@@ -37,13 +37,13 @@ observations_sf <- data.frame(
  # provide a fixed uncertainty for all points
  add_coordinate_uncertainty(
    observations_sf,
-   coordinate_uncertainty_meters = 1000
+   coords_uncertainty_meters = 1000
    )
 
 # add variability in uncertainty. For example, using gamma distribution
 add_coordinate_uncertainty(
   observations_sf,
-  coordinate_uncertainty_meters = rgamma(n_points, shape = 5, rate = 0.1)
+  coords_uncertainty_meters = rgamma(n_points, shape = 5, rate = 0.1)
 )
 
 }
