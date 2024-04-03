@@ -15,7 +15,7 @@
 #' Conversely, a value of 0.5 will result in half less samples within the
 #' bias_area than outside.
 #'
-#' @returns An sf object with POINT geometry containing a bias_weight column
+#' @returns An sf object with POINT geometry with a bias_weight column
 #' containing the sampling probability based on sampling bias.
 #'
 #' @export
@@ -91,8 +91,9 @@ apply_polygon_sample_bias <- function(observations, bias_area, bias_strength = 1
   bias_weights_outside_polygon <- 1 / (1 + bias_strength)
   bias_weights_inside_polygon <- bias_strength / (1 + bias_strength)
 
+  #create bias_weight column
   observations <- observations %>%
-  mutate(bias_weights = ifelse(in_bias_area, bias_weights_inside_polygon, bias_weights_outside_polygon))
+  mutate(bias_weight = ifelse(in_bias_area, bias_weights_inside_polygon, bias_weights_outside_polygon))
 
   return(observations)
 }
