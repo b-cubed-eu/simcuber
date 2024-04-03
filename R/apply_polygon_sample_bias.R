@@ -3,22 +3,20 @@
 #' This function adds a sampling bias weight column containing the sample
 #' probability based on sampling bias within a polygon.
 #'
+#' @param observations An sf object with POINT geometry.
 #'
-#' inputs - bias.area, bias.strength, occurrences
-#' outputs - occurrences with a bias.weight column added (a bias_weight column containing the sampling probability based on sampling bias)
+#' @param bias_area An sf object with POLYGON geometry. The area in which the
+#' sampling will be biased.
 #'
-#' The argument bias.strength indicates the strength of the bias. For example, a value of 50 will
-#' result in 50 times more samples within the bias.area than outside. Conversely, a value of 0.5 will
-#' result in half less samples within the bias.area than outside.
+#' @param bias_strength A positive numeric value. The strength of the bias to
+#' be applied in the biased area (as a multiplier). Above 1, area will be
+#' oversampled. Below 1, area will be undersampled. For example, a value of 50
+#' will result in 50 times more samples within the bias_area than outside.
+#' Conversely, a value of 0.5 will result in half less samples within the
+#' bias_area than outside.
 #'
-#' @param observations An sf object with POINT geometry and a
-#' `coordinateUncertaintyInMeters` column. If this column is not present, the
-#' function will assume no (zero meters) uncertainty around the observation
-#' points.
-#'
-#' @returns An sf object with POINT geometry containing the locations of the
-#' sampled occurrences and a `coordinateUncertaintyInMeters` column containing
-#' the coordinate uncertainty for each observation.
+#' @returns An sf object with POINT geometry containing a bias_weight column
+#' containing the sampling probability based on sampling bias.
 #'
 #' @export
 #'
@@ -42,7 +40,7 @@
 #' ) %>%
 #'   st_as_sf(coords = c("long", "lat"), crs = 3035)
 #'
-#' # Create polygon overlapping two of the points
+#' # Create bias_area polygon overlapping two of the points
 #' selected_observations <- st_union(observations_buffered[2:3,])
 #' bias_area <- st_convex_hull(selected_multipolygon) %>%
 #'   st_buffer(dist = 100) %>%
