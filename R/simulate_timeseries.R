@@ -1,17 +1,17 @@
-#' Simulate timeseries of occurrences
+#' Simulate timeseries for species abundances
 #'
-#' The function simulates a timeseries of occurrences of a species.
+#' The function simulates a timeseries for the abundance of a species.
 #'
 #' @param initial_average_abundance A positive integer value indicating the
 #' average number of occurrences to be simulated within the extend of `polygon`
-#' at time point 1. This value will be used as mean of a Poisson distribution
-#' (lambda parameter).
+#' at the first time point. This value will be used as mean of a Poisson
+#'  distribution (lambda parameter).
 #' @param n_time_points A positive integer value indicating the number of time
 #' points to simulate.
-#' @param temporal_autocorr `NA`, `"random_walk"` or a function which generates
+#' @param temporal_autocorr `NA`, or a function which generates
 #' a trend in abundance over time. Only used if `time_points > 1`. When there
-#' are multiple time points the function will by default use a `"random_walk"`
-#' function.
+#' are multiple time points the function will by default use the internal
+#' `simulate_random_walk()` function.
 #' @param ... Additional argument to be passed to the `temporal_autocorr`
 #' function.
 #' @param seed A positive numeric value. The seed for random number generation
@@ -24,7 +24,11 @@
 #'
 #' @examples
 #'
-#' timeseries <- simulate_timeseries(50, 10, simulate_random_walk, c(0.1))
+#' timeseries <- simulate_timeseries(
+#'   initial_average_abundance = 50,
+#'   n_time_points = 10,
+#'   temporal_autocorr = simulate_random_walk,
+#'   sd_step = 0.1)
 #'
 
 simulate_timeseries <- function(
