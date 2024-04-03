@@ -1,27 +1,23 @@
-# vs
 # Loading required packages
 library(sf)
-library(ClimDatDownloadR)
 library(raster)
+library(viridis)
 library(virtualspecies)
 library(tidyverse)
 
 
-#Dowload bioclimatic variables from Worldclim
+library(geodata)
 
-worldclim <- getData("worldclim", var = "bio", res = 0.5, lon=5, lat=45)
-worldclim
+worldclim_global(var, res, path, version="2.1", ...)
+worldclim_country(country, var, path, version="2.1", ...)
+worldclim_tile(var, lon, lat, path, version="2.1", ...)
+d <- worldclim_country(country = "Jamaica", var = "tmin", res=0.5, path=tempdir())
+?worldclim_country
+### Generation of Virtual Species ###
+# The input data for virtual species is gridded spatial data
+worldclim <- getData("worldclim", var = "bio", res=0.5, lon=20, lat=0)
+?getData
+plot(d[[5]])
 
-names(worldclim)
-plot(worldclim)
 
-
-PA.points <- sampleOccurrences(my.first.species, n =
-                                 30
-                               , type =
-                                 "presence-absence"
-                               , sampling.area = c(
-                                 "South America"
-                                 ,
-                                 "Mexico"
-                               ))
+d
