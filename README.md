@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# simcuber
+# simcuber <a href="https://b-cubed-eu.github.io/simcuber/"><img src="man/figures/logo.png" align="right" height="120" alt="simcuber website"/></a>
 
 <!-- badges: start -->
 
