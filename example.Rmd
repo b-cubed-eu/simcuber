@@ -15,11 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 library(simcuber)
 library(dplyr)
 library(sf)
+library(ggplot2)
 ```
 # Create random points
 ```{r}
 
-n_points <- 6
+n_points <- 23
 xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)
 coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
@@ -52,23 +53,26 @@ grid_df <- st_make_grid(
 
 # Create occurrence cube
 ```{r}
-grid_designation(
+grid <- grid_designation(
   observations = observations_sf,
   grid = grid_df,
   seed = 123
 )
 ```
 
+visualize grid
 
 ```{r}
-grid_designation(
-  observations,
-  grid,
-  id_col = "row_names",
-  seed = NA,
-  aggregate = TRUE,
-  randomisation = c("uniform", "normal"),
-  p_norm = ifelse(tolower(randomisation[1]) == "uniform", NA, 0.95)
-)
+ggplot(data = grid) +
+  geom_sf(color = "red", fill = "darkgreen")
 ```
-
+Visualize points
+```{r}
+ggplot(data = observations_sf) +
+  geom_sf(color = "red", fill = "darkgreen")
+```
+Visualize bufer
+```{r}
+ggplot(data = observations_buffered) +
+  geom_sf(color = "red", fill = "darkgreen")
+```
