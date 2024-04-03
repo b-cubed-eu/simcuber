@@ -5,7 +5,7 @@ xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)
 
 ## set seed for reproducible observations object
-# set.seed(123)
+set.seed(9)
 
 ## dataset without coordinateUncertaintyInMeters
 observations_sf1 <- data.frame(
