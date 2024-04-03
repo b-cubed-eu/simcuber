@@ -39,28 +39,28 @@ simulate_timeseries <- function(
     seed = NA) {
   # Checks
   # Check if initial_average_abundance is a positive integer
-    if (!is.numeric(initial_average_abundance) | initial_average_abundance <= 0) {
-        cli::cli_abort(c(
-        "{.var initial_average_abundance} must be a positive integer.",
-        "x" = paste("You've supplied a {.cls {class(initial_average_abundance)}}",
-                    "value of {initial_average_abundance}."))
-        )
-    }
-    # Check if n_time_points is a positive integer
-    if (!is.numeric(n_time_points) | n_time_points <= 0) {
-        cli::cli_abort(c(
-        "{.var n_time_points} must be a positive integer.",
-        "x" = paste("You've supplied a {.cls {class(n_time_points)}}",
-                    "value of {n_time_points}."))
-    )
+  if (!is.numeric(initial_average_abundance) | initial_average_abundance <= 0) {
+      cli::cli_abort(c(
+      "{.var initial_average_abundance} must be a positive integer.",
+      "x" = paste("You've supplied a {.cls {class(initial_average_abundance)}}",
+                  "value of {initial_average_abundance}."))
+      )
+  }
+  # Check if n_time_points is a positive integer
+  if (!is.numeric(n_time_points) | n_time_points <= 0) {
+      cli::cli_abort(c(
+      "{.var n_time_points} must be a positive integer.",
+      "x" = paste("You've supplied a {.cls {class(n_time_points)}}",
+                  "value of {n_time_points}."))
+  )
   }
   # Check if temporal_autocorr is NA or a function
-    if (!is.numeric(temporal_autocorr) & !is.function(temporal_autocorr)) {
-        cli::cli_abort(c(
-        "{.var temporal_autocorr} must be NA, 'random_walk' or a function.",
-        "x" = paste("You've supplied a {.cls {class(temporal_autocorr)}}",
-                    "value of {temporal_autocorr}."))
-        )
+  if (!is.numeric(temporal_autocorr) & !is.function(temporal_autocorr)) {
+      cli::cli_abort(c(
+      "{.var temporal_autocorr} must be NA, 'random_walk' or a function.",
+      "x" = paste("You've supplied a {.cls {class(temporal_autocorr)}}",
+                  "value of {temporal_autocorr}."))
+      )
     }
   # Set seed if provided
   if (!is.na(seed)) {
@@ -79,18 +79,25 @@ simulate_timeseries <- function(
   # If temporal_autocorr is a function, use it to generate the timeseries
   if (is.function(temporal_autocorr)) {
     # Collect additional arguments
-    pars <- list(...)
+    length_pars <- length(list(...))
 
     # If arguments are empty, pass nothing to the function
-    if (length(pars) == 0) {
+    if (length_pars == 0) {
       # Generate timeseries using the provided function
-      lambdas <- temporal_autocorr(initial_average_abundance, n_time_points, seed=seed)
+      lambdas <- temporal_autocorr(
+        initial_average_abundance,
+        n_time_points,
+        seed = seed)
     } else {
       # Generate timeseries using the provided function
-      lambdas <- temporal_autocorr(initial_average_abundance, n_time_points, pars[[1]], seed=seed)
+      lambdas <- temporal_autocorr(
+        initial_average_abundance,
+        n_time_points,
+        ...,
+        seed = seed)
     }
     timeseries <- rpois(n_time_points, lambdas)
-  } else if (is.na(temporal_autocorr)) {
+  } else {
     # When it's NA, generate timeseries using a Poisson distribution
     timeseries <- rpois(n_time_points, initial_average_abundance)
   }
