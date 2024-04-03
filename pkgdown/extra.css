@@ -1,8 +1,4 @@
 body {
-  background-color: #f5f5f5;
-  color: #5e5e5e;
-  background-image: url('reference/figures/background-pattern.png');
-  font-family: FlandersArtSans-Light, Verdana, Arial, sans-serif;
 }
 
 .row{
@@ -40,15 +36,6 @@ a:hover {
   color: #5e5e5e;
 }
 
-@font-face{
-  font-family: inbo;
-  src:
-    url('figures/flanders.woff2') format('woff2'),
-    url('reference/figures/flanders.woff') format('woff');
-;
-  font-weight:normal;
-  font-style:normal;
-}
 
 code.sourceCode.diff span.st {
   background-color: #48A529;
