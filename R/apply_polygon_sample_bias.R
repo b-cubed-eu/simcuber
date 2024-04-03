@@ -52,10 +52,35 @@
 #'
 #'
 #' )
-apply_polygon_sample_bias <- function(observations, bias_area, bias_strength) {
+apply_polygon_sample_bias <- function(observations, bias_area, bias_strength = 1) {
   require(sf)
 
   ### Start checks
+  # 1. check input lengths
+  if (length(bias_strength) != 1) {
+    cli::cli_abort(c(
+      "{.var bias_strength} must be a numeric vector of length 1.",
+      "x" = paste(
+        "You've supplied a {.cls {class(bias_strength)}} vector",
+        "of length {length(bias_strength)}."
+      )
+    ))
+  }
+
+  # 2. check input classes
+  if (!"sf" %in% class(observations)) {
+    cli::cli_abort(c(
+      "{.var observations} must be an sf object",
+      "x" = "You've supplied a {.cls {class(observations)}} object."
+    ))
+  }
+
+  if (!"sf" %in% class(bias_area)) {
+    cli::cli_abort(c(
+      "{.var bias_area} must be an sf object",
+      "x" = "You've supplied a {.cls {class(bias_area)}} object."
+    ))
+  }
   ### End checks
 
   # Find observations inside polygon
