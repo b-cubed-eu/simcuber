@@ -75,8 +75,65 @@ sample_observations <- function(
     bias_weights = NA,
     coordinate_uncertainty_meters = 25,
     seed = NA) {
+
+  ### Start checks
+
+  # 1. check input classes
+  # To do: checks for bias_area, bias_strength and bias_weights
+  if (!("sf" %in% class(occurrences))) {
+    cli::cli_abort(c(
+      "{.var occurrences} must be an sf object",
+      "x" = "You've supplied a {.cls {class(occurrences)}} object."
+    ))
+  }
+  if (!is.numeric(detection_probability)) {
+    cli::cli_abort(c(
+      "{.var detection_probability} must be a numeric value between 0 and 1",
+      "x" = "You've supplied a {.cls {class(detection_probability)}} object."
+    ))
+  }
+  if (!is.character(sampling_bias)) {
+    cli::cli_abort(c(
+      "{.var sampling_bias} must be a character vector of length 1.",
+      "x" = "You've supplied a {.cls {class(sampling_bias)}} vector"
+    ))
+  }
+  if (!is.numeric(coordinate_uncertainty_meters)) {
+    cli::cli_abort(c(
+      "{.var coordinate_uncertainty_meters} must be a positive numeric value",
+      "x" = "You've supplied a {.cls {class(coordinate_uncertainty_meters)}}
+      object."
+    ))
+  }
+  if (!is.integer(seed) & !is.na(seed)) {
+    cli::cli_abort(c(
+      "{.var seed} must be NA or a positive integer",
+      "x" = "You've supplied a {.cls {class(occurrences)}} object."
+    ))
+  }
+#
+#   # 2. other checks
+#   # detection_probability is a numeric value between 0 and 1
+#   if ((!(0 <= detection_probability) & !(detection_probability <= 1))) {
+#     cli::cli_abort(c(
+#       "{.var detection_probability} must be a numeric value between 0 and 1",
+#       "x" = "You've supplied {.cls {class(detection_probability)}} as
+#       {.var detection_probability}."
+#     ))
+#   }
+  # # seed is a positive value
+  # if (seed <= 0) {
+  #   cli::cli_abort(c(
+  #     "{.var seed} must be a positive integer",
+  #     "x" = "You've supplied {seed} as {.var seed}."
+  #   ))
+  # }
+
+  ### End checks
+
   occurrences <- occurrences %>%
     dplyr::mutate(detection_probability = detection_probability)
+  print(detection_probability)
 
   # ...
 }
