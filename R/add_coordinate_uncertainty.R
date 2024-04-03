@@ -39,7 +39,7 @@
 #'   coordinate_uncertainty_meters = rgamma(n_points, shape = 5, rate = 0.1)
 #' )
 #'
-#' @import sf
+#' @importFrom sf st_geometry_type
 #'
 add_coordinate_uncertainty <- function(
     occurrences,
