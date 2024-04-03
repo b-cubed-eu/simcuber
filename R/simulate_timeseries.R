@@ -55,13 +55,13 @@ simulate_timeseries <- function(
   )
   }
   # Check if temporal_autocorr is NA or a function
-  if (!is.numeric(temporal_autocorr) & !is.function(temporal_autocorr)) {
+  if (!is.na(temporal_autocorr) & !is.function(temporal_autocorr)) {
       cli::cli_abort(c(
-      "{.var temporal_autocorr} must be NA, 'random_walk' or a function.",
+      "{.var temporal_autocorr} must be `NA` or a function.",
       "x" = paste("You've supplied a {.cls {class(temporal_autocorr)}}",
                   "value of {temporal_autocorr}."))
       )
-    }
+  }
   # Set seed if provided
   if (!is.na(seed)) {
     if (is.numeric(seed)) {
