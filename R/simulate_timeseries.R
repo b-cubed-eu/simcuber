@@ -12,10 +12,12 @@
 #' a trend in abundance over time. Only used if `time_points > 1`. When there
 #' are multiple time points the function will by default use a `"random_walk"`
 #' function.
+#' @param ... Additional argument to be passed to the `temporal_autocorr`
+#' function.
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
-#' @returns A vector of integers of length n_time_points with the number of 
+#' @returns A vector of integers of length n_time_points with the number of
 #' occurrences.
 #'
 #' @export
@@ -29,7 +31,7 @@ simulate_timeseries <- function(
     initial_average_abundance = 50,
     n_time_points = 10,
     temporal_autocorr = ifelse(n_time_points ==  1, NA, simulate_random_walk),
-    pars = ifelse(n_time_points ==  1, NA, c(0.05)),
+    ...,
     seed = NA) {
   # Checks
   # Check if initial_average_abundance is a positive integer
@@ -72,8 +74,17 @@ simulate_timeseries <- function(
   # Check type of temporal_autocorr
   # If temporal_autocorr is a function, use it to generate the timeseries
   if (is.function(temporal_autocorr)) {
-    # Generate timeseries using the provided function
-    lambdas <- temporal_autocorr(initial_average_abundance, n_time_points, pars, seed)
+    # Collect additional arguments
+    pars <- list(...)
+
+    # If arguments are empty, pass nothing to the function
+    if (length(pars) == 0) {
+      # Generate timeseries using the provided function
+      lambdas <- temporal_autocorr(initial_average_abundance, n_time_points, seed=seed)
+    } else {
+      # Generate timeseries using the provided function
+      lambdas <- temporal_autocorr(initial_average_abundance, n_time_points, pars[[1]], seed=seed)
+    }
     timeseries <- rpois(n_time_points, lambdas)
   } else if (is.na(temporal_autocorr)) {
     # When it's NA, generate timeseries using a Poisson distribution

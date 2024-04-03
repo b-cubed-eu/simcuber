@@ -8,8 +8,8 @@
 #' (lambda parameter).
 #' @param n_time_points A positive integer value indicating the number of time
 #' points to simulate.
-#' @param pars A list of numeric values indicating parameters of
-#' the random walk.
+#' @param sd_step A positive numeric value indicating the standard deviation of
+#' the random steps.
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
@@ -26,17 +26,9 @@
 simulate_random_walk <- function(
     initial_average_abundance = 50,
     n_time_points = 10,
-    pars = c(0.05),
+    sd_step = 0.05,
     seed = NA) {
   # Checks
-  # Check if pars is a numeric vector with length 1
-  if (!is.numeric(pars) | length(pars) != 1) {
-    cli::cli_abort(c(
-      "{.var pars} must be an numeric vector of length 1.",
-      "x" = paste("You've supplied a {.cls {class(pars)}} vector",
-                  "of length {length(pars)}.")) 
-    )
-  }
   # Set seed if provided
   if (!is.na(seed)) {
     if (is.numeric(seed)) {
@@ -55,9 +47,6 @@ simulate_random_walk <- function(
   
   # Set the initial abundance
   lambdas[1] <- initial_average_abundance
-  
-  # Unpack parameters
-  sd_step <- pars[1]
 
   # Generate random steps and accumulate them
   for (i in 2:n_time_points) {
