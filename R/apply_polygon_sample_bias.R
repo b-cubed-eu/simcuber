@@ -42,25 +42,34 @@
 #' ) %>%
 #'   st_as_sf(coords = c("long", "lat"), crs = 3035)
 #'
-#' # Sample points within uncertainty circles according to uniform rules
-#' sample_from_uniform_circle(
-#'   observations = observations_sf,
-#'   seed = 123
+#' # Create polygon overlapping two of the points
+#' selected_observations <- st_union(observations_buffered[2:3,])
+#' bias_area <- st_convex_hull(selected_multipolygon) %>%
+#'   st_buffer(dist = 100) %>%
+#'   st_as_sf()
+#'
+#' bias_strength <- 2
+#'
+#' apply_polygon_sample_bias(observations, bias_area, bias_strength)
+#'
+#'
 #' )
-apply_polygon_sample_bias <- function(occurrences, bias_area, bias_strength, seed = NA) {
+apply_polygon_sample_bias <- function(observations, bias_area, bias_strength) {
   require(sf)
 
   ### Start checks
   ### End checks
 
-  # Find occurrences inside polygon
-  in_bias_area <- st_within(occurrences, bias_area)
+  # Find observations inside polygon
+  in_bias_area <- observations %>%
+    st_within(bias_area, sparse = FALSE)
 
-  # Calculate sampling probability based on bias value
-  sampling_probability <- ifelse(
-    point.in.polygon(spatial_points$x, spatial_points$y, polygon@polygons[[1]]@coords[,1], polygon@polygons[[1]]@coords[,2]) == 1,
-    bias_value, 1
-  )
+  # Calculate sampling probability based on bias strength
+  bias_weights_outside_polygon <- 1 / (1 + bias_strength)
+  bias_weights_inside_polygon <- bias_strength / (1 + bias_strength)
 
-  return(occurrences)
+  observations <- observations %>%
+  mutate(bias_weights = ifelse(in_bias_area, bias_weights_inside_polygon, bias_weights_outside_polygon))
+
+  return(observations)
 }
