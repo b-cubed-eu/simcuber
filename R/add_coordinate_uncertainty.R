@@ -40,6 +40,7 @@
 #' )
 #'
 #' @importFrom sf st_geometry_type
+#' @importFrom cli cli_abort
 #'
 add_coordinate_uncertainty <- function(
     occurrences,
@@ -47,21 +48,42 @@ add_coordinate_uncertainty <- function(
 
   ## checks
   ## is it sf object
-  if(!inherits(occurrences, "sf")) stop(
-    "'occurrences' must be an object of class 'sf'"
-  )
+  if(!inherits(occurrences, "sf")){
 
-  ## sf geometry is POINT
-  if(sf::st_geometry_type(observations_sf, by_geometry = FALSE) != "POINT"){
-    "'occurrences' must be a sf object with POINT geometry"
+    cli::cli_abort(c(
+      "{.var occurrences}  must be an object of class 'sf'",
+      "x" = paste(
+        "You've supplied an object of class {.cls {class(occurrences)}}"
+      )
+    ))
+
   }
 
-  ## number of points in sf object and the coords_uncertainty_meters must be the same
-  ## when coords_uncertainty_meters is larger than 1
+  ## is geometry type POINT?
+  is_point <- sf::st_geometry_type(occurrences, by_geometry = FALSE) == "POINT"
+  if(!is_point){
+    cli::cli_abort(c(
+      "{.var occurrences} must be a 'sf' object with POINT geometry",
+      "x" = "You've supplied an 'sf' object of geometry type {.cls {sf::st_geometry_type(occurrences, by_geometry = FALSE)}}"
+      )
+    )
+   }
+
+  ## number of points in sf object and the coords_uncertainty_meters must be the
+  ## same when coords_uncertainty_meters is larger than 1
   if(length(coords_uncertainty_meters) != 1){
     size_match <- length(coords_uncertainty_meters) == nrow(occurrences)
 
-    if(!size_match) stop("length of 'coords_uncertainty_meters' must be the same as number of rows in 'occurrences")
+    if(!size_match){
+      cli::cli_abort(
+        c(
+          "{.var coords_uncertainty_meters} has diferent length than the number of rows in {.var occurrences}",
+          "x" = paste("You've supplied {.var coords_uncertainty_meters} of length {length(coords_uncertainty_meters)}",
+                      "but {.var occurrences} has {nrow(occurrences)} rows.")
+        )
+     )
+
+    }
   }
 
   occurrences$coordinateUncertaintyInMeters <- coords_uncertainty_meters
