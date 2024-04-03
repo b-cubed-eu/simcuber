@@ -1,0 +1,76 @@
+---
+title: "Use case"
+bibliography: references.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(simcuber)
+```
+
+## Trend detection in population time series
+
+-   Requirement of where, why and how fast biodiversity is changing.
+
+    -   but debate on direction and strengths of the trends - depending on taxon and location [@leung2024]
+
+    -   progress towards attaining biodiversity goals or change after conservation action needs to be detectable. -\> simulation
+
+-   Source of uncertainty
+
+    -   geographical & temporal cover of biodiversity observations
+
+    -   difference in growth rate of the population -- characteristic of the species
+
+Temporal lags in change in abundance are higher in species with high generation time @daskalovaLandscapescaleForestLoss2020
+
+```{r}
+n_time_points <- 50
+initial_abundance <- 10
+sd_step = 1
+# Initialize an empty vector to store average abundance values
+lambdas <- numeric(n_time_points)
+  
+# Set the initial abundance
+lambdas[1] <- initial_average_abundance
+  
+# Generate random steps and accumulate them
+for (i in 2:n_time_points) {
+  step <- rnorm(1, mean = 0, sd = sd_step)
+  lambdas[i] <- lambdas[i - 1] + step
+}
+
+# Identify where the lambda values become 0 or lower
+zero_or_lower_index <- which(lambdas <= 0)
+
+# If any lambda becomes 0 or lower, set all subsequent ambdas to 0
+if (length(zero_or_lower_index) > 0) {
+  zero_or_lower_indices <- zero_or_lower_index[1]n_time_points
+    lambdas[zero_or_lower_indices] <- 0
+  }
+  
+
+```
+
+What do we need to know to assess the reliability of trend detected by gbif
+
+-   how long do you need to monitor
+
+-   how often do you need to monitor
+
+-   how many population of species to sample
+
+```{r}
+## general population trend (-1,1)
+
+## generation time of species
+
+
+
+```
