@@ -1,9 +1,13 @@
 Package: simcuber
 Title: Simulating Biodiversity Data Cubes
 Version: 0.0.0
-Authors@R: 
-    person("Ward", "Langeraert", , "ward.langeraert@inbo.be", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-5900-8109", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)"))
+Authors@R: c(
+    person("Ward", "Langeraert", , "ward.langeraert@inbo.be",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-5900-8109")),
+    person("Pieter", "Huybrechts", role = "ctb",
+           comment = c(ORCID = "0000-0002-6658-6062"))
+  )
 Description: Simulation framework for biodiversity data cubes.
 License: MIT + file LICENSE
 URL: https://github.com/b-cubed-eu/simcuber,
