@@ -15,7 +15,8 @@ Imports:
     mnormt,
     rlang,
     sf,
-    stats
+    stats,
+    withr
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
