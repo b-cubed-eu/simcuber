@@ -36,7 +36,7 @@
 #' # add variability in uncertainty. For example, using gamma distribution
 #' add_coordinate_uncertainty(
 #'   observations_sf,
-#'   coordinate_uncertainty_meters = rgamma(n_points, shape = 5, rate = 0.1)
+#'   coords_uncertainty_meters = rgamma(n_points, shape = 5, rate = 0.1)
 #' )
 #'
 #' @importFrom sf st_geometry_type
