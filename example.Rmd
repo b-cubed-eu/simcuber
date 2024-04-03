@@ -1,0 +1,74 @@
+---
+title: "simcumber_1"
+author: "Dimitri Brosens"
+date: "2024-04-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# load libraries
+
+```{r}
+library(simcuber)
+library(dplyr)
+library(sf)
+```
+# Create random points
+```{r}
+
+n_points <- 6
+xlim <- c(3841000, 3842000)
+ylim <- c(3110000, 3112000)
+coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
+
+observations_sf <- data.frame(
+  lat = runif(n_points, ylim[1], ylim[2]),
+  long = runif(n_points, xlim[1], xlim[2]),
+  coordinateUncertaintyInMeters = coordinate_uncertainty
+) %>%
+  st_as_sf(coords = c("long", "lat"), crs = 3035)
+```
+
+# Add buffer uncertainty in meters around points
+
+```{r}
+
+observations_buffered <- observations_sf %>%
+  st_buffer(observations_sf$coordinateUncertaintyInMeters)
+```
+
+# Create grid
+```{r}
+grid_df <- st_make_grid(
+  observations_buffered,
+  square = TRUE,
+  cellsize = c(200, 200)
+) %>%
+  st_sf()
+```
+
+# Create occurrence cube
+```{r}
+grid_designation(
+  observations = observations_sf,
+  grid = grid_df,
+  seed = 123
+)
+```
+
+
+```{r}
+grid_designation(
+  observations,
+  grid,
+  id_col = "row_names",
+  seed = NA,
+  aggregate = TRUE,
+  randomisation = c("uniform", "normal"),
+  p_norm = ifelse(tolower(randomisation[1]) == "uniform", NA, 0.95)
+)
+```
+
