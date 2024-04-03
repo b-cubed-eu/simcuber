@@ -8,10 +8,10 @@
 #' (lambda parameter).
 #' @param n_time_points A positive integer value indicating the number of time
 #' points to simulate.
-#' @param temporal_autocorr `NA`, `"random_walk"` or a function which generates
+#' @param temporal_autocorr `NA` or a function which generates
 #' a trend in abundance over time. Only used if `time_points > 1`. When there
-#' are multiple time points the function will by default use a `"random_walk"`
-#' function.
+#' are multiple time points the function will by default use a built-in 
+#' random walk function.
 #' @param ... Additional argument to be passed to the `temporal_autocorr`
 #' function.
 #' @param seed A positive numeric value. The seed for random number generation
@@ -24,7 +24,7 @@
 #'
 #' @examples
 #'
-#' timeseries <- simulate_timeseries(50, 10, simulate_random_walk, c(0.1))
+#' timeseries <- simulate_timeseries(50, 10, simulate_random_walk, 0.05)
 #'
 
 simulate_timeseries <- function(
@@ -51,9 +51,17 @@ simulate_timeseries <- function(
     )
   }
   # Check if temporal_autocorr is NA or a function
-    if (!is.numeric(temporal_autocorr) & !is.function(temporal_autocorr)) {
+    if (!is.function(temporal_autocorr) && !is.na(temporal_autocorr)) {
         cli::cli_abort(c(
-        "{.var temporal_autocorr} must be NA, 'random_walk' or a function.",
+        "{.var temporal_autocorr} must be NA or a function.",
+        "x" = paste("You've supplied a {.cls {class(temporal_autocorr)}}",
+                    "value of {temporal_autocorr}."))
+        )
+    }
+  # If n_time_points is 1, temporal_autocorr must be NA
+    if (!is.function(temporal_autocorr) && !is.na(temporal_autocorr) && n_time_points == 1) {
+        cli::cli_abort(c(
+        "When {.var n_time_points} is 1, {.var temporal_autocorr} must be NA.",
         "x" = paste("You've supplied a {.cls {class(temporal_autocorr)}}",
                     "value of {temporal_autocorr}."))
         )
