@@ -2,11 +2,32 @@ Package: simcuber
 Title: Simulating Biodiversity Data Cubes
 Version: 0.0.0
 Authors@R: c(
-    person("Ward", "Langeraert", , "ward.langeraert@inbo.be",
-           role = c("aut", "cre"),
+    person("Ward", "Langeraert", , "ward.langeraert@inbo.be", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5900-8109")),
     person("Pieter", "Huybrechts", role = "ctb",
-           comment = c(ORCID = "0000-0002-6658-6062"))
+           comment = c(ORCID = "0000-0002-6658-6062")),
+    person("Chandra", "Earl", role = "ctb",
+           comment = c(ORCID = "0000-0001-9850-882X")),
+    person("Annegreet", "Veeken", role = "ctb",
+           comment = c(ORCID = "0000-0003-4291-5981")),
+    person("Toon", "Van Daele", role = "ctb",
+           comment = c(ORCID = "0000-0002-1362-853X")),
+    person("Dimitri", "Brosens", role = "ctb",
+           comment = c(ORCID = "0000-0002-0846-9116")),
+    person("Wissam", "Barhdadi", role = "ctb",
+           comment = c(ORCID = "0000-0001-9304-3971")),
+    person("Arthur", "Rodrigues", role = "ctb",
+           comment = c(ORCID = "0000-0003-2656-558X")),
+    person("Sanne", "Govaert", role = "ctb",
+           comment = c(ORCID = "0000-0002-8939-1305")),
+    person("Mukhtar Muhammed", "Yahaya", role = "ctb",
+           comment = c(ORCID = "0009-0008-9200-0863")),
+    person("Peter", "Desmet", role = "ctb",
+           comment = c(ORCID = "0000-0002-8442-8025")),
+    person("Matilde", "Martini", role = "ctb"),
+    person("Rocìo", "Beatriz Cortès Lobos", role = "ctb"),
+    person("Michele", "Di Musciano", role = "ctb",
+           comment = c(ORCID = "0000-0002-3130-7270"))
   )
 Description: Simulation framework for biodiversity data cubes.
 License: MIT + file LICENSE
