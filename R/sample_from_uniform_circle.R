@@ -121,7 +121,7 @@ sample_from_uniform_circle <- function(
       coords = c("x_new", "y_new"),
       crs = sf::st_crs(observations)
     ) %>%
-    dplyr::select(.data$coordinateUncertaintyInMeters)
+    dplyr::select("coordinateUncertaintyInMeters")
 
   return(new_points)
 }
