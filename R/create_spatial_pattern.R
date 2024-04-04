@@ -1,12 +1,79 @@
-
-
-### idea: create a raster (terra) with a spatial pattern from which a sampling can be made.
-## user need to provide a polygon (sf)
-
-## the spatial pattern could be defined by string (3 options) or a value from 1 to 100.
-## the value is a multiplier of the resolution size.by default 1 is random, 5 is clustered
-
-
+#' Create spatial pattern
+#'
+#' It creates a raster with a spatial pattern for the area of a polygon.
+#'
+#' @param polygon an sf object of geometry type POLYGON
+#' @param resolution a numeric value defining the resolution of the raster cell
+#' @param spatial_pattern define the spatial pattern. It could be a character string
+#'  "random" or "clustered", in which "random" is the default. The user is able to
+#'  provide a numeric value between 1 and 100. 1 is "random" and 5 is "clustered.
+#'  As large the number more broad is the size of the clusters area. See details.
+#' @param seed integer. set a seed to randomization
+#' @param n_sim number of simulations. Each simulation is a different layer in the raster.
+#'
+#' @return an object of class SpatRaster
+#' @export
+#'
+#' @examples
+#'
+#' plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
+#' plot(plgn)
+#' # random pattern by default
+#' spat_random <- create_spatial_pattern(
+#'   plgn,
+#'   resolution = 0.1,
+#'   seed = 123)
+#'
+#' plot(spat_random)
+#'
+#' # built in clustered pattern
+#'
+#' spat_clust<- create_spatial_pattern(
+#'   plgn,
+#'   resolution = 0.1,
+#'   spatial_pattern = "clustered",
+#'   seed = 123)
+#'
+#' plot(spat_clust)
+#'
+#' # user defined spatial pattern
+#' ## small scale cluster
+#'
+#' spat_small <- create_spatial_pattern(
+#'   plgn,
+#'   resolution = 0.1,
+#'   spatial_pattern = 5,
+#'   seed = 123)
+#'
+#' plot(spat_small)
+#'
+#' ## medium scale cluster (the built in clustered pattern)
+#' spat_medium <- create_spatial_pattern(
+#'   plgn,
+#'   resolution = 0.1,
+#'   spatial_pattern = 10,
+#'   seed = 123)
+#'
+#' plot(spat_medium)
+#'
+#' ## large scale cluster
+#' spat_large <- create_spatial_pattern(
+#'   plgn,
+#'   resolution = 0.1,
+#'   spatial_pattern = 100,
+#'   seed = 123)
+#'
+#' plot(spat_large)
+#'
+#'
+#' @import dplyr
+#' @import terra
+#' @import sf
+#' @import gstat
+#' @importFrom cli cli_abort
+#' @importFrom withr local_seed
+#'
+#'
 create_spatial_pattern <- function(
   polygon,
   resolution,
@@ -26,8 +93,8 @@ create_spatial_pattern <- function(
   }
 
   # create a reference raster with same extent as the polygon and user defined resolution
-  templ <- terra::rast(vect(polygon), res=resolution)
-  poly_raster <- terra::rasterize(vect(plgn), templ)
+  templ <- terra::rast(terra::vect(polygon), res=resolution)
+  poly_raster <- terra::rasterize(terra::vect(plgn), templ)
 
   dfxy <- as.data.frame(poly_raster, xy = TRUE)
 
@@ -58,7 +125,7 @@ create_spatial_pattern <- function(
   #
   if(is.numeric(spatial_pattern)){
     # value should be between 1 and 100
-    if(between(spatial_pattern, 1, 100)){
+    if(dplyr::between(spatial_pattern, 1, 100)){
       multiplier <- spatial_pattern
     }else{
       cli::cli_abort("")
@@ -86,7 +153,7 @@ create_spatial_pattern <- function(
 
   # !idea: we can allow the user to provide a gstat object with other vgm model...
   gstat_model <- gstat::gstat(formula=z~1, locations=~x+y, dummy=T, beta=1,
-                       model=vgm(psill=0.5, model="Sph", range=range_size,
+                       model=gstat::vgm(psill=0.5, model="Sph", range=range_size,
                                  nugget = 0), nmax=2)
 
   dfxy_pred <- predict(gstat_model, newdata=dfxy, nsim=n_sim)
@@ -94,11 +161,11 @@ create_spatial_pattern <- function(
 
   # standardize values between 0 and 1
   dfxy_std <- dfxy_pred %>%
-    mutate(
-      across(starts_with("sim"), ~vegan::decostand(.x, "range"))
+    dplyr::mutate(
+      dplyr::across(dplyr::starts_with("sim"), ~vegan::decostand(.x, "range"))
     )
 
-  r <- rast(dfxy_std)
+  r <- terra::rast(dfxy_std)
 
   r
 }
