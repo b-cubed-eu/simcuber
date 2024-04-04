@@ -17,10 +17,10 @@ test_that("arguments are of the right class", {
                fixed = TRUE)
   # temporal_autocorr must be NA or a function
   expect_error(simulate_timeseries(temporal_autocorr = "a"),
-               regexp = "`temporal_autocorr` must be NA or a function.",
+               regexp = "`temporal_autocorr` must be `NA` or a function.",
                fixed = TRUE)
   expect_error(simulate_timeseries(temporal_autocorr = 1),
-               regexp = "`temporal_autocorr` must be NA or a function.",
+               regexp = "`temporal_autocorr` must be `NA` or a function.",
                fixed = TRUE)
   # seed must be an numeric vector of length 1
   expect_error(simulate_timeseries(seed = "a"),
