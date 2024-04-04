@@ -90,7 +90,16 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
       "x" = "The column `bias_weight` has negative values."
     ))
   }
-
+  if (max(bias_weights$bias_weight) > 1) {
+    if (!all(bias_weights$bias_weight %% 1 == 0)) {
+      cli::cli_abort(c(
+        paste("The column `bias_weight` must consist of numeric values between",
+              "0 and 1 OR positive integers."),
+        "x" = paste("The column `bias_weight` has values larger than 1 but",
+                    "they are not all integers.")
+      ))
+    }
+  }
   ### End checks
 
   # Rescale bias_weight if needed
