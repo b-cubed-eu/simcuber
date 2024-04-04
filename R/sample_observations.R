@@ -87,13 +87,6 @@ sample_observations <- function(
       "x" = "You've supplied a {.cls {class(sampling_bias)}} vector."
     ))
   }
-  if (!is.numeric(coordinate_uncertainty_meters)) {
-    cli::cli_abort(c(
-      "{.var coordinate_uncertainty_meters} must be a positive numeric value.",
-      "x" = "You've supplied a {.cls {class(coordinate_uncertainty_meters)}}
-      object."
-    ))
-  }
   if (!is.integer(seed) & !is.na(seed)) {
     cli::cli_abort(c(
       "{.var seed} must be NA or a positive integer.",
