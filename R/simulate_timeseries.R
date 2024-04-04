@@ -192,7 +192,7 @@ simulate_timeseries <- function(
   # Set seed if provided
   if (!is.na(seed)) {
     if (is.numeric(seed)) {
-      set.seed(seed)
+      withr::local_seed(seed)
     } else {
       cli::cli_abort(
         c(
