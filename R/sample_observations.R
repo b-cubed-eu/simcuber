@@ -44,6 +44,7 @@
 #' @importFrom stats rbinom
 #' @importFrom magrittr %>%
 #' @importFrom withr local_seed
+#' @importFrom rlang .data
 #'
 #' @examples
 #' # Load packages
@@ -188,17 +189,18 @@ sample_observations <- function(
   # Combine detection and bias probabilities and sample observations
   occurrences_combi <- occurrences %>%
     dplyr::mutate(
-      sampling_probability = detection_probability * bias_weight
+      sampling_probability = .data$detection_probability * .data$bias_weight
     ) %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(sample_status = stats::rbinom(1, 1, sampling_probability)) %>%
+    dplyr::mutate(sample_status = stats::rbinom(1, 1,
+                                                .data$sampling_probability)) %>%
     dplyr::ungroup()
 
   # Filter observations
   observations <- occurrences_combi %>%
-    dplyr::filter(sample_status == 1) %>%
-    dplyr::select(time_point, detection_probability, bias_weight,
-                  sampling_probability, geometry)
+    dplyr::filter(.data$sample_status == 1) %>%
+    dplyr::select("time_point", "detection_probability", "bias_weight",
+                  "sampling_probability", "geometry")
 
   # Return the observed occurrences
   return(observations)
