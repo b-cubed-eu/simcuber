@@ -22,7 +22,7 @@ distribution (lambda parameter).}
 points to simulate.}
 
 \item{temporal_autocorr}{\code{NA} (default), or a function which generates
-a trend in abundance over time. Only used if \code{time_points > 1}. By default,
+a trend in abundance over time. Only used if \code{n_time_points > 1}. By default,
 the function will sample \code{n_time_points} times from a Poisson
 distribution with average (lambda) \code{initial_average_abundance}. When a
 function is specified (e.g. the internal \code{simulate_random_walk()} function)
@@ -45,7 +45,6 @@ The function simulates a timeseries for the abundance of a species.
 }
 \examples{
 
-library(simcuber)
 library(ggplot2)
 
 ## 1. Use the function simulate_random_walk()

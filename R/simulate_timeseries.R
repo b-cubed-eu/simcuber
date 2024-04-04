@@ -9,7 +9,7 @@
 #' @param n_time_points A positive integer value indicating the number of time
 #' points to simulate.
 #' @param temporal_autocorr `NA` (default), or a function which generates
-#' a trend in abundance over time. Only used if `time_points > 1`. By default,
+#' a trend in abundance over time. Only used if `n_time_points > 1`. By default,
 #' the function will sample `n_time_points` times from a Poisson
 #' distribution with average (lambda) `initial_average_abundance`. When a
 #' function is specified (e.g. the internal `simulate_random_walk()` function)
@@ -185,7 +185,7 @@ simulate_timeseries <- function(
 
   # Check type of temporal_autocorr
   # If temporal_autocorr is a function, use it to generate the timeseries
-  if (is.function(temporal_autocorr)) {
+  if (is.function(temporal_autocorr) && n_time_points > 1) {
     # Collect additional arguments
     length_pars <- length(list(...))
 
