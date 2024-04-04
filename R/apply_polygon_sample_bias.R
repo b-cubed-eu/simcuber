@@ -34,12 +34,10 @@
 #' n_points <- 4
 #' xlim <- c(3841000, 3842000)
 #' ylim <- c(3110000, 3112000)
-#' coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 #'
 #' observations_sf <- data.frame(
 #'   lat = runif(n_points, ylim[1], ylim[2]),
-#'   long = runif(n_points, xlim[1], xlim[2]),
-#'   coordinateUncertaintyInMeters = coordinate_uncertainty
+#'   long = runif(n_points, xlim[1], xlim[2])
 #' ) %>%
 #'   st_as_sf(coords = c("long", "lat"), crs = 3035)
 #'
