@@ -40,6 +40,8 @@ coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 # create spatial dataframe with occurrences
 
 Create random occurrences following uniform distribution within the bounding box
+Define CRS
+Aggregate TRUE or FALSE
 
 ```{r}
 observations_sf <- data.frame(
@@ -50,7 +52,10 @@ observations_sf <- data.frame(
 ) %>% st_as_sf(coords = c("long", "lat"), crs = 3035, remove = FALSE)
 ```
 
-Visualize points
+# Visualize points
+
+Simple observation of randomized points in grid
+
 ```{r}
 ggplot(data = observations_sf) +
   geom_sf(color = "red")

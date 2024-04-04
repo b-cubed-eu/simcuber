@@ -1,5 +1,5 @@
 ---
-title: "random_walk"
+title: "random_walk_time series"
 ---
 
 ```{r, include = FALSE}
@@ -9,6 +9,189 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+# load libraries
+
+```{r}
 library(simcuber)
+library(dplyr)
+library(sf)
+library(ggplot2)
+library(tidyverse)
+library(magrittr)
 ```
+
+# Create random points
+
+n_points: number of needed virtual occurrences in the grid
+Define grid bounding box: 
+              xlim: bounding box
+              ylim: bounding box
+
+Add variables here
+
+```{r}
+n_points <- (simulate_random_walk(
+  initial_average_occurrences = 50,
+  n_time_points = 10,
+  sd_step = 0.05,
+  seed = NA))
+xlim <- c(3841000, 3842000)
+ylim <- c(3110000, 3112000)
+coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
+```
+
+```{r}
+n_points <- simulate_timeseries(
+  initial_average_occurrences = 50,
+  n_time_points = 10,
+  temporal_function = simulate_random_walk,
+  sd_step = 0.05,
+  seed = NA)
+xlim <- c(3841000, 3842000)
+ylim <- c(3110000, 3112000)
+coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
+```
+
+
+# create spatial dataframe with occurrences
+
+Create random occurrences following uniform distribution within the bounding box
+Define CRS
+Aggregate TRUE or FALSE
+
+```{r}
+observations_sf <- data.frame(
+  lat = runif(n_points, ylim[1], ylim[2]),
+  long = runif(n_points, xlim[1], xlim[2]),
+  aggregate = TRUE,
+  coordinateUncertaintyInMeters = coordinate_uncertainty
+) %>% st_as_sf(coords = c("long", "lat"), crs = 3035, remove = FALSE)
+```
+
+# Visualize points
+
+Simple observation of randomized points in grid
+
+```{r}
+ggplot(data = observations_sf) +
+  geom_sf(color = "red")
+```
+
+# Add buffer uncertainty in meters around points
+
+```{r}
+
+observations_buffered <- observations_sf %>%
+  st_buffer(observations_sf$coordinateUncertaintyInMeters)
+```
+
+
+Visualize bufer
+```{r}
+ggplot(data = observations_buffered) +
+  geom_sf(color = "red", fill = "darkgreen")
+```
+
+
+# Create grid
+```{r}
+grid_df <- st_make_grid(
+  observations_buffered,
+  square = TRUE,
+  cellsize = c(200, 200)
+) %>%
+  st_sf()
+```
+
+visualize grid
+
+```{r}
+ggplot(data = grid) +
+  geom_sf(color = "red", fill = "darkgreen")
+```
+
+
+
+# Grid designation
+```{r}
+occurrence_cube_df <- grid_designation(
+  observations = observations_sf,
+  grid = grid_df,
+  seed = 123)
+```
+
+# Visualise Grid designation
+```{r}
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1, aes(fill = as.factor(n))) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+ # scale_fill_manual() + 
+# geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  theme_void()
+
+```
+# Visualise Grid designation2
+```{r}
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1, aes(fill = factor(n))) +
+ # scale_fill_manual() +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+ #  
+# geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  theme_void()
+
+```
+
+
+
+# Also get sampled points to visualise
+
+```{r}
+sampled_points <- grid_designation(
+  observations = observations_sf,
+  grid = grid_df,
+  seed = 123,
+  aggregate = FALSE)
+```
+
+
+# visualize output 1
+
+
+```{r}
+ggplot() +
+  geom_sf(data = grid_df, linewidth = 1, color = "red", fill = "lightgreen") +
+  
+  geom_sf(data = observations_sf, colour = "firebrick") +
+  geom_sf(data = observations_buffered, fill = alpha("firebrick", 0.5)) +
+  theme_void()
+```
+
+
+
+
+# Visualise output complete
+```{r}
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n) +
+  geom_sf(data = sampled_points, colour = "blue") +
+  geom_sf(data = observations_sf, colour = "firebrick") +
+  geom_sf(data = observations_buffered, fill = alpha("firebrick", 0.5)) +
+ # geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  theme_void()
+
+```
+
+trying
+
+```{r}
+ggplot() +
+  geom_sf(data = grid, linewidth = 1, color = "red", fill = "lightgreen") +
+  geom_sf(data = grid, aes(label = n) ) +
+  theme_void()
+```
+
+
+
+
