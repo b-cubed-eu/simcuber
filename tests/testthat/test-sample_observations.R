@@ -45,7 +45,7 @@ test_that("arguments are of the right class", {
 
   # sampling_bias is a character vector
   expect_error(sample_observations(points_sf1, 0.5, TRUE),
-               regexp = "`points_sf2` must be a character vector of length 1.",
+               regexp = "`sampling_bias` must be a character vector of length 1.",
                fixed = TRUE)
 
   # coordinate_uncertainty_meters is a numeric value
@@ -63,10 +63,10 @@ test_that("arguments are of the right class", {
 
   # seed is a numeric value
   expect_error(sample_observations(points_sf1, seed = TRUE),
-               regexp = "`seed` must be a positive integer.",
+               regexp = "`seed` must be NA or a positive integer.",
                fixed = TRUE)
-expect_error(sample_observations(points_sf1, seed = -1),
-             regexp = "`seed` must be a positive integer.",
+  expect_error(sample_observations(points_sf1, seed = -1),
+             regexp = "`seed` must be NA or a positive integer.",
              fixed = TRUE)
   expect_error(sample_observations(points_sf1, seed = 2.34),
                regexp = "`seed` must be NA or a positive integer.",
