@@ -58,18 +58,7 @@ apply_polygon_sample_bias <- function(observations,
                                       bias_strength = 1) {
 
   ### Start checks
-  # 1. check input lengths
-  if (length(bias_strength) != 1) {
-    cli::cli_abort(c(
-      "{.var bias_strength} must be a numeric vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(bias_strength)}} vector",
-        "of length {length(bias_strength)}."
-      )
-    ))
-  }
-
-  # 2. check input classes
+  # 1. check input classes
   if (!"sf" %in% class(observations)) {
     cli::cli_abort(c(
       "{.var observations} must be an sf object.",
@@ -83,7 +72,36 @@ apply_polygon_sample_bias <- function(observations,
       "x" = "You've supplied a {.cls {class(bias_area)}} object."
     ))
   }
+
+  if (!unique(sf::st_geometry_type(bias_area)) == "POLYGON") {
+    cli::cli_abort(c(
+      "{.var bias_area} must be an sf object containing one or more polygon geometry types.",
+      "x" = "You've supplied an sf object with {.cls {unique(sf::st_geometry_type(bias_area))}} geometry types."
+    ))
+  }
+
+  if (!"numeric" %in% class(bias_strength)) {
+    cli::cli_abort(c(
+      "{.var bias_strength} must be a numeric object.",
+      "x" = "You've supplied a {.cls {class(bias_strength)}} object."
+    ))
+  }
+
+  # 2. check input lengths
+  if (length(bias_strength) != 1) {
+    cli::cli_abort(c(
+      "{.var bias_strength} must be a numeric vector of length 1.",
+      "x" = paste(
+        "You've supplied a {.cls {class(bias_strength)}} vector",
+        "of length {length(bias_strength)}."
+      )
+    ))
+  }
+
   ### End checks
+
+  # Combine polygons into multipolygon
+  bias_area <- sf::st_union(bias_area)
 
   # Find observations inside polygon
   in_bias_area <- observations %>%
