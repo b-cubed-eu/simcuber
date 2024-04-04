@@ -36,6 +36,36 @@ test_that("add_coordinate_uncertainty() add the right coordinate uncertainty", {
   )
 })
 
+test_that("add_coordinate_uncertainty() returns error on wrong length of coords_uncertainty_meters", {
+  # set the number of observations and coordinate uncertainty to test
+  n_observations <- 7
+  # create observations_sf object to be used as an input
+  observations_sf <-
+    data.frame(
+      lat = runif(n_observations, 3110000, 3112000),
+      long = runif(n_observations, 3841000, 3842000)
+    ) %>%
+    st_as_sf(coords = c("long", "lat"), crs = 3035)
+
+  # Use an expectation per line of the error.
+  expect_error(
+    add_coordinate_uncertainty(
+      observations_sf,
+      coords_uncertainty_meters = rep(1234, n_observations + 1)
+    ),
+    regexp = "`coords_uncertainty_meters` has diferent length than the number of rows in `occurrences`",
+    fixed = TRUE
+  )
+
+  expect_error(
+    add_coordinate_uncertainty(
+      observations_sf,
+      coords_uncertainty_meters = rep(1234, n_observations + 1)
+    ),
+    regexp = "You've supplied `coords_uncertainty_meters` of length 8 but `occurrences` has 7 rows."
+  )
+})
+
 test_that("add_coordinate_uncertainty() returns error on non sf occurrence input", {
   not_an_sf_object <- data.frame(1:5, 5, 6)
 
