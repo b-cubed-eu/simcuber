@@ -6,6 +6,7 @@ library(virtualspecies)
 library(tidyverse)
 library(geodata)
 library(corrplot)
+library(car)
 # worldclim_global(var, res, path, version="2.1", ...)
 # worldclim_country(country, var, path, version="2.1", ...)
 # worldclim_tile(var, lon, lat, path, version="2.1", ...)
@@ -52,10 +53,19 @@ d <- worldclim_country(country = "Italy", var = "bio", res=0.5, path=tempdir()) 
 #BIO19 = Precipitation of Coldest Quarter
 
 # Subsample 10% of pixels and calculate pairwise correlations
-d
-r1 <- mydata$wc2.1_30s_bio_1
-cor <- cor(sampleRandom(mydata, size= ncell(r1) * 0.10 ), method = "pearson")
 
+cor <- cor(sampleRandom(mydata, size= ncell(r1) * 0.10 ), method = "pearson")
+d
+pp <- stack(d)
+
+
+data_df <- as.data.frame(d, xy = TRUE)
+# Supponendo che 'data' sia il tuo dataframe contenente le variabili bioclimatiche
+vif_results <- vif(lm.fit = lm())
+
+
+# Plot correlation matrix
+df <- corrplot(cor, method = "number")
 
 # Creazione di un vettore di nomi delle variabili
 names_var <- c()
@@ -73,6 +83,17 @@ for (i in 1:num_var) {
 print(names_var)
 names(d) <- names_var
 
+
+#Numero variabili bioclimatiche
+
+num_bioclim <- 5
+
+indici <- sample(1:nlayers(d), 3)
+
+selezionati <- d[[indici]]
+
+print(names(selezionati))
+
 # Plot correlation matrix
 df <- corrplot(cor, method = "number")
 
@@ -85,7 +106,7 @@ Outputs <- list()
 
 for (i in 1:Number_species) {
   set.seed(i)
-  random.sp <- generateRandomSp(raster.stack = d,
+  random.sp <- generateRandomSp(raster.stack = biovar,
                                 convert.to.PA = FALSE,
                                 species.type = "multiplicative",
                                 relations = "gaussian",
