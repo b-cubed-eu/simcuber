@@ -73,6 +73,13 @@ apply_polygon_sample_bias <- function(observations,
     ))
   }
 
+  if (!unique(sf::st_geometry_type(bias_area)) == "POLYGON") {
+    cli::cli_abort(c(
+      "{.var bias_area} must be an sf object containing one or more polygon geometry types.",
+      "x" = "You've supplied an sf object with {.cls {unique(sf::st_geometry_type(bias_area))}} geometry types."
+    ))
+  }
+
   if (!"numeric" %in% class(bias_strength)) {
     cli::cli_abort(c(
       "{.var bias_strength} must be a numeric object.",

@@ -64,6 +64,11 @@ test_that("arguments are of the right class", {
                                          bias_strength = 1),
                regexp = "`bias_area` must be an sf object",
                fixed = TRUE)
+  expect_error(apply_polygon_sample_bias(observations,
+                                         bias_area = observations,
+                                         bias_strength = 1),
+               regexp = "`bias_area` must be an sf object containing one or more polygon geometry types",
+               fixed = TRUE)
 
   # bias_strength is numeric
   expect_error(apply_polygon_sample_bias(observations,
