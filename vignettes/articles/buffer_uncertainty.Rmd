@@ -11,4 +11,39 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(simcuber)
+library(dplyr)
+library(sf)
+library(ggplot2)
+```
+
+# Create random points
+```{r}
+
+n_points <- 23
+xlim <- c(3841000, 3842000)
+ylim <- c(3110000, 3112000)
+coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
+
+observations_sf <- data.frame(
+  lat = runif(n_points, ylim[1], ylim[2]),
+  long = runif(n_points, xlim[1], xlim[2]),
+  aggregate = FALSE,
+  
+  coordinateUncertaintyInMeters = coordinate_uncertainty
+) %>%
+  st_as_sf(coords = c("long", "lat"), crs = 3035)
+```
+
+# Add buffer uncertainty in meters around points
+
+```{r}
+
+observations_buffered <- observations_sf %>%
+  st_buffer(observations_sf$coordinateUncertaintyInMeters)
+```
+
+Visualize bufer
+```{r}
+ggplot(data = observations_buffered) +
+  geom_sf(color = "red", fill = "darkgreen")
 ```
