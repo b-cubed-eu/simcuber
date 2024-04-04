@@ -63,8 +63,6 @@
 #' # Can be used as occurrences input argument
 #' points_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
-
-
 sample_observations <- function(
     occurrences,
     detection_probability = 1,
@@ -78,7 +76,6 @@ sample_observations <- function(
   ### Start checks
 
   # 1. check input classes
-  # To do: checks for bias_area, bias_strength and bias_weights
   if (!("sf" %in% class(occurrences))) {
     cli::cli_abort(c(
       "{.var occurrences} must be an sf object.",
