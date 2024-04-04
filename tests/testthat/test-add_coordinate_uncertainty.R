@@ -16,6 +16,25 @@ test_that("add_coordinate_uncertainty() returns sf object", {
   )
 })
 
+test_that("add_coordinate_uncertainty() add the right coordinate uncertainty", {
+  n_observations <- 4
+  coords_uncertanty_set <- 1000
+  # create observations_sf object to be used as an input
+  observations_sf <-
+    data.frame(
+      lat = runif(n_observations, 3110000, 3112000),
+      long = runif(n_observations, 3841000, 3842000)
+    ) %>%
+    st_as_sf(coords = c("long", "lat"), crs = 3035)
+
+  expect_identical(
+    add_coordinate_uncertainty(observations_sf,
+      coords_uncertainty_meters = coords_uncertanty_set
+    )$coordinateUncertaintyInMeters,
+    rep(coords_uncertanty_set, n_observations)
+  )
+})
+
 test_that("add_coordinate_uncertainty() returns error on non sf occurrence input", {
   not_an_sf_object <- data.frame(1:5, 5, 6)
 
