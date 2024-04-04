@@ -8,6 +8,7 @@
 #' the virtual species are created.
 #' @param nocc numeric values indicate the number of desired occurrences for the
 #' virtual species, by default is 100.
+#' virtual species
 #' @param polygon An sf object with POLYGON geometry indicating the spatial
 #' extend to simulate occurrences. If `NA` (the default), the virtual species is
 #' generated in the entire area of the stack.
@@ -62,7 +63,11 @@ virtualspecies_to_sf <- function(
                          plot = FALSE)
 
   presence.points <- sampleOccurrences(new.pres,
+
                                        n = 100,
+
+                                       n = nocc,
+
                                        type = "presence only",
                                        sample.prevalence = 0.5,
                                        detection.probability = 0.8,
