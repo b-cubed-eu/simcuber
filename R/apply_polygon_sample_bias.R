@@ -74,14 +74,14 @@ apply_polygon_sample_bias <- function(observations, bias_area,
   # 2. check input classes
   if (!"sf" %in% class(observations)) {
     cli::cli_abort(c(
-      "{.var observations} must be an sf object",
+      "{.var observations} must be an sf object.",
       "x" = "You've supplied a {.cls {class(observations)}} object."
     ))
   }
 
   if (!"sf" %in% class(bias_area)) {
     cli::cli_abort(c(
-      "{.var bias_area} must be an sf object",
+      "{.var bias_area} must be an sf object.",
       "x" = "You've supplied a {.cls {class(bias_area)}} object."
     ))
   }
