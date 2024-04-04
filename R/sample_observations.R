@@ -33,12 +33,11 @@
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' sampled observations, a `detection_probability` column containing the
-#' detection probability for each observation (will be the same for all), a
+#' detection probability for each observation (will be the same for all), and a
 #' `bias_weight` column containing the sampling probability based on sampling
 #' bias, a `sampling_probability` column containing the combined sampling
-#' probability from detection probability and sampling bias, and a
-#' `coordinateUncertaintyInMeters` column containing the coordinate uncertainty
-#' for each observation.
+#' probability from detection probability and sampling bias for each
+#' observation.
 #'
 #' @export
 #'
@@ -64,8 +63,6 @@
 #' # Can be used as occurrences input argument
 #' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
-
-
 sample_observations <- function(
     occurrences,
     detection_probability = 1,
@@ -74,7 +71,7 @@ sample_observations <- function(
     bias_strength = 1,
     seed = NA) {
   # Add detection probability
-  occurrences$detection_probability <-  detection_probability
+  occurrences$detection_probability <- detection_probability
 
   # Create and merge bias weight with occurrences
   if (length(sampling_bias) > 1) {
@@ -91,20 +88,20 @@ sample_observations <- function(
     occurrences$bias_weights <- 1
   }
 
-  # Combine detection and bias probabilities
-  combine_probability <- occurrences$bias_weights*occurrences$detection_probability
-  occurrences$combine_probability
+  # Combine detection and bias probabilities and sample observations
+  occurrences <- occurrences %>%
+    dplyr::mutate(
+      sampling_probability = detection_probability * bias_weights
+    ) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(sample_status = stats::rbinom(1, 1, sampling_probability))
 
-  # sampling based on combined probability
-  n <- nrow(occurrences)
-  sample_status <- vector(length = n)
-  for (i in 1:n) {
-    prob <- combine_probability[i]
-    sample_status[i] <- rbinom(1, 1, prob)
-  }
-  occurrences$sample_status <- sample_status
-  occurrences <- subset(occurrences, sample_status == 1)
+  # Filter observations
+  observations <- occurrences %>%
+    dplyr::filter(sample_status == 1) %>%
+    dplyr::select(time_point, detection_probability, bias_weights,
+                  sampling_probability, geometry)
 
   # Return the observed occurrences
-  return(occurrences)
+  return(observations)
 }
