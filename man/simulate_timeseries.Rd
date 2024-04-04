@@ -45,7 +45,6 @@ The function simulates a timeseries for the abundance of a species.
 }
 \examples{
 
-library(simcuber)
 library(ggplot2)
 
 ## 1. Use the function simulate_random_walk()
