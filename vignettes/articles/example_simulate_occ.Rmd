@@ -1,0 +1,14 @@
+---
+title: "example_simulate_occ"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(simcuber)
+```

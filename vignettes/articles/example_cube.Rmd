@@ -23,8 +23,9 @@ library(magrittr)
 # Create random points
 
 n_points: number of needed virtual occurrences in the grid
-xlim: bounding box
-ylim: bounding box
+Define grid bounding box: 
+              xlim: bounding box
+              ylim: bounding box
 
 Add variables here
 ```{r}
@@ -37,6 +38,8 @@ coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 ```
 
 # create spatial dataframe with occurrences
+
+Create random occurrences following uniform distribution within the bounding box
 
 ```{r}
 observations_sf <- data.frame(
