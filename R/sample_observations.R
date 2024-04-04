@@ -25,20 +25,16 @@
 #' of bias weights to be applied to the sampling of occurrences. Higher weights
 #' mean a higher probability of sampling. Weights can be numeric values between
 #' 0 and 1 or positive integers that will be rescaled to values between 0 and 1.
-#' @param coordinate_uncertainty_meters A positive numeric value or vector with
-#' length `nrow(occurrences)` describing the uncertainty in meters around each
-#' observation.
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' sampled observations, a `detection_probability` column containing the
-#' detection probability for each observation (will be the same for all), a
+#' detection probability for each observation (will be the same for all), and a
 #' `bias_weight` column containing the sampling probability based on sampling
 #' bias, a `sampling_probability` column containing the combined sampling
-#' probability from detection probability and sampling bias, and a
-#' `coordinateUncertaintyInMeters` column containing the coordinate uncertainty
-#' for each observation.
+#' probability from detection probability and sampling bias for each
+#' observation.
 #'
 #' @export
 #'
@@ -61,18 +57,15 @@
 #'
 #' # Convert the occurrence data to an sf object
 #' # Can be used as occurrences input argument
-#' points_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
+#' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
 sample_observations <- function(
     occurrences,
     detection_probability = 1,
     sampling_bias = c("no_bias", "polygon", "manual"),
     bias_area = NA,
-    bias_strength = NA,
-    bias_weights = NA,
-    coordinate_uncertainty_meters = 25,
+    bias_strength = 1,
     seed = NA) {
-
   ### Start checks
 
   # 1. check input classes
@@ -117,19 +110,48 @@ sample_observations <- function(
       {.var detection_probability}."
     ))
   }
-# seed is a positive value
-if (seed <= 0) {
-  cli::cli_abort(c(
-    "{.var seed} must be a positive integer.",
-    "x" = "You've supplied {seed} as {.var seed}."
-  ))
-}
+  # seed is a positive value
+  if (seed <= 0) {
+    cli::cli_abort(c(
+      "{.var seed} must be a positive integer.",
+      "x" = "You've supplied {seed} as {.var seed}."
+    ))
+  }
 
   ### End checks
 
-  occurrences <- occurrences %>%
-    dplyr::mutate(detection_probability = detection_probability)
-  print(detection_probability)
+  # Add detection probability
+  occurrences$detection_probability <- detection_probability
 
-  # ...
+  # Create and merge bias weight with occurrences
+  if (length(sampling_bias) > 1) {
+    sampling_bias <- sampling_bias[1]
+  }
+  if (sampling_bias == "polygon") {
+    occurrences <- apply_polygon_sample_bias(
+      observations = occurrences,
+      bias_area = bias_area,
+      bias_strength = bias_strength)
+  } else if (sampling_bias == "manual") {
+    cli::cli_abort("Manual option still in development!")
+  } else {
+    occurrences$bias_weights <- 1
+  }
+
+  # Combine detection and bias probabilities and sample observations
+  occurrences <- occurrences %>%
+    dplyr::mutate(
+      sampling_probability = detection_probability * bias_weights
+    ) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(sample_status = stats::rbinom(1, 1, sampling_probability))
+
+  # Filter observations
+  observations <- occurrences %>%
+    dplyr::filter(sample_status == 1) %>%
+    dplyr::select(time_point, detection_probability, bias_weights,
+                  sampling_probability, geometry)
+
+  # Return the observed occurrences
+  return(observations)
 }
