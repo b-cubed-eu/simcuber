@@ -17,14 +17,15 @@
 #' @param bias_strength `NA` or a positive numeric value. Only used if
 #' `sampling_bias = "polygon"`. The strength of the bias to be applied in the
 #' biased area (as a multiplier). Above 1, area will be oversampled. Below 1,
-#' area will be undersampled. For example, a value of 50 will result in 50
-#' times more samples within the `bias_area` than outside. Conversely, a value
-#' of 0.5 will result in half less samples within the `bias_area` than outside.
-#' @param bias_weights `NA` or a raster layer (sf object with POLYGON geometry,
-#' or SpatRaster object). Only used if `sampling_bias = "manual"`. The raster
-#' of bias weights to be applied to the sampling of occurrences. Higher weights
-#' mean a higher probability of sampling. Weights can be numeric values between
-#' 0 and 1 or positive integers that will be rescaled to values between 0 and 1.
+#' area will be undersampled. For example, a value of 50 will result in a 50
+#' times sampling probability within the `bias_area` than outside. Conversely,
+#' a value of 0.5 will result in half less samples within the `bias_area` than
+#' outside.
+#' @param bias_weights `NA` or a raster layer (sf object with POLYGON geometry.
+#' Only used if `sampling_bias = "manual"`. The raster of bias weights to be
+#' applied to the sampling of occurrences. Higher weights mean a higher
+#' probability of sampling. Weights can be numeric values between 0 and 1 or
+#' positive integers that will be rescaled to values between 0 and 1.
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
@@ -116,7 +117,7 @@ sample_observations <- function(
   # Add detection probability
   occurrences$detection_probability <- detection_probability
 
-  # Create and merge bias weight with occurrences
+  # Create and merge bias weights with occurrences
   if (length(sampling_bias) > 1) {
     sampling_bias <- sampling_bias[1]
   }
