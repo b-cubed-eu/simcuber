@@ -71,26 +71,26 @@ sample_observations <- function(
     detection_probability = 1,
     sampling_bias = c("no_bias", "polygon", "manual"),
     bias_area = NA,
-    bias_strength = NA,
-    bias_weights = NA,
+    bias_strength = 1,
     coordinate_uncertainty_meters = 25,
     seed = NA) {
 
-  # bias weights
-  bias_weight <- apply_polygon_sample_bias(occurrences, ...)
+  # create and merge bias weight with the data with occurrences
+  occurrences <- apply_polygon_sample_bias(observations = occurrences,
+                                           bias_area = bias_area,
+                                           bias_strength = bias_strength)
 
-  # Merge bias weight with the data with occurrences
-  occurrences$bias_weights <- bias_weights
+
+
 
   # detection probability
   occurrences$detection_probability <-  detection_probability
 
   # combine probability
-  combine_probability <- bias_weights*detection_probability
+  combine_probability <- occurrences$bias_weights*occurrences$detection_probability
   occurrences$combine_probability
 
   # sampling based on combined probability
-
   n <- nrow(occurrences)
   sample_status <- vector(length = n)
   for (i in 1:n) {
@@ -105,6 +105,6 @@ sample_observations <- function(
 
 }
 
-sample_observations(occurrences = occurrences_sf, bias_weights = runif(10,0,1))
+sample_observations(occurrences = observations_sf, bias_area = bias_area )
 
-
+observations_sf
