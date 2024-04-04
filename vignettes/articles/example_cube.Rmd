@@ -19,6 +19,12 @@ library(ggplot2)
 ```
 
 # Create random points
+
+n_points: number of needed virtual occurrences in the grid
+xlim: bounding box
+ylim: bounding box
+
+Add variables here
 ```{r}
 
 n_points <- 23
@@ -26,6 +32,11 @@ xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)
 coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 
+```
+
+# create spatial dataframe with occurrences
+
+```{r}
 observations_sf <- data.frame(
   lat = runif(n_points, ylim[1], ylim[2]),
   long = runif(n_points, xlim[1], xlim[2]),
@@ -35,6 +46,11 @@ observations_sf <- data.frame(
 ) %>%
   st_as_sf(coords = c("long", "lat"), crs = 3035)
 ```
+
+# add column decimalLat & decimalLong
+
+
+
 
 # Add buffer uncertainty in meters around points
 
