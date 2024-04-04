@@ -69,7 +69,6 @@
 apply_polygon_sample_bias <- function(occurrences_sf,
                                       bias_area,
                                       bias_strength = 1) {
-
   ### Start checks
   # 1. check input classes
   if (!"sf" %in% class(occurrences_sf)) {
@@ -118,7 +117,8 @@ apply_polygon_sample_bias <- function(occurrences_sf,
 
   # Find occurrences inside polygon
   in_bias_area <- occurrences_sf %>%
-    sf::st_within(bias_area, sparse = FALSE)
+    sf::st_within(bias_area, sparse = FALSE) %>%
+    as.vector()
 
   # Calculate sampling probability based on bias strength
   bias_weights_outside_polygon <- 1 / (1 + bias_strength)
