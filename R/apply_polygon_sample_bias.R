@@ -46,14 +46,14 @@
 #'   st_as_sf(coords = c("long", "lat"), crs = 3035)
 #'
 #' # Create bias_area polygon overlapping two of the points
-#' selected_observations <- st_union(observations_buffered[2:3,])``
-#' bias_area <- st_convex_hull(selected_multipolygon) %>%
+#' selected_observations <- st_union(observations_sf[2:3,])
+#' bias_area <- st_convex_hull(selected_observations) %>%
 #'   st_buffer(dist = 100) %>%
 #'   st_as_sf()
 #'
 #' bias_strength <- 2
 #'
-#' apply_polygon_sample_bias(observations, bias_area, bias_strength)
+#' apply_polygon_sample_bias(observations_sf, bias_area, bias_strength)
 #'
 apply_polygon_sample_bias <- function(observations, bias_area,
                                       bias_strength = 1) {
