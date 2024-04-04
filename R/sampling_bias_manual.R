@@ -37,24 +37,23 @@
 #' bias_weights <- grid
 
 sampling_bias_manual <- function(occurrences_sf, bias_weights) {
-
   ### Start checks
-
   # 1. check input classes
-
-  # Occurrences_sf is already checked in sample_observations.
-
+  if (!("sf" %in% class(occurrences))) {
+    cli::cli_abort(c(
+      "{.var occurrences} must be an sf object.",
+      "x" = "You've supplied a {.cls {class(occurrences)}} object."
+    ))
+  }
   if (!"sf" %in% class(bias_weights)) {
     cli::cli_abort(c(
       "{.var bias_weights} must be an sf object.",
       "x" = "You've supplied a {.cls {class(bias_weights)}} object."
     ))
   }
-  # To do: Check also for spatRaster object? ####
 
   # 2. Other checks
-
-  # Check if bias_weights has a column named bias_weight, if not, raise error
+  # Check if bias_weights has a column named bias_weight
   if (!("bias_weight" %in% names(bias_weights))) {
     cli::cli_abort(c(
       "{.var bias_weights} must have a column named `bias_weight`.",
@@ -63,8 +62,8 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
     ))
   }
 
-  # Check if all occurrences (points) are in the grid, if not, raise error
-  points_in_grid <- st_filter(occurrences_sf, bias_weights)
+  # Check if all occurrences (points) are in the grid
+  points_in_grid <- sf::st_filter(occurrences_sf, bias_weights)
   if (!identical(points_in_grid, occurrences_sf)) {
     cli::cli_abort(c(
       "{.var bias_weights} must be a grid that encompasses all occurrences.",
@@ -90,7 +89,7 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
   }
 
   # Intersection
-  weighted_occurrences <- st_intersection(occurrences_sf, bias_weights)
+  weighted_occurrences <- sf::st_intersection(occurrences_sf, bias_weights)
 
   return(weighted_occurrences)
 }
