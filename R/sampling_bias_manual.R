@@ -5,8 +5,7 @@
 #' probability to be sampled.
 #'
 #' @param occurrences_sf An sf object with POINT geometry.
-#' @param bias_weights A raster layer (sf object with POLYGON geometry,
-#' or SpatRaster object). The raster of bias weights to be applied to the
+#' @param bias_weights A raster layer (sf object with POLYGON geometry). The raster of bias weights to be applied to the
 #' sampling of occurrences. This sf object should have 2 columns with the
 #' following names:
 #' - geometry
@@ -77,10 +76,9 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
 
   # Check if the values of occurrences_sf$bias_weight are positive
   # seed is a positive value
-  if (!(all(occurrences_sf$bias_weight) >= 0)) {
+  if (!(all(bias_weights$bias_weight >= 0))) {
     cli::cli_abort(c(
-      "The column `bias_weight` must consist of numeric values between 0 and 1
-      OR positive integers.",
+      "The column `bias_weight` must consist of numeric values between 0 and 1 OR positive integers.",
       "x" = "The column `bias_weight` has negative values."
     ))
   }
@@ -88,23 +86,13 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
   ### End checks
 
   # Rescale bias_weight if needed
-  if ((!(0 <= detection_probability) && !(detection_probability <= 1))) {
-    cli::cli_abort(c(
-      "Weights  must be numeric values between 0
-      and 1 OR positive integers.",
-      "x" = "You've supplied XXX."
-    ))
+  maxweight <- max(bias_weights$bias_weight)
+  if (maxweight > 1) {
+    bias_weights$bias_weight <- bias_weights$bias_weight / maxweight
   }
 
-
   # Intersection
-  observations <- st_intersection(occurrences_sf, bias_weights)
+  weighted_occurrences <- st_intersection(occurrences_sf, bias_weights)
 
-  # To do: Check if the column names are correct
-
-  # To do: not the same return as polygon does, with(out) UncertainityInMeter?
-
-  return(observations)
-
-
+  return(weighted_occurrences)
 }
