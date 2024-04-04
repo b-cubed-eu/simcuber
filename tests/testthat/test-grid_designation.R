@@ -4,6 +4,9 @@ n_points <- 4
 xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)
 
+## set seed for reproducible observations object
+set.seed(9)
+
 ## dataset without coordinateUncertaintyInMeters
 observations_sf1 <- data.frame(
   lat = runif(n_points, ylim[1], ylim[2]),
@@ -12,7 +15,6 @@ observations_sf1 <- data.frame(
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
 
 ## dataset with coordinateUncertaintyInMeters
-set.seed(123)
 coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 observations_sf2 <- observations_sf1 %>%
   dplyr::mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
@@ -240,44 +242,31 @@ test_that("correct column names present", {
 })
 
 test_that("no minimal coordinate uncertainty for empty grid cells", {
+  grid_designation_df1 <- grid_designation(observations_sf1, grid = grid_df1)
+  grid_designation_df2 <- grid_designation(observations_sf2, grid = grid_df1)
+  grid_designation_df3 <- grid_designation(observations_sf1, grid = grid_df1,
+                                           randomisation = "normal")
+  grid_designation_df4 <- grid_designation(observations_sf2, grid = grid_df1,
+                                           randomisation = "normal")
+
   # randomisation = "uniform"
   suppressWarnings({
-    expect_equal(sum(
-                   grid_designation(observations_sf1,
-                                    grid = grid_df1)$n == 0),
-                 sum(is.na(
-                   grid_designation(observations_sf1,
-                                    grid = grid_df1)$min_coord_uncertainty))
+    expect_equal(sum(grid_designation_df1$n == 0),
+                 sum(is.na(grid_designation_df1$min_coord_uncertainty))
                  )
   })
-  expect_equal(sum(
-    grid_designation(observations_sf2,
-                     grid = grid_df1)$n == 0),
-    sum(is.na(
-      grid_designation(observations_sf2,
-                       grid = grid_df1)$min_coord_uncertainty))
+  expect_equal(sum(grid_designation_df2$n == 0),
+    sum(is.na(grid_designation_df2$min_coord_uncertainty))
   )
 
   # randomisation = "normal"
   suppressWarnings({
-    expect_equal(sum(
-      grid_designation(observations_sf1,
-                       grid = grid_df1,
-                       randomisation = "normal")$n == 0),
-      sum(is.na(
-        grid_designation(observations_sf1,
-                         grid = grid_df1,
-                         randomisation = "normal")$min_coord_uncertainty))
+    expect_equal(sum(grid_designation_df3$n == 0),
+      sum(is.na(grid_designation_df3$min_coord_uncertainty))
     )
   })
-  expect_equal(sum(
-    grid_designation(observations_sf2,
-                     grid = grid_df1,
-                     randomisation = "normal")$n == 0),
-    sum(is.na(
-      grid_designation(observations_sf2,
-                       grid = grid_df1,
-                       randomisation = "normal")$min_coord_uncertainty))
+  expect_equal(sum(grid_designation_df4$n == 0),
+    sum(is.na(grid_designation_df4$min_coord_uncertainty))
   )
 })
 
