@@ -75,11 +75,18 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
     ))
   }
 
-  # Check if the values of occurrences_sf$bias_weight are positive
-  # seed is a positive value
+  # Check if the values of bias_weights$bias_weight are positive
+  if (!is.numeric(bias_weights$bias_weight)) {
+    cli::cli_abort(c(
+      paste("The column `bias_weight` must consist of numeric values between 0",
+            "and 1 OR positive integers."),
+      "x" = "The column `bias_weight` does not contain numeric values."
+    ))
+  }
   if (!(all(bias_weights$bias_weight >= 0))) {
     cli::cli_abort(c(
-      "The column `bias_weight` must consist of numeric values between 0 and 1 OR positive integers.",
+      paste("The column `bias_weight` must consist of numeric values between 0",
+            "and 1 OR positive integers."),
       "x" = "The column `bias_weight` has negative values."
     ))
   }
