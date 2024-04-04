@@ -5,30 +5,31 @@
 #' @param rs a raster object (terra)
 #' @param ts vector with the number of occurrences by time step
 #'
-#'@return
-#'An sf object with POINT geometry
-#'@export
+#' @return
+#' An sf object with POINT geometry
+#' @export
 #'
-#'@examples
+#' @examples
 #'
-#'library(spatstat)
-#'library(sf)
+#' library(spatstat)
+#' library(sf)
 #'
-#'r <- rast(ncol = 50, nrow = 50, xmin = 0, xmax = 50, ymin = 0, ymax = 50)
-#'values(r) <- 1:ncell(r)
-#'timeseries <- c(20, 40, 60)
+#' r <- rast(ncol = 50, nrow = 50, xmin = 0, xmax = 50, ymin = 0, ymax = 50)
+#' values(r) <- 1:ncell(r)
+#' timeseries <- c(20, 40, 60)
 #'
-#'pts_occ <- sample_occurrences(rs = r, ts = timeseries)
+#' pts_occ <- sample_occurrences(rs = r, ts = timeseries)
 #'
-#'plot(r)
-#'plot(pts_occ, add = TRUE, color = "black")
+#' plot(r)
+#' plot(pts_occ, add = TRUE, color = "black")
 #'
 #' @importFrom sf st_geometry_type
-#' @importFrom spatstat spatSample
 
 sample_occurrences <- function(
     rs,
     ts){
+
+  require(spatstat)
 
   # checks
   # check if rs is a terra raster
@@ -55,7 +56,7 @@ sample_occurrences <- function(
   occ_pf <- NULL
 
   for (t in 1:length(ts)) {
-    occ_p <- spatSample(x = rs3, size = ts[t], method = "weights",
+    occ_p <- spatstat::spatSample(x = rs3, size = ts[t], method = "weights",
                        replace = TRUE,  as.points = TRUE)
     occ_sf <- sf::st_as_sf(occ_p)
     occ_sf$time <- t
