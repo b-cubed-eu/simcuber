@@ -20,8 +20,12 @@
 #'
 #' @examples
 #'
+#' simulate_random_walk(
+#'   initial_average_abundance = 50,
+#'   n_time_points = 10,
+#'   sd_step = 1,
+#'   seed = 123)
 #'
-#' timeseries <- simulate_random_walk(50, 10, c(0.1))
 
 simulate_random_walk <- function(
     initial_average_abundance = 50,
