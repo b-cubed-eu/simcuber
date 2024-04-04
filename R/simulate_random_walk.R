@@ -13,15 +13,19 @@
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
-#' @returns A vector of integers of length n_time_points with the number of
-#' occurrences.
+#' @returns A vector of integers of length n_time_points with the avarage number
+#' of occurrences.
 #'
 #' @export
 #'
 #' @examples
 #'
+#' simulate_random_walk(
+#'   initial_average_abundance = 50,
+#'   n_time_points = 10,
+#'   sd_step = 1,
+#'   seed = 123)
 #'
-#' timeseries <- simulate_random_walk(50, 10, c(0.1))
 
 simulate_random_walk <- function(
     initial_average_abundance = 50,
@@ -41,10 +45,10 @@ simulate_random_walk <- function(
         )
     }
   }
-  
+
   # Initialize an empty vector to store average abundance values
   lambdas <- numeric(n_time_points)
-  
+
   # Set the initial abundance
   lambdas[1] <- initial_average_abundance
 
@@ -53,16 +57,16 @@ simulate_random_walk <- function(
     step <- rnorm(1, mean = 0, sd = sd_step)
     lambdas[i] <- lambdas[i - 1] + step
   }
-  
+
   # Identify where the lambda values become 0 or lower
   zero_or_lower_index <- which(lambdas <= 0)
-  
+
   # If any lambda becomes 0 or lower, set all subsequent lambdas to 0
   if (length(zero_or_lower_index) > 0) {
     zero_or_lower_indices <- zero_or_lower_index[1]:n_time_points
     lambdas[zero_or_lower_indices] <- 0
   }
-  
+
   # Return samples from Poisson
-  return(rpois(n_time_points, lambdas))
+  return(lambdas)
 }
