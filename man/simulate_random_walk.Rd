@@ -5,14 +5,14 @@
 \title{Simulates a random walk}
 \usage{
 simulate_random_walk(
-  initial_average_abundance = 50,
+  initial_average_occurrences = 50,
   n_time_points = 10,
   sd_step = 0.05,
   seed = NA
 )
 }
 \arguments{
-\item{initial_average_abundance}{A positive integer value indicating the
+\item{initial_average_occurrences}{A positive integer value indicating the
 average number of occurrences to be simulated within the extend of \code{polygon}
 at time point 1. This value will be used as mean of a Poisson distribution
 (lambda parameter).}
@@ -36,9 +36,10 @@ The function simulates occurrences of a species in a temporal extent.
 \examples{
 
 simulate_random_walk(
-  initial_average_abundance = 50,
+  initial_average_occurrences = 50,
   n_time_points = 10,
   sd_step = 1,
-  seed = 123)
+  seed = 123
+)
 
 }

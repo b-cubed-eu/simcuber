@@ -5,15 +5,15 @@
 \title{Simulate timeseries for species abundances}
 \usage{
 simulate_timeseries(
-  initial_average_abundance = 50,
+  initial_average_occurrences = 50,
   n_time_points = 10,
-  temporal_autocorr = NA,
+  temporal_function = NA,
   ...,
   seed = NA
 )
 }
 \arguments{
-\item{initial_average_abundance}{A positive integer value indicating the
+\item{initial_average_occurrences}{A positive integer value indicating the
 average number of occurrences to be simulated within the extend of \code{polygon}
 at the first time point. This value will be used as mean of a Poisson
 distribution (lambda parameter).}
@@ -21,16 +21,16 @@ distribution (lambda parameter).}
 \item{n_time_points}{A positive integer value indicating the number of time
 points to simulate.}
 
-\item{temporal_autocorr}{\code{NA} (default), or a function which generates
+\item{temporal_function}{\code{NA} (default), or a function which generates
 a trend in abundance over time. Only used if \code{n_time_points > 1}. By default,
 the function will sample \code{n_time_points} times from a Poisson
-distribution with average (lambda) \code{initial_average_abundance}. When a
+distribution with average (lambda) \code{initial_average_occurrences}. When a
 function is specified (e.g. the internal \code{simulate_random_walk()} function)
 \code{n_time_points} average abundances (lambdas) are calculated using
-\code{initial_average_abundance} and any additional arguments passed.
+\code{initial_average_occurrences} and any additional arguments passed.
 See examples.}
 
-\item{...}{Additional argument to be passed to the \code{temporal_autocorr}
+\item{...}{Additional argument to be passed to the \code{temporal_function}
 function.}
 
 \item{seed}{A positive numeric value. The seed for random number generation
@@ -49,11 +49,12 @@ library(ggplot2)
 
 ## 1. Use the function simulate_random_walk()
 simulate_timeseries(
-  initial_average_abundance = 50,
+  initial_average_occurrences = 50,
   n_time_points = 10,
-  temporal_autocorr = simulate_random_walk,
+  temporal_function = simulate_random_walk,
   sd_step = 1,
-  seed = 123)
+  seed = 123
+)
 
 ## 2. Visualising multiple draws
 # Set seed for reproducibility
@@ -68,16 +69,17 @@ list_abundances <- vector("list", length = n_sim)
 # Loop n_sim times over simulate_timeseries()
 for (i in seq_len(n_sim)) {
   abundances <- simulate_timeseries(
-    initial_average_abundance = 50,
+    initial_average_occurrences = 50,
     n_time_points = n_time_points,
-    temporal_autocorr = simulate_random_walk,
-    sd_step = sd_step)
+    temporal_function = simulate_random_walk,
+    sd_step = sd_step
+  )
 
   list_abundances[[i]] <- data.frame(
     time = seq_along(abundances),
     abundance = abundances,
     sim = i
-    )
+  )
 }
 
 # Combine list of dataframes
@@ -86,9 +88,13 @@ data_abundances <- do.call(rbind.data.frame, list_abundances)
 # Plot the simulated abundances over time using ggplot2
 ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
   geom_line() +
-  labs(x = "Time", y = "Species abundance",
-  title = paste(n_sim, "simulated abundances using random walk",
-                "with sd =", sd_step)) +
+  labs(
+    x = "Time", y = "Species abundance",
+    title = paste(
+      n_sim, "simulated abundances using random walk",
+      "with sd =", sd_step
+    )
+  ) +
   scale_y_continuous(limits = c(0, NA)) +
   scale_x_continuous(breaks = seq(0, n_time_points, 5)) +
   theme_minimal() +
@@ -97,12 +103,12 @@ ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
 ## 3. Using your own function
 # You can also specify your own trend function, e.g. this linear function
 my_own_linear_function <- function(
-   initial_average_abundance = initial_average_abundance,
-   n_time_points = n_time_points,
-   coef) {
+    initial_average_occurrences = initial_average_occurrences,
+    n_time_points = n_time_points,
+    coef) {
   # Calculate new average abundances over time
   time <- seq_len(n_time_points) - 1
-  lambdas <- initial_average_abundance + (coef * time)
+  lambdas <- initial_average_occurrences + (coef * time)
 
   # Identify where the lambda values become 0 or lower
   zero_or_lower_index <- which(lambdas <= 0)
@@ -129,16 +135,17 @@ list_abundances <- vector("list", length = n_sim)
 # Loop n_sim times over simulate_timeseries()
 for (i in seq_len(n_sim)) {
   abundances <- simulate_timeseries(
-    initial_average_abundance = 50,
+    initial_average_occurrences = 50,
     n_time_points = n_time_points,
-    temporal_autocorr = my_own_linear_function,
-    coef = slope)
+    temporal_function = my_own_linear_function,
+    coef = slope
+  )
 
   list_abundances[[i]] <- data.frame(
     time = seq_along(abundances),
     abundance = abundances,
     sim = i
-    )
+  )
 }
 
 # Combine list of dataframes
@@ -147,9 +154,13 @@ data_abundances <- do.call(rbind.data.frame, list_abundances)
 # Plot the simulated abundances over time using ggplot2
 ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
   geom_line() +
-  labs(x = "Time", y = "Species abundance",
-  title = paste(n_sim, "simulated abundances using our own linear function",
-                "with slope", slope)) +
+  labs(
+    x = "Time", y = "Species abundance",
+    title = paste(
+      n_sim, "simulated abundances using our own linear function",
+      "with slope", slope
+    )
+  ) +
   scale_y_continuous(limits = c(0, NA)) +
   scale_x_continuous(breaks = seq(0, n_time_points, 5)) +
   theme_minimal() +
