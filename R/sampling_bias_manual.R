@@ -24,6 +24,8 @@
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
+#' library(ggplot2)
+#'
 #' # Set seed for reproducibility
 #' set.seed(123)
 #'
@@ -36,7 +38,6 @@
 #'   )
 #'
 #' # Convert the occurrence data to an sf object
-#' # Can be used as occurrences input argument
 #' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 #'
 #' grid <- st_sf(st_make_grid(occurrences_sf) %>% st_sf())
@@ -49,9 +50,16 @@
 #'
 #' # Bias weights larger than 1
 #' grid2 <- grid %>%
-#'   mutate(bias_weight = rpois(nrow(grid), 20))
+#'   mutate(bias_weight = rpois(nrow(grid), 5))
 #'
-#' sampling_bias_manual(occurrences_sf, grid2)
+#' occurrence_bias_sf <- sampling_bias_manual(occurrences_sf, grid2)
+#' occurrence_bias_sf
+#'
+#' # Visualise where the bias is
+#' ggplot() +
+#'  geom_sf(data = grid2) +
+#'  geom_sf_text(data = grid2, aes(label = bias_weight)) +
+#'  geom_sf(data = occurrence_bias_sf, aes(colour = bias_weight))
 
 sampling_bias_manual <- function(occurrences_sf, bias_weights) {
   ### Start checks
