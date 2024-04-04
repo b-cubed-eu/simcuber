@@ -20,11 +20,6 @@
 #'
 #' @export
 #'
-#' @importFrom cli cli_abort cli_warn
-#' @importFrom magrittr %>%
-#' @importFrom sf st_within
-#' @importFrom dplyr mutate
-#'
 #' @examples
 #'
 #' library(simcuber)
@@ -46,7 +41,7 @@
 #'   st_as_sf(coords = c("long", "lat"), crs = 3035)
 #'
 #' # Create bias_area polygon overlapping two of the points
-#' selected_observations <- st_union(observations_buffered[2:3,])``
+#' selected_observations <- st_union(observations_buffered[2:3,])
 #' bias_area <- st_convex_hull(selected_multipolygon) %>%
 #'   st_buffer(dist = 100) %>%
 #'   st_as_sf()
@@ -55,8 +50,9 @@
 #'
 #' apply_polygon_sample_bias(observations, bias_area, bias_strength)
 #'
-apply_polygon_sample_bias <- function(observations, bias_area,
-                                      bias_strength = 1) {
+#'
+#' )
+apply_polygon_sample_bias <- function(observations, bias_area, bias_strength = 1) {
   require(sf)
 
   ### Start checks
@@ -89,7 +85,7 @@ apply_polygon_sample_bias <- function(observations, bias_area,
 
   # Find observations inside polygon
   in_bias_area <- observations %>%
-    sf::st_within(bias_area, sparse = FALSE)
+    st_within(bias_area, sparse = FALSE)
 
   # Calculate sampling probability based on bias strength
   bias_weights_outside_polygon <- 1 / (1 + bias_strength)
@@ -97,8 +93,7 @@ apply_polygon_sample_bias <- function(observations, bias_area,
 
   #create bias_weight column
   observations <- observations %>%
-  dplyr::mutate(bias_weight = ifelse(in_bias_area, bias_weights_inside_polygon,
-                              bias_weights_outside_polygon))
+  mutate(bias_weight = ifelse(in_bias_area, bias_weights_inside_polygon, bias_weights_outside_polygon))
 
   return(observations)
 }
