@@ -75,6 +75,8 @@ sample_observations <- function(
     bias_weights = NA,
     coordinate_uncertainty_meters = 25,
     seed = NA) {
+  occurrences <- occurrences %>%
+    dplyr::mutate(detection_probability = detection_probability)
 
   # ...
 }

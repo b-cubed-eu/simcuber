@@ -1,12 +1,3 @@
-# Load packages
-library(testthat)
-library(here)
-library(sf)
-library(dplyr)
-
-# Source functions
-source(here("R", "sample_from_binormal_circle.R"))
-
 # Prepare example datasets
 ## number of points and extend
 n_points <- 4
@@ -18,17 +9,17 @@ observations_sf1 <- data.frame(
   lat = runif(n_points, ylim[1], ylim[2]),
   long = runif(n_points, xlim[1], xlim[2])
   ) %>%
-  st_as_sf(coords = c("long", "lat"), crs = 3035)
+  sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
 
 ## dataset with coordinateUncertaintyInMeters
 set.seed(123)
 coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 observations_sf2 <- observations_sf1 %>%
-  mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
+  dplyr::mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
 
 ## dataset without geometry
 observations_sf3 <- observations_sf2 %>%
-  st_drop_geometry()
+  sf::st_drop_geometry()
 
 # Unit tests
 ## expect errors
@@ -123,16 +114,16 @@ test_that("coordinateUncertaintyInMeters column is handled correctly", {
   suppressWarnings({
     expect_equal(
       sample_from_binormal_circle(observations_sf1) %>%
-        pull(coordinateUncertaintyInMeters),
+        dplyr::pull(coordinateUncertaintyInMeters),
       rep(0, nrow(observations_sf1)))
     ## different seeds
     expect_equal(
       sample_from_binormal_circle(observations_sf1, seed = 123) %>%
-        pull(coordinateUncertaintyInMeters),
+        dplyr::pull(coordinateUncertaintyInMeters),
       rep(0, nrow(observations_sf1)))
     expect_equal(
       sample_from_binormal_circle(observations_sf1, seed = 456) %>%
-        pull(coordinateUncertaintyInMeters),
+        dplyr::pull(coordinateUncertaintyInMeters),
       rep(0, nrow(observations_sf1)))
   })
 
@@ -140,32 +131,32 @@ test_that("coordinateUncertaintyInMeters column is handled correctly", {
   ## no seed
   expect_equal(
     sample_from_binormal_circle(observations_sf2) %>%
-      pull(coordinateUncertaintyInMeters),
+      dplyr::pull(coordinateUncertaintyInMeters),
     observations_sf2 %>%
-      pull(coordinateUncertaintyInMeters))
+      dplyr::pull(coordinateUncertaintyInMeters))
   ## different seeds
   expect_equal(
     sample_from_binormal_circle(observations_sf2, seed = 123) %>%
-      pull(coordinateUncertaintyInMeters),
+      dplyr::pull(coordinateUncertaintyInMeters),
     observations_sf2 %>%
-      pull(coordinateUncertaintyInMeters))
+      dplyr::pull(coordinateUncertaintyInMeters))
   expect_equal(
     sample_from_binormal_circle(observations_sf2, seed = 456) %>%
-      pull(coordinateUncertaintyInMeters),
+      dplyr::pull(coordinateUncertaintyInMeters),
     observations_sf2 %>%
-      pull(coordinateUncertaintyInMeters))
+      dplyr::pull(coordinateUncertaintyInMeters))
 })
 
 # This function calculates if the distances between the sampled points and the
 # original point are not larger than their coordinate uncertainty
 test_smaller_distances <- function(observations, seed = NA) {
   sample_dists <- sample_from_binormal_circle(observations, seed = seed) %>%
-    mutate(dist = st_distance(geometry, observations,
+    dplyr::mutate(dist = sf::st_distance(geometry, observations,
                               by_element = TRUE),
            dist = as.numeric(dist)) %>%
-    pull(dist)
+    dplyr::pull(dist)
   test_dists_df <- observations %>%
-    st_drop_geometry() %>%
+    sf::st_drop_geometry() %>%
     mutate(dist = sample_dists,
            test = dist < coordinateUncertaintyInMeters)
 
@@ -178,25 +169,25 @@ test_that("distance to new point falls within coordinate uncertainty", {
     ## no seed
     expect_equal(
       sample_from_binormal_circle(observations_sf1) %>%
-        mutate(dist = st_distance(geometry, observations_sf1,
+        dplyr::mutate(dist = sf::st_distance(geometry, observations_sf1,
                                   by_element = TRUE),
                dist = as.numeric(dist)) %>%
-        pull(dist),
+        dplyr::pull(dist),
       rep(0, nrow(observations_sf1)))
     ## different seeds
     expect_equal(
       sample_from_binormal_circle(observations_sf1, seed = 123) %>%
-        mutate(dist = st_distance(geometry, observations_sf1,
+        dplyr::mutate(dist = sf::st_distance(geometry, observations_sf1,
                                   by_element = TRUE),
                dist = as.numeric(dist)) %>%
-        pull(dist),
+        dplyr::pull(dist),
       rep(0, nrow(observations_sf1)))
     expect_equal(
       sample_from_binormal_circle(observations_sf1, seed = 456) %>%
-        mutate(dist = st_distance(geometry, observations_sf1,
+        dplyr::mutate(dist = sf::st_distance(geometry, observations_sf1,
                                   by_element = TRUE),
                dist = as.numeric(dist)) %>%
-        pull(dist),
+        dplyr::pull(dist),
       rep(0, nrow(observations_sf1)))
   })
 

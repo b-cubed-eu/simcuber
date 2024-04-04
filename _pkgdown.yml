@@ -1,28 +1,20 @@
-URL: 'https://b-cubed-eu.github.io/simcuber/'
+url: https://b-cubed-eu.github.io/simcuber/
+
+template:
+  bootstrap: 5
+  bslib:
+    bg: "#ffffff"
+    fg: "#2f2f2f"
+    heading_font: {google: "PT Sans"}
+    primary: "#005856"
 
 navbar:
-  title: ~
-  type: default
-  left:
-  - text: NEWS
-    href: news/index.html
-  - text: Functions
-    href: reference/index.html
-  - text: Contributing
-    href: CONTRIBUTING.html
-  right:
-  - icon: "fa fa-github"
-    href: https://github.com/b-cubed-eu/simcuber
-  - icon: "fa fa-cube"
-    href: https://b-cubed.eu/
-  - icon: "fa fa-twitter"
-    href: https://twitter.com/BCubedProject
-  - icon: "fa fa-linkedin"
-    href: https://www.linkedin.com/company/b-cubed-project
-  - icon: "fa fa-youtube"
-    href: https://www.youtube.com/@B-CubedProject
-
-authors:
-  Research Institute for Nature and Forest (INBO):
-    href: "https://www.vlaanderen.be/inbo/en-gb"
-    html: "<img src='https://inbo.github.io/checklist/reference/figures/logo-en.png' height=24>"
+  bg: primary
+  type: dark
+  structure:
+    right: [search, mainsite, github]
+  components:
+    mainsite:
+      icon: fa-cube
+      href: https://b-cubed.eu/
+      aria-label: B-Cubed website
