@@ -33,7 +33,7 @@ test_that("output length is correct", {
   expect_length(simulate_timeseries(50, 10, simulate_random_walk, 0.05), 10)
 
   # length of output is 1: case with temporal_autocorr function
-  expect_length(simulate_timeseries(50, 1, simulate_random_walk, 0.05), 10)
+  expect_length(simulate_timeseries(50, 1, simulate_random_walk, 0.05), 1)
 
   # length of output > 1: case without temporal_autocorr function
   expect_length(simulate_timeseries(50, 10), 10)
