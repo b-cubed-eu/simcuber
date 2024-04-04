@@ -25,9 +25,6 @@
 #' of bias weights to be applied to the sampling of occurrences. Higher weights
 #' mean a higher probability of sampling. Weights can be numeric values between
 #' 0 and 1 or positive integers that will be rescaled to values between 0 and 1.
-#' @param coordinate_uncertainty_meters A positive numeric value or vector with
-#' length `nrow(occurrences)` describing the uncertainty in meters around each
-#' observation.
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
