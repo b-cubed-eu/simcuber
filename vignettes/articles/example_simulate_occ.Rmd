@@ -1,6 +1,7 @@
 ---
 title: "example_simulate_occ"
 ---
+# for the future
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -9,6 +10,185 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+
+# load libraries
+
+```{r}
 library(simcuber)
+library(dplyr)
+library(sf)
+library(ggplot2)
+library(tidyverse)
+library(magrittr)
 ```
+
+```{r}
+polygon <- st_polygon(list(rbind(c(0, 0),
+                                 c(1, 0),
+                                 c(1, 1),
+                                 c(0, 1),
+                                 c(0, 0))))
+# Convert the polygon to an sf object
+# Can be used as polygon input argument
+
+polygon_sf <- st_sfc(polygon)
+```
+
+
+# Create random points
+
+```{r}
+simulate_occurrences(
+  polygon_sf,
+  initial_average_abundance = 50,
+  spatial_autocorr = c("random", "clustered", "regular"),
+  n_time_points = 10,
+  temporal_autocorr = ifelse(n_time_points == 1, NA, "random_walk"),
+  spatiotemporal_autocorr = NA,
+  seed = NA
+)
+```
+
+
+# create spatial dataframe with occurrences
+
+Create random occurrences following uniform distribution within the bounding box
+Define CRS
+Aggregate TRUE or FALSE
+
+```{r}
+observations_sf <- data.frame(
+  lat = runif(n_points, ylim[1], ylim[2]),
+  long = runif(n_points, xlim[1], xlim[2]),
+  aggregate = TRUE,
+  coordinateUncertaintyInMeters = coordinate_uncertainty
+) %>% st_as_sf(coords = c("long", "lat"), crs = 3035, remove = FALSE)
+```
+
+# Visualize points
+
+Simple observation of randomized points in grid
+
+```{r}
+ggplot(data = observations_sf) +
+  geom_sf(color = "red")
+```
+
+# Add buffer uncertainty in meters around points
+
+```{r}
+
+observations_buffered <- observations_sf %>%
+  st_buffer(observations_sf$coordinateUncertaintyInMeters)
+```
+
+
+Visualize bufer
+```{r}
+ggplot(data = observations_buffered) +
+  geom_sf(color = "red", fill = "darkgreen")
+```
+
+
+# Create grid
+```{r}
+grid_df <- st_make_grid(
+  observations_buffered,
+  square = TRUE,
+  cellsize = c(200, 200)
+) %>%
+  st_sf()
+```
+
+visualize grid
+
+```{r}
+ggplot(data = grid) +
+  geom_sf(color = "red", fill = "darkgreen")
+```
+
+
+
+# Grid designation
+```{r}
+occurrence_cube_df <- grid_designation(
+  observations = observations_sf,
+  grid = grid_df,
+  seed = 123)
+```
+
+# Visualise Grid designation
+```{r}
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1, aes(fill = as.factor(n))) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+ # scale_fill_manual() + 
+# geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  theme_void()
+
+```
+# Visualise Grid designation2
+```{r}
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1, aes(fill = factor(n))) +
+ # scale_fill_manual() +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+ #  
+# geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  theme_void()
+
+```
+
+
+
+# Also get sampled points to visualise
+
+```{r}
+sampled_points <- grid_designation(
+  observations = observations_sf,
+  grid = grid_df,
+  seed = 123,
+  aggregate = FALSE)
+```
+
+
+# visualize output 1
+
+
+```{r}
+ggplot() +
+  geom_sf(data = grid_df, linewidth = 1, color = "red", fill = "lightgreen") +
+  
+  geom_sf(data = observations_sf, colour = "firebrick") +
+  geom_sf(data = observations_buffered, fill = alpha("firebrick", 0.5)) +
+  theme_void()
+```
+
+
+
+
+# Visualise output complete
+```{r}
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n) +
+  geom_sf(data = sampled_points, colour = "blue") +
+  geom_sf(data = observations_sf, colour = "firebrick") +
+  geom_sf(data = observations_buffered, fill = alpha("firebrick", 0.5)) +
+ # geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  theme_void()
+
+```
+
+trying
+
+```{r}
+ggplot() +
+  geom_sf(data = grid, linewidth = 1, color = "red", fill = "lightgreen") +
+  geom_sf(data = grid, aes(label = n) ) +
+  theme_void()
+```
+
+
+
+
