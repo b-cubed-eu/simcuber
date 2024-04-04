@@ -14,6 +14,7 @@
 #' @examples
 #'
 #' library(tidyverse)
+#' set.seed(123)
 #' occ <- custom_occurences(initial_average_abundance = 20, n_time_points = 10,
 #'                          population_change = 0.2, n_samp = 100)
 #'
@@ -28,28 +29,36 @@
 
 
 custom_occurences <- function(
-    initial_average_abundance = NA,
+    initial_n_occ = NA,
     n_time_points = NA,
     population_change = NA,
     n_samp = NA) {
 
-  stopifnot("initial_average_abundance must be given" = is.numeric(initial_average_abundance))
-  stopifnot("n_time_points must be given" = is.numeric(n_time_points))
-  stopifnot("population_change must be given" = is.numeric(population_change))
-  stopifnot("n_samp must be given" = is.numeric(n_samp))
+  if (length(initial_n_occ) != 1) {
+    cli::cli_abort(c(
+      "{.var id_col} must be a character vector of length 1.",
+      "x" = paste(
+        "You've supplied a {.cls {class(id_col)}} vector",
+        "of length {length(id_col)}."
+      )
+    ))
+  }
 
 # create empty matrix
-  abundances <- matrix(nrow = n_samp,
-                       ncol = n_time_points)
+  occ <- numeric(n_time_points)
 
   # set initial abundance
-  abundances[,1] <- rpois(n_samp, initial_average_abundance)
+  occ[,1] <- rpois(1, initial_n_occ)
 
   # loop over time points
   for (i in 2:n_time_points) {
-    # Abundance at time t is dependent on the abundance at time t-1
-    abundances[,i] <- abundances[,i - 1] + abundances[,i - 1] * population_change
+    # Occurences at time t is dependent on the occurences at time t-1
+    occ[i] <- occ[i - 1] + occ[i - 1] * population_change
   }
 
-  return(abundances)
+  return(occ)
 }
+
+
+occ <- custom_occurences(initial_average_abundance = 20, n_time_points = 10,
+                         n_samp = 100, population_change = runif(1, min = -5, m))
