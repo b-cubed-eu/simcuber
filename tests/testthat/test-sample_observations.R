@@ -1,5 +1,5 @@
 # Set seed for reproducibility
-set.seed(123)
+withr:local_seed(123)
 
 # Simulate some occurrence data with coordinates and time points
 num_points <- 10
