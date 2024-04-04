@@ -53,7 +53,8 @@
 #'
 #' apply_polygon_sample_bias(observations_sf, bias_area, bias_strength)
 #'
-apply_polygon_sample_bias <- function(observations, bias_area,
+apply_polygon_sample_bias <- function(observations,
+                                      bias_area,
                                       bias_strength = 1) {
 
   ### Start checks
@@ -94,8 +95,9 @@ apply_polygon_sample_bias <- function(observations, bias_area,
 
   #create bias_weight column
   observations <- observations %>%
-    dplyr::mutate(bias_weight = ifelse(in_bias_area, bias_weights_inside_polygon,
-                              bias_weights_outside_polygon))
+    dplyr::mutate(bias_weight = ifelse(in_bias_area,
+                                       bias_weights_inside_polygon,
+                                       bias_weights_outside_polygon))
 
   return(observations)
 }
