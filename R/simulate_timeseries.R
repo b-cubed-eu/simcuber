@@ -28,7 +28,6 @@
 #'
 #' @examples
 #'
-#' library(simcuber)
 #' library(ggplot2)
 #'
 #' ## 1. Use the function simulate_random_walk()
