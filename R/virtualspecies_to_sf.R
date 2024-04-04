@@ -4,10 +4,10 @@
 #' an sf object with the virtual species occurrences as well as its environmental
 #' suitability over space
 #'
-#'
-#' @param nspecies numeric values indicate the number of desired virtual species
 #' @param covariates_stack raster stack of the ecological variables from which
 #' the virtual species are created.
+#' @param nocc numeric values indicate the number of desired occurrences for the
+#' virtual species
 #' @param polygon An sf object with POLYGON geometry indicating the spatial
 #' extend to simulate occurrences. If `NA` (the default), the virtual species is
 #' generated in the entire area of the stack.
@@ -33,12 +33,11 @@
 #'
 #' stack_bio <- worldclim_country(country = "Belgium", var = "bio", res=0.5, path=tempdir())
 #'
-#' out <- virtualspecies_to_sf(nsp = 1, covariates_stack = stack_bio)
-#
+#' out <- virtualspecies_to_sf(covariates_stack = stack_bio)
 
 virtualspecies_to_sf <- function(
-    nsp = 10,
     covariates_stack,
+    nocc = 100,
     polygon = NA,
     seed = NA){
 
@@ -64,7 +63,7 @@ virtualspecies_to_sf <- function(
                          species.prevalence = 0.02)
 
   presence.points <- sampleOccurrences(new.pres,
-                                       n = 40,
+                                       n = nocc,
                                        type = "presence only",
                                        sample.prevalence = 0.5,
                                        detection.probability = 0.8,
