@@ -72,21 +72,26 @@ sample_observations <- function(
     sampling_bias = c("no_bias", "polygon", "manual"),
     bias_area = NA,
     bias_strength = 1,
-    coordinate_uncertainty_meters = 25,
     seed = NA) {
-
-  # create and merge bias weight with the data with occurrences
-  occurrences <- apply_polygon_sample_bias(observations = occurrences,
-                                           bias_area = bias_area,
-                                           bias_strength = bias_strength)
-
-
-
-
-  # detection probability
+  # Add detection probability
   occurrences$detection_probability <-  detection_probability
 
-  # combine probability
+  # Create and merge bias weight with occurrences
+  if (length(sampling_bias) > 1) {
+    sampling_bias <- sampling_bias[1]
+  }
+  if (sampling_bias == "polygon") {
+    occurrences <- apply_polygon_sample_bias(
+      observations = occurrences,
+      bias_area = bias_area,
+      bias_strength = bias_strength)
+  } else if (sampling_bias == "manual") {
+    cli::cli_abort("Manual option still in development!")
+  } else {
+    occurrences$bias_weights <- 1
+  }
+
+  # Combine detection and bias probabilities
   combine_probability <- occurrences$bias_weights*occurrences$detection_probability
   occurrences$combine_probability
 
@@ -98,13 +103,8 @@ sample_observations <- function(
     sample_status[i] <- rbinom(1, 1, prob)
   }
   occurrences$sample_status <- sample_status
-  occurrences<- subset(occurrences, sample_status==1)
+  occurrences <- subset(occurrences, sample_status == 1)
 
-  #return the sampled species
+  # Return the observed occurrences
   return(occurrences)
-
 }
-
-sample_observations(occurrences = observations_sf, bias_area = bias_area )
-
-observations_sf
