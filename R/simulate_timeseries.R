@@ -37,7 +37,8 @@
 #'   n_time_points = 10,
 #'   temporal_autocorr = simulate_random_walk,
 #'   sd_step = 1,
-#'   seed = 123)
+#'   seed = 123
+#' )
 #'
 #' ## 2. Visualising multiple draws
 #' # Set seed for reproducibility
@@ -55,13 +56,14 @@
 #'     initial_average_abundance = 50,
 #'     n_time_points = n_time_points,
 #'     temporal_autocorr = simulate_random_walk,
-#'     sd_step = sd_step)
+#'     sd_step = sd_step
+#'   )
 #'
 #'   list_abundances[[i]] <- data.frame(
 #'     time = seq_along(abundances),
 #'     abundance = abundances,
 #'     sim = i
-#'     )
+#'   )
 #' }
 #'
 #' # Combine list of dataframes
@@ -70,9 +72,13 @@
 #' # Plot the simulated abundances over time using ggplot2
 #' ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
 #'   geom_line() +
-#'   labs(x = "Time", y = "Species abundance",
-#'   title = paste(n_sim, "simulated abundances using random walk",
-#'                 "with sd =", sd_step)) +
+#'   labs(
+#'     x = "Time", y = "Species abundance",
+#'     title = paste(
+#'       n_sim, "simulated abundances using random walk",
+#'       "with sd =", sd_step
+#'     )
+#'   ) +
 #'   scale_y_continuous(limits = c(0, NA)) +
 #'   scale_x_continuous(breaks = seq(0, n_time_points, 5)) +
 #'   theme_minimal() +
@@ -81,9 +87,9 @@
 #' ## 3. Using your own function
 #' # You can also specify your own trend function, e.g. this linear function
 #' my_own_linear_function <- function(
-#'    initial_average_abundance = initial_average_abundance,
-#'    n_time_points = n_time_points,
-#'    coef) {
+#'     initial_average_abundance = initial_average_abundance,
+#'     n_time_points = n_time_points,
+#'     coef) {
 #'   # Calculate new average abundances over time
 #'   time <- seq_len(n_time_points) - 1
 #'   lambdas <- initial_average_abundance + (coef * time)
@@ -116,13 +122,14 @@
 #'     initial_average_abundance = 50,
 #'     n_time_points = n_time_points,
 #'     temporal_autocorr = my_own_linear_function,
-#'     coef = slope)
+#'     coef = slope
+#'   )
 #'
 #'   list_abundances[[i]] <- data.frame(
 #'     time = seq_along(abundances),
 #'     abundance = abundances,
 #'     sim = i
-#'     )
+#'   )
 #' }
 #'
 #' # Combine list of dataframes
@@ -131,14 +138,17 @@
 #' # Plot the simulated abundances over time using ggplot2
 #' ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
 #'   geom_line() +
-#'   labs(x = "Time", y = "Species abundance",
-#'   title = paste(n_sim, "simulated abundances using our own linear function",
-#'                 "with slope", slope)) +
+#'   labs(
+#'     x = "Time", y = "Species abundance",
+#'     title = paste(
+#'       n_sim, "simulated abundances using our own linear function",
+#'       "with slope", slope
+#'     )
+#'   ) +
 #'   scale_y_continuous(limits = c(0, NA)) +
 #'   scale_x_continuous(breaks = seq(0, n_time_points, 5)) +
 #'   theme_minimal() +
 #'   theme(legend.position = "")
-
 simulate_timeseries <- function(
     initial_average_abundance = 50,
     n_time_points = 10,
@@ -148,41 +158,53 @@ simulate_timeseries <- function(
   # Checks
   # Check if initial_average_abundance is a positive integer
   if (!is.numeric(initial_average_abundance) | initial_average_abundance <= 0) {
-      cli::cli_abort(c(
-      "{.var initial_average_abundance} must be a positive integer.",
-      "x" = paste("You've supplied a {.cls {class(initial_average_abundance)}}",
-                  "value of {initial_average_abundance}."))
-      )
+    cli::cli_abort(
+      c(
+        "{.var initial_average_abundance} must be a positive integer.",
+        "x" = "You've supplied a {.cls {class(initial_average_abundance)}}
+      value of {initial_average_abundance}."
+      ),
+      class = "simcuber_error_wrong_argument_type"
+    )
   }
   # Check if n_time_points is a positive integer
   if (!is.numeric(n_time_points) | n_time_points <= 0) {
-      cli::cli_abort(c(
-      "{.var n_time_points} must be a positive integer.",
-      "x" = paste("You've supplied a {.cls {class(n_time_points)}}",
-                  "value of {n_time_points}."))
-  )
+    cli::cli_abort(
+      c(
+        "{.var n_time_points} must be a positive integer.",
+        "x" = "You've supplied a {.cls {class(n_time_points)}}
+             value of {n_time_points}."
+      ),
+      class = "simcuber_error_wrong_argument_type"
+    )
   }
   # Check if temporal_autocorr is NA or a function
   if (suppressWarnings(!is.na(temporal_autocorr)) &
-      !is.function(temporal_autocorr)) {
-      cli::cli_abort(c(
-      "{.var temporal_autocorr} must be `NA` or a function.",
-      "x" = paste("You've supplied a {.cls {class(temporal_autocorr)}}",
-                  "value of {temporal_autocorr}."))
-      )
+    !is.function(temporal_autocorr)) {
+    cli::cli_abort(
+      c(
+        "{.var temporal_autocorr} must be `NA` or a function.",
+        "x" = "You've supplied a {.cls {class(temporal_autocorr)}}",
+        "value of {temporal_autocorr}."
+      ),
+      class = "simcuber_error_wrong_argument_type"
+    )
   }
   # Set seed if provided
   if (!is.na(seed)) {
     if (is.numeric(seed)) {
       set.seed(seed)
     } else {
-      cli::cli_abort(c(
-        "{.var seed} must be an numeric vector of length 1.",
-            "x" = paste("You've supplied a {.cls {class(seed)}} vector",
-                        "of length {length(seed)}."))
-            )
-        }
+      cli::cli_abort(
+        c(
+          "{.var seed} must be an numeric vector of length 1.",
+          "x" = "You've supplied a {.cls {class(seed)}}
+          vector of length {length(seed)}."
+        ),
+        class = "simcuber_error_wrong_argument_type"
+      )
     }
+  }
 
   # Check type of temporal_autocorr
   # If temporal_autocorr is a function, use it to generate the timeseries
@@ -196,13 +218,15 @@ simulate_timeseries <- function(
       lambdas <- temporal_autocorr(
         initial_average_abundance,
         n_time_points,
-        seed = seed)
+        seed = seed
+      )
     } else {
       # Generate timeseries using the provided function
       lambdas <- temporal_autocorr(
         initial_average_abundance,
         n_time_points,
-        ...)
+        ...
+      )
     }
     timeseries <- rpois(n_time_points, lambdas)
   } else {
