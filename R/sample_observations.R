@@ -71,9 +71,9 @@ sample_observations <- function(
     sampling_bias = c("no_bias", "polygon", "manual"),
     bias_area = NA,
     bias_strength = 1,
+    bias_weights = NA,
     seed = NA) {
   ### Start checks
-
   # 1. check input classes
   if (!("sf" %in% class(occurrences))) {
     cli::cli_abort(c(
@@ -128,19 +128,22 @@ sample_observations <- function(
   }
   if (sampling_bias == "polygon") {
     occurrences <- apply_polygon_sample_bias(
-      observations = occurrences,
+      occurrences_sf = occurrences,
       bias_area = bias_area,
       bias_strength = bias_strength)
   } else if (sampling_bias == "manual") {
-    cli::cli_abort("Manual option still in development!")
+    occurrences <- sampling_bias_manual(
+      occurrences_sf = occurrences,
+      bias_weights = bias_weights
+    )
   } else {
-    occurrences$bias_weights <- 1
+    occurrences$bias_weight <- 1
   }
 
   # Combine detection and bias probabilities and sample observations
   occurrences <- occurrences %>%
     dplyr::mutate(
-      sampling_probability = detection_probability * bias_weights
+      sampling_probability = detection_probability * bias_weight
     ) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(sample_status = stats::rbinom(1, 1, sampling_probability))
@@ -148,7 +151,7 @@ sample_observations <- function(
   # Filter observations
   observations <- occurrences %>%
     dplyr::filter(sample_status == 1) %>%
-    dplyr::select(time_point, detection_probability, bias_weights,
+    dplyr::select(time_point, detection_probability, bias_weight,
                   sampling_probability, geometry)
 
   # Return the observed occurrences
