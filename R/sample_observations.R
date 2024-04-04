@@ -75,8 +75,20 @@ sample_observations <- function(
     bias_weights = NA,
     coordinate_uncertainty_meters = 25,
     seed = NA) {
-  occurrences <- occurrences %>%
-    dplyr::mutate(detection_probability = detection_probability)
 
-  # ...
+  # detection probability
+  occurrences$detection_probability <-  detection_probability
+
+  # bias weights
+  apply_polygon_sample_bias(occurrences, ...)
+  # some example code
+  occurrences$bias_weights <- rep(c(0.2, 0.8), each = 5)
+
+  # combine probabilities
+  #...
+
+  # sample
+  rbinom(1, 1, 0.7)
+
+  return(...)
 }
