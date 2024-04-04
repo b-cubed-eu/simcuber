@@ -94,7 +94,7 @@ apply_polygon_sample_bias <- function(observations, bias_area,
 
   #create bias_weight column
   observations <- observations %>%
-  dplyr::mutate(bias_weight = ifelse(in_bias_area, bias_weights_inside_polygon,
+    dplyr::mutate(bias_weight = ifelse(in_bias_area, bias_weights_inside_polygon,
                               bias_weights_outside_polygon))
 
   return(observations)
