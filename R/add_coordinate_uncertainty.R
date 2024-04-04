@@ -44,7 +44,7 @@
 #'
 add_coordinate_uncertainty <- function(
     occurrences,
-    coords_uncertainty_meters = 25){
+    coords_uncertainty_meters = 25) {
 
   ## checks
   ## is it sf object
