@@ -13,7 +13,8 @@
 #' @return a matrix of number of occurrences with columns as time steps and rows as samples
 #' @examples
 #'
-#' library(tidyverse)
+#' library(dplyr)
+#' library(ggplot2)
 #' occ <- custom_occurences(initial_average_abundance = 20, n_time_points = 10,
 #'                          population_change = 0.2, n_samp = 100)
 #'
