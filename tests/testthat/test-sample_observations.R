@@ -62,7 +62,7 @@ test_that("arguments are of the right class", {
   # bias_weights ...
 
   # seed is a numeric value
-  expect_error(sample_observations(points_sf1, seed = -7),
+  expect_error(sample_observations(points_sf1, seed = TRUE),
                regexp = "`seed` must be a positive integer.",
                fixed = TRUE)
 expect_error(sample_observations(points_sf1, seed = -1),
