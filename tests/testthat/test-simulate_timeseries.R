@@ -27,9 +27,12 @@ test_that("arguments are of the right class", {
                regexp = "`seed` must be an numeric vector of length 1.",
                fixed = TRUE)
   # n_time_points is 1, temporal_autocorr must be NA
-  expect_error(simulate_timeseries(n_time_points = 1, temporal_autocorr = simulate_random_walk),
-               regexp = "When `n_time_points` is 1, `temporal_autocorr` must be NA.",
-               fixed = TRUE)
+  expect_error(
+    simulate_timeseries(n_time_points = 1,
+                        temporal_autocorr = simulate_random_walk),
+    regexp = "When `n_time_points` is 1, `temporal_autocorr` must be NA.",
+    fixed = TRUE
+  )
 })
 
 test_that("output length is correct", {
