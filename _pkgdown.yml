@@ -10,7 +10,7 @@ template:
 
 navbar:
   bg: primary
-  type: light
+  type: dark
   structure:
     right: [search, mainsite, github]
   components:
