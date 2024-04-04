@@ -40,7 +40,9 @@
 #' # Convert the occurrence data to an sf object
 #' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 #'
-#' grid <- st_sf(st_make_grid(occurrences_sf) %>% st_sf())
+#' # Create raster grid
+#' grid <- st_make_grid(occurrences_sf) %>%
+#'   st_sf()
 #'
 #' # Bias weights between 0 and 1
 #' grid1 <- grid %>%
