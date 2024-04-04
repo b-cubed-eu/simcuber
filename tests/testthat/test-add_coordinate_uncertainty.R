@@ -58,3 +58,22 @@ test_that(
 
   }
 )
+
+test_that("add_coordinate_uncertainty() returns error when coordinate uncertainty is not a number", {
+  # create observations_sf object to be used as an input
+  observations_sf <-
+    data.frame(
+      lat = runif(4, 3110000, 3112000),
+      long = runif(4, 3841000, 3842000)
+    ) %>%
+    st_as_sf(coords = c("long", "lat"), crs = 3035)
+
+  expect_error(
+    add_coordinate_uncertainty(
+      observations_sf,
+      coords_uncertainty_meters = "not a number"
+    ),
+    regexp = "coords_uncertainty_meters must be a numeric value",
+    fixed = TRUE
+  )
+})

@@ -56,6 +56,12 @@ add_coordinate_uncertainty <- function(
       )
     ))
   }
+  ## check if coords_uncertainty_meters is numeric
+  if(!is.numeric(coords_uncertainty_meters)) {
+    cli::cli_abort(
+      "{.var coords_uncertainty_meters must be a numeric value}"
+    )
+  }
 
   ## is geometry type POINT?
   is_point <- sf::st_geometry_type(occurrences, by_geometry = FALSE) == "POINT"
