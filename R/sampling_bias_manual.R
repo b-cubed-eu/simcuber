@@ -7,11 +7,16 @@
 #' @param occurrences_sf An sf object with POINT geometry.
 #' @param bias_weights A raster layer (sf object with POLYGON geometry,
 #' or SpatRaster object). The raster of bias weights to be applied to the
-#' sampling of occurrences. Higher weights mean a higher probability of sampling.
-#' Weights can be numeric values between 0 and 1 or positive integers that will
-#' be rescaled to values between 0 and 1.
+#' sampling of occurrences. This sf object should have 2 columns with the
+#' following names:
+#' - geometry
+#' - bias_weight
+#' Higher weights indicate a higher probability of sampling. #' Weights can be
+#' numeric values between 0 and 1 or positive integers that will #' be rescaled
+#' to values between 0 and 1.
 #'
-#' @returns ...
+#' @returns An sf object with POINT geometry with a bias_weight column
+#' containing the sampling probability based on sampling bias.
 #'
 #' @export
 #' @examples
@@ -38,10 +43,17 @@
 #####
 sampling_bias_manual <- function(occurrences_sf,bias_weights) {
 
+  # Check if bias_weights has a column named bias_weight
+  if (!("bias_weight" %in% names(bias_weights))) {
+    cli::cli_abort(c(
+      "{.var bias_weights} must have a column named `bias_weight`.",
+      "x" = "You've supplied a grid {.var bias_weights} that has column names
+      {names(bias_weights)}."
+    ))
+  }
+
   # Check if all occurrences (points) are in the grid, if not, raise error
-
   points_in_grid <- st_filter(occurrences_sf, bias_weights)
-
   if (!identical(points_in_grid, occurrences_sf)) {
     cli::cli_abort(c(
       "{.var bias_weights} must be a grid that encompasses all occurrences.",
@@ -49,10 +61,12 @@ sampling_bias_manual <- function(occurrences_sf,bias_weights) {
     ))
   }
 
-
   # To do: Check also for spatRaster object?
 
   # To do: Check if rescaling is needed
+  if (){
+
+  }
 
   # Intersection
   observations <- st_intersection(occurrences_sf, bias_weights)
