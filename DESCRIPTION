@@ -24,8 +24,10 @@ Authors@R: c(
            comment = c(ORCID = "0009-0008-9200-0863")),
     person("Peter", "Desmet", role = "ctb",
            comment = c(ORCID = "0000-0002-8442-8025")),
-    person("Matilde", "Martini", role = "ctb"),
-    person("Rocìo", "Beatriz Cortès Lobos", role = "ctb"),
+    person("Matilde", "Martini", role = "ctb",
+           comment = c(ORCID = "0009-0003-5612-925X")),
+    person("Rocìo", "Cortès", role = "ctb",
+           comment = c(ORCID = "0009-0004-8440-958X")),
     person("Michele", "Di Musciano", role = "ctb",
            comment = c(ORCID = "0000-0002-3130-7270"))
   )
