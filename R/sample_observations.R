@@ -46,9 +46,9 @@
 #' @importFrom withr local_seed
 #'
 #' @examples
-#'
 #' # Load packages
 #' library(sf)
+#' library(dplyr)
 #'
 #' # Set seed for reproducibility
 #' set.seed(123)

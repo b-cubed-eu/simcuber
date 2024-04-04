@@ -9,9 +9,8 @@ sample_observations(
   detection_probability = 1,
   sampling_bias = c("no_bias", "polygon", "manual"),
   bias_area = NA,
-  bias_strength = NA,
+  bias_strength = 1,
   bias_weights = NA,
-  coordinate_uncertainty_meters = 25,
   seed = NA
 )
 }
@@ -34,19 +33,16 @@ sampled to \code{bias_weights}.}
 \item{bias_strength}{\code{NA} or a positive numeric value. Only used if
 \code{sampling_bias = "polygon"}. The strength of the bias to be applied in the
 biased area (as a multiplier). Above 1, area will be oversampled. Below 1,
-area will be undersampled. For example, a value of 50 will result in 50
-times more samples within the \code{bias_area} than outside. Conversely, a value
-of 0.5 will result in half less samples within the \code{bias_area} than outside.}
+area will be undersampled. For example, a value of 50 will result in a 50
+times sampling probability within the \code{bias_area} than outside. Conversely,
+a value of 0.5 will result in half less samples within the \code{bias_area} than
+outside.}
 
-\item{bias_weights}{\code{NA} or a raster layer (sf object with POLYGON geometry,
-or SpatRaster object). Only used if \code{sampling_bias = "manual"}. The raster
-of bias weights to be applied to the sampling of occurrences. Higher weights
-mean a higher probability of sampling. Weights can be numeric values between
-0 and 1 or positive integers that will be rescaled to values between 0 and 1.}
-
-\item{coordinate_uncertainty_meters}{A positive numeric value or vector with
-length \code{nrow(occurrences)} describing the uncertainty in meters around each
-observation.}
+\item{bias_weights}{\code{NA} or a raster layer (sf object with POLYGON geometry.
+Only used if \code{sampling_bias = "manual"}. The raster of bias weights to be
+applied to the sampling of occurrences. Higher weights mean a higher
+probability of sampling. Weights can be numeric values between 0 and 1 or
+positive integers that will be rescaled to values between 0 and 1.}
 
 \item{seed}{A positive numeric value. The seed for random number generation
 to make results reproducible. If \code{NA} (the default), no seed is used.}
@@ -54,23 +50,20 @@ to make results reproducible. If \code{NA} (the default), no seed is used.}
 \value{
 An sf object with POINT geometry containing the locations of the
 sampled observations, a \code{detection_probability} column containing the
-detection probability for each observation (will be the same for all), a
+detection probability for each observation (will be the same for all), and a
 \code{bias_weight} column containing the sampling probability based on sampling
 bias, a \code{sampling_probability} column containing the combined sampling
-probability from detection probability and sampling bias, and a
-\code{coordinateUncertaintyInMeters} column containing the coordinate uncertainty
-for each observation.
+probability from detection probability and sampling bias for each
+observation.
 }
 \description{
 The function samples observations from occurrences based on detection
 probability and sampling bias.
 }
 \examples{
-
-# add example here ...
-
-# This is just to create an example polygon for input
+# Load packages
 library(sf)
+library(dplyr)
 
 # Set seed for reproducibility
 set.seed(123)
@@ -84,6 +77,43 @@ occurrences <- data.frame(
   )
 
 # Convert the occurrence data to an sf object
-# Can be used as occurrences input argument
-points_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
+occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
+
+# Sample observations without sampling bias
+sample_observations(
+  occurrences_sf,
+  detection_probability = 0.8,
+  sampling_bias = "no_bias",
+  seed = 123
+  )
+
+# Sample observations with sampling bias in a polygon
+# Create bias_area polygon overlapping two of the points
+selected_observations <- st_union(occurrences_sf[2:3,])
+bias_area <- st_convex_hull(selected_observations) \%>\%
+  st_buffer(dist = 100) \%>\%
+  st_as_sf()
+
+sample_observations(
+  occurrences_sf,
+  detection_probability = 0.8,
+  sampling_bias = "polygon",
+  bias_area = bias_area,
+  bias_strength = 2,
+  seed = 123
+  )
+
+# Sample observations with sampling bias in a polygon
+# Create raster grid with bias weights between 0 and 1
+grid <- st_make_grid(occurrences_sf) \%>\%
+  st_sf() \%>\%
+  mutate(bias_weight = runif(n(), min = 0, max = 1))
+
+sample_observations(
+  occurrences_sf,
+  detection_probability = 0.8,
+  sampling_bias = "manual",
+  bias_weights = grid,
+  seed = 123
+  )
 }

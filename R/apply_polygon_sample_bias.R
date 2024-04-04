@@ -26,7 +26,6 @@
 #' @importFrom dplyr mutate
 #'
 #' @examples
-#' @examples
 #' # Load packages
 #' library(sf)
 #' library(dplyr)
