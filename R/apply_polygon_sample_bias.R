@@ -55,7 +55,6 @@
 #'
 apply_polygon_sample_bias <- function(observations, bias_area,
                                       bias_strength = 1) {
-  require(sf)
 
   ### Start checks
   # 1. check input lengths
