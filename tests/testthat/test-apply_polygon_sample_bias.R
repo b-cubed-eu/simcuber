@@ -48,7 +48,7 @@ test_that("arguments are of the right class", {
                regexp = "`observations` must be an sf object",
                fixed = TRUE)
 
-  # bias_area is sf polygon dataframe
+  # bias_area is sf dataframe
   expect_error(apply_polygon_sample_bias(observations,
                                          data.frame(x = 1, y = 1),
                                          bias_strength = 1),
@@ -64,6 +64,7 @@ test_that("arguments are of the right class", {
                                          bias_strength = 1),
                regexp = "`bias_area` must be an sf object",
                fixed = TRUE)
+  #bias_area is an sf dataframe containing only polygons
   expect_error(apply_polygon_sample_bias(observations,
                                          bias_area = observations,
                                          bias_strength = 1),
