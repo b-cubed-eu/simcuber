@@ -29,7 +29,7 @@
 #' @examples
 #'
 #' library(simcuber)
-#' library(ggplot)
+#' library(ggplot2)
 #'
 #' ## 1. Use the function simulate_random_walk()
 #' simulate_timeseries(
