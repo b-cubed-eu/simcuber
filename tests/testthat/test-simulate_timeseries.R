@@ -3,28 +3,28 @@
 test_that("arguments are of the right class", {
   # initial_average_occurrences must be a positive integer
   expect_error(simulate_timeseries(initial_average_occurrences = "a"),
-    class = "simcuber_error_wrong_argument_type"
+    class = "gcube_error_wrong_argument_type"
   )
   expect_error(simulate_timeseries(initial_average_occurrences = 0),
-    class = "simcuber_error_wrong_argument_type"
+    class = "gcube_error_wrong_argument_type"
   )
   # n_time_points must be a positive integer
   expect_error(simulate_timeseries(n_time_points = "a"),
-    class = "simcuber_error_wrong_argument_type"
+    class = "gcube_error_wrong_argument_type"
   )
   expect_error(simulate_timeseries(n_time_points = 0),
-    class = "simcuber_error_wrong_argument_type"
+    class = "gcube_error_wrong_argument_type"
   )
   # temporal_function must be NA or a function
   expect_error(simulate_timeseries(temporal_function = "a"),
-    class = "simcuber_error_wrong_argument_type"
+    class = "gcube_error_wrong_argument_type"
   )
   expect_error(simulate_timeseries(temporal_function = 1),
-    class = "simcuber_error_wrong_argument_type"
+    class = "gcube_error_wrong_argument_type"
   )
   # seed must be an numeric vector of length 1
   expect_error(simulate_timeseries(seed = "a"),
-    class = "simcuber_error_wrong_argument_type"
+    class = "gcube_error_wrong_argument_type"
   )
 })
 

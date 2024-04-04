@@ -31,8 +31,6 @@
 #' @importFrom mnormt rmnorm
 #'
 #' @examples
-#'
-#' library(simcuber)
 #' library(sf)
 #' library(dplyr)
 #'
@@ -138,7 +136,7 @@ sample_from_binormal_circle <- function(
 
     # New points are equal to original points in case of no uncertainty
     new_points <- observations %>%
-      dplyr::select(.data$coordinateUncertaintyInMeters)
+      dplyr::select("coordinateUncertaintyInMeters")
   } else {
     # Calculate 2-dimensional means and variance-covariance matrices
     means <- sf::st_coordinates(observations$geometry)

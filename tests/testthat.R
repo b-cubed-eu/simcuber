@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(simcuber)
+library(gcube)
 
-test_check("simcuber")
+test_check("gcube")
