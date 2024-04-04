@@ -31,8 +31,6 @@
 #' @importFrom mnormt rmnorm
 #'
 #' @examples
-#'
-#' library(simcuber)
 #' library(sf)
 #' library(dplyr)
 #'

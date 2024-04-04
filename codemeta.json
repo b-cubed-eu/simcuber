@@ -1,0 +1,239 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "gcube",
+  "description": "Simulation framework for biodiversity data cubes.",
+  "name": "gcube: Simulating Biodiversity Data Cubes",
+  "relatedLink": "https://b-cubed-eu.github.io/gcube/",
+  "codeRepository": "https://github.com/b-cubed-eu/gcube",
+  "issueTracker": "https://github.com/b-cubed-eu/gcube/issues",
+  "license": "https://spdx.org/licenses/MIT",
+  "version": "0.0.0",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.2.3 (2023-03-15)",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Ward",
+      "familyName": "Langeraert",
+      "email": "ward.langeraert@inbo.be",
+      "@id": "https://orcid.org/0000-0002-5900-8109"
+    }
+  ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Wissam",
+      "familyName": "Barhdadi",
+      "@id": "https://orcid.org/0000-0001-9304-3971"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Dimitri",
+      "familyName": "Brosens",
+      "@id": "https://orcid.org/0000-0002-0846-9116"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Rocìo",
+      "familyName": "Cortès",
+      "@id": "https://orcid.org/0009-0004-8440-958X"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Peter",
+      "familyName": "Desmet",
+      "@id": "https://orcid.org/0000-0002-8442-8025"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Michele",
+      "familyName": "Di Musciano",
+      "@id": "https://orcid.org/0000-0002-3130-7270"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Chandra",
+      "familyName": "Earl",
+      "@id": "https://orcid.org/0000-0001-9850-882X"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Sanne",
+      "familyName": "Govaert",
+      "@id": "https://orcid.org/0000-0002-8939-1305"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Pieter",
+      "familyName": "Huybrechts",
+      "@id": "https://orcid.org/0000-0002-6658-6062"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Matilde",
+      "familyName": "Martini",
+      "@id": "https://orcid.org/0009-0003-5612-925X"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Arthur",
+      "familyName": "Rodrigues",
+      "@id": "https://orcid.org/0000-0003-2656-558X"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Toon",
+      "familyName": "Van Daele",
+      "@id": "https://orcid.org/0000-0002-1362-853X"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Annegreet",
+      "familyName": "Veeken",
+      "@id": "https://orcid.org/0000-0003-4291-5981"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Mukhtar Muhammed",
+      "familyName": "Yahaya",
+      "@id": "https://orcid.org/0009-0008-9200-0863"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Ward",
+      "familyName": "Langeraert",
+      "email": "ward.langeraert@inbo.be",
+      "@id": "https://orcid.org/0000-0002-5900-8109"
+    }
+  ],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "ggplot2",
+      "name": "ggplot2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "testthat",
+      "name": "testthat",
+      "version": ">= 3.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
+    }
+  ],
+  "softwareRequirements": {
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "cli",
+      "name": "cli",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cli"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "magrittr",
+      "name": "magrittr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=magrittr"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "mnormt",
+      "name": "mnormt",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mnormt"
+    },
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "rlang",
+      "name": "rlang",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
+    },
+    "6": {
+      "@type": "SoftwareApplication",
+      "identifier": "sf",
+      "name": "sf",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=sf"
+    },
+    "7": {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "8": {
+      "@type": "SoftwareApplication",
+      "identifier": "withr",
+      "name": "withr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=withr"
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "110.322KB",
+  "releaseNotes": "https://github.com/b-cubed-eu/gcube/blob/master/NEWS.md",
+  "contIntegration": ["https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/b-cubed-eu/gcube/"],
+  "developmentStatus": "https://www.repostatus.org/#concept"
+}

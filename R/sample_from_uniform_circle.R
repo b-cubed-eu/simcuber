@@ -24,8 +24,6 @@
 #' @importFrom stats runif
 #'
 #' @examples
-#'
-#' library(simcuber)
 #' library(sf)
 #'
 #' set.seed(123)
