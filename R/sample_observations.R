@@ -62,7 +62,7 @@
 #'
 #' # Convert the occurrence data to an sf object
 #' # Can be used as occurrences input argument
-#' points_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
+#' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
 
 
@@ -76,19 +76,35 @@ sample_observations <- function(
     coordinate_uncertainty_meters = 25,
     seed = NA) {
 
+  # bias weights
+  bias_weight <- apply_polygon_sample_bias(occurrences, ...)
+
+  # Merge bias weight with the data with occurrences
+  occurrences$bias_weights <- bias_weights
+
   # detection probability
   occurrences$detection_probability <-  detection_probability
 
-  # bias weights
-  apply_polygon_sample_bias(occurrences, ...)
-  # some example code
-  occurrences$bias_weights <- rep(c(0.2, 0.8), each = 5)
+  # combine probability
+  combine_probability <- bias_weights*detection_probability
+  occurrences$combine_probability
 
-  # combine probabilities
-  #...
+  # sampling based on combined probability
 
-  # sample
-  rbinom(1, 1, 0.7)
+  n <- nrow(occurrences)
+  sample_status <- vector(length = n)
+  for (i in 1:n) {
+    prob <- combine_probability[i]
+    sample_status[i] <- rbinom(1, 1, prob)
+  }
+  occurrences$sample_status <- sample_status
+  occurrences<- subset(occurrences, sample_status==1)
 
-  return(...)
+  #return the sampled species
+  return(occurrences)
+
 }
+
+sample_observations(occurrences = occurrences_sf, bias_weights = runif(10,0,1))
+
+
