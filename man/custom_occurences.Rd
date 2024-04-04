@@ -32,7 +32,9 @@ Function to generate temporally autocorrelated occurrences
 }
 \examples{
 
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
+>>>>>>> 796d996c3d554dc4896fc41f9b64f745523b62e1
 occ <- custom_occurences(initial_average_abundance = 20, n_time_points = 10,
                          population_change = 0.2, n_samp = 100)
 
