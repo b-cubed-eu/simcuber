@@ -11,7 +11,7 @@ occurrences <- data.frame(
 points_sf1 <- sf::st_as_sf(occurrences, coords = c("lon", "lat"))
 
 ## dataset with coordinateUncertaintyInMeters
-coordinate_uncertainty <- rgamma(num_points, shape = 5, rate = 0.1)
+coordinate_uncertainty <- rgamma(10, shape = 5, rate = 0.1)
 points_sf2 <- points_sf1 %>%
   dplyr::mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
 
@@ -45,7 +45,7 @@ test_that("arguments are of the right class", {
 
   # sampling_bias is a character vector
   expect_error(sample_observations(points_sf1, 0.5, TRUE),
-               regexp = "`points_sf2` must be a character vector of length 1",
+               regexp = "`points_sf2` must be a character vector of length 1.",
                fixed = TRUE)
 
   # coordinate_uncertainty_meters is a numeric value

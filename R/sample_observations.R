@@ -91,7 +91,7 @@ sample_observations <- function(
   if (!is.character(sampling_bias)) {
     cli::cli_abort(c(
       "{.var sampling_bias} must be a character vector of length 1.",
-      "x" = "You've supplied a {.cls {class(sampling_bias)}} vector"
+      "x" = "You've supplied a {.cls {class(sampling_bias)}} vector."
     ))
   }
   if (!is.numeric(coordinate_uncertainty_meters)) {
