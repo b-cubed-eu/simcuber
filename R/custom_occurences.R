@@ -44,7 +44,7 @@ custom_occurences <- function(
                        ncol = n_time_points)
 
   # set initial abundance
-  abundances[,1] <- rpois(n_samp, initial_average_abundance)
+  abundances[,1] <- stats::rpois(n_samp, initial_average_abundance)
 
   # loop over time points
   for (i in 2:n_time_points) {
