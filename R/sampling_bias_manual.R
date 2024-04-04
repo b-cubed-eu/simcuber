@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @importFrom cli cli_abort
-#' @importFrom sf st_intersection st_filter
+#' @importFrom sf st_intersection st_filter st_agr
 #'
 #' @examples
 #' # Set seed for reproducibility
@@ -100,6 +100,8 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
   }
 
   # Intersection
+  sf::st_agr(occurrences_sf) <- "constant"
+  sf::st_agr(bias_weights) <- "constant"
   weighted_occurrences <- sf::st_intersection(occurrences_sf, bias_weights)
 
   return(weighted_occurrences)
