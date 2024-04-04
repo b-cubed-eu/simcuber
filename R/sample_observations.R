@@ -47,7 +47,6 @@
 #' # add example here ...
 #'
 #' # This is just to create an example polygon for input
-#' library(sf)
 #'
 #' # Set seed for reproducibility
 #' set.seed(123)
@@ -111,23 +110,23 @@ sample_observations <- function(
       "x" = "You've supplied a {.cls {class(occurrences)}} object."
     ))
   }
-#
-#   # 2. other checks
-#   # detection_probability is a numeric value between 0 and 1
-#   if ((!(0 <= detection_probability) & !(detection_probability <= 1))) {
-#     cli::cli_abort(c(
-#       "{.var detection_probability} must be a numeric value between 0 and 1",
-#       "x" = "You've supplied {.cls {class(detection_probability)}} as
-#       {.var detection_probability}."
-#     ))
-#   }
-  # # seed is a positive value
-  # if (seed <= 0) {
-  #   cli::cli_abort(c(
-  #     "{.var seed} must be a positive integer",
-  #     "x" = "You've supplied {seed} as {.var seed}."
-  #   ))
-  # }
+
+  # 2. other checks
+  # detection_probability is a numeric value between 0 and 1
+  if ((!(0 <= detection_probability) & !(detection_probability <= 1))) {
+    cli::cli_abort(c(
+      "{.var detection_probability} must be a numeric value between 0 and 1",
+      "x" = "You've supplied {.cls {class(detection_probability)}} as
+      {.var detection_probability}."
+    ))
+  }
+# seed is a positive value
+if (seed <= 0) {
+  cli::cli_abort(c(
+    "{.var seed} must be a positive integer",
+    "x" = "You've supplied {seed} as {.var seed}."
+  ))
+}
 
   ### End checks
 
