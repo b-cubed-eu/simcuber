@@ -3,7 +3,7 @@
 #' This function adds a sampling bias weight column containing the sample
 #' probability based on sampling bias within a polygon.
 #'
-#' @param observations An sf object with POINT geometry.
+#' @param occurrences_sf An sf object with POINT geometry.
 #'
 #' @param bias_area An sf object with POLYGON geometry. The area in which the
 #' sampling will be biased.
@@ -51,16 +51,16 @@
 #'
 #' apply_polygon_sample_bias(observations_sf, bias_area, bias_strength)
 #'
-apply_polygon_sample_bias <- function(observations,
+apply_polygon_sample_bias <- function(occurrences_sf,
                                       bias_area,
                                       bias_strength = 1) {
 
   ### Start checks
   # 1. check input classes
-  if (!"sf" %in% class(observations)) {
+  if (!"sf" %in% class(occurrences_sf)) {
     cli::cli_abort(c(
-      "{.var observations} must be an sf object.",
-      "x" = "You've supplied a {.cls {class(observations)}} object."
+      "{.var occurrences_sf} must be an sf object.",
+      "x" = "You've supplied a {.cls {class(occurrences_sf)}} object."
     ))
   }
 
@@ -101,8 +101,8 @@ apply_polygon_sample_bias <- function(observations,
   # Combine polygons into multipolygon
   bias_area <- sf::st_union(bias_area)
 
-  # Find observations inside polygon
-  in_bias_area <- observations %>%
+  # Find occurrences inside polygon
+  in_bias_area <- occurrences_sf %>%
     sf::st_within(bias_area, sparse = FALSE)
 
   # Calculate sampling probability based on bias strength
@@ -110,10 +110,10 @@ apply_polygon_sample_bias <- function(observations,
   bias_weights_inside_polygon <- bias_strength / (1 + bias_strength)
 
   #create bias_weight column
-  observations <- observations %>%
+  occurrences_sf <- occurrences_sf %>%
     dplyr::mutate(bias_weight = ifelse(in_bias_area,
                                        bias_weights_inside_polygon,
                                        bias_weights_outside_polygon))
 
-  return(observations)
+  return(occurrences_sf)
 }
