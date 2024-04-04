@@ -26,8 +26,6 @@
 #' @importFrom dplyr mutate
 #'
 #' @examples
-#'
-#' library(simcuber)
 #' library(sf)
 #'
 #' set.seed(123)

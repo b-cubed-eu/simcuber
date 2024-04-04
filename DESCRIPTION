@@ -1,4 +1,4 @@
-Package: simcuber
+Package: gcube
 Title: Simulating Biodiversity Data Cubes
 Version: 0.0.0
 Authors@R: c(
@@ -33,9 +33,9 @@ Authors@R: c(
   )
 Description: Simulation framework for biodiversity data cubes.
 License: MIT + file LICENSE
-URL: https://github.com/b-cubed-eu/simcuber,
-    https://b-cubed-eu.github.io/simcuber/
-BugReports: https://github.com/b-cubed-eu/simcuber/issues
+URL: https://github.com/b-cubed-eu/gcube,
+    https://b-cubed-eu.github.io/gcube/
+BugReports: https://github.com/b-cubed-eu/gcube/issues
 Imports:
     cli,
     dplyr,
