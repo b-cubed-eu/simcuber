@@ -39,16 +39,16 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr mutate rowwise select filter
+#' @importFrom dplyr mutate rowwise select filter ungroup
 #' @importFrom cli cli_abort
 #' @importFrom stats rbinom
 #' @importFrom magrittr %>%
+#' @importFrom withr local_seed
 #'
 #' @examples
 #'
-#' # add example here ...
-#'
-#' # This is just to create an example polygon for input
+#' # Load packages
+#' library(sf)
 #'
 #' # Set seed for reproducibility
 #' set.seed(123)
@@ -62,8 +62,45 @@
 #'   )
 #'
 #' # Convert the occurrence data to an sf object
-#' # Can be used as occurrences input argument
 #' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
+#'
+#' # Sample observations without sampling bias
+#' sample_observations(
+#'   occurrences_sf,
+#'   detection_probability = 0.8,
+#'   sampling_bias = "no_bias",
+#'   seed = 123
+#'   )
+#'
+#' # Sample observations with sampling bias in a polygon
+#' # Create bias_area polygon overlapping two of the points
+#' selected_observations <- st_union(occurrences_sf[2:3,])
+#' bias_area <- st_convex_hull(selected_observations) %>%
+#'   st_buffer(dist = 100) %>%
+#'   st_as_sf()
+#'
+#' sample_observations(
+#'   occurrences_sf,
+#'   detection_probability = 0.8,
+#'   sampling_bias = "polygon",
+#'   bias_area = bias_area,
+#'   bias_strength = 2,
+#'   seed = 123
+#'   )
+#'
+#' # Sample observations with sampling bias in a polygon
+#' # Create raster grid with bias weights between 0 and 1
+#' grid <- st_make_grid(occurrences_sf) %>%
+#'   st_sf() %>%
+#'   mutate(bias_weight = runif(n(), min = 0, max = 1))
+#'
+#' sample_observations(
+#'   occurrences_sf,
+#'   detection_probability = 0.8,
+#'   sampling_bias = "manual",
+#'   bias_weights = grid,
+#'   seed = 123
+#'   )
 
 sample_observations <- function(
     occurrences,
@@ -73,6 +110,9 @@ sample_observations <- function(
     bias_strength = 1,
     bias_weights = NA,
     seed = NA) {
+  # Default sampling_bias is first element in vector
+  sampling_bias <- sampling_bias[1]
+
   ### Start checks
   # 1. check input classes
   if (!("sf" %in% class(occurrences))) {
@@ -93,15 +133,9 @@ sample_observations <- function(
       "x" = "You've supplied a {.cls {class(sampling_bias)}} vector."
     ))
   }
-  if (!is.integer(seed) & !is.na(seed)) {
-    cli::cli_abort(c(
-      "{.var seed} must be NA or a positive integer.",
-      "x" = "{.var seed} has the value {seed}."
-    ))
-  }
 
   # 2. other checks
-  # detection_probability is a numeric value between 0 and 1
+  # Detection_probability is a numeric value between 0 and 1
   if ((!(0 <= detection_probability) && !(detection_probability <= 1))) {
     cli::cli_abort(c(
       "{.var detection_probability} must be a numeric value between 0 and 1.",
@@ -109,23 +143,34 @@ sample_observations <- function(
       {.var detection_probability}."
     ))
   }
-  # seed is a positive value
-  if (seed <= 0) {
+  # sampling_bias arguments must match
+  sampling_bias <- tolower(sampling_bias)
+  if (!sampling_bias %in% c("no_bias", "polygon", "manual")) {
     cli::cli_abort(c(
-      "{.var seed} must be a positive integer.",
-      "x" = "You've supplied {seed} as {.var seed}."
+      '{.var sampling_bias} should be one of "no_bias", "polygon", "manual".',
+      "x" = "You've supplied {.val {sampling_bias[1]}}."
     ))
   }
-
+  # Set seed if provided
+  if (!is.na(seed)) {
+    if (is.numeric(seed)) {
+      withr::local_seed(seed)
+    } else {
+      cli::cli_abort(c(
+        "{.var seed} must be a numeric vector of length 1.",
+        "x" = paste(
+          "You've supplied a {.cls {class(seed)}} vector",
+          "of length {length(seed)}."
+        )
+      ))
+    }
+  }
   ### End checks
 
   # Add detection probability
   occurrences$detection_probability <- detection_probability
 
   # Create and merge bias weights with occurrences
-  if (length(sampling_bias) > 1) {
-    sampling_bias <- sampling_bias[1]
-  }
   if (sampling_bias == "polygon") {
     occurrences <- apply_polygon_sample_bias(
       occurrences_sf = occurrences,
@@ -141,15 +186,16 @@ sample_observations <- function(
   }
 
   # Combine detection and bias probabilities and sample observations
-  occurrences <- occurrences %>%
+  occurrences_combi <- occurrences %>%
     dplyr::mutate(
       sampling_probability = detection_probability * bias_weight
     ) %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(sample_status = stats::rbinom(1, 1, sampling_probability))
+    dplyr::mutate(sample_status = stats::rbinom(1, 1, sampling_probability)) %>%
+    dplyr::ungroup()
 
   # Filter observations
-  observations <- occurrences %>%
+  observations <- occurrences_combi %>%
     dplyr::filter(sample_status == 1) %>%
     dplyr::select(time_point, detection_probability, bias_weight,
                   sampling_probability, geometry)
