@@ -11,8 +11,8 @@
 #' following names:
 #' - geometry
 #' - bias_weight
-#' Higher weights indicate a higher probability of sampling. #' Weights can be
-#' numeric values between 0 and 1 or positive integers that will #' be rescaled
+#' Higher weights indicate a higher probability of sampling. Weights must be
+#' numeric values between 0 and 1 OR positive integers that will be rescaled
 #' to values between 0 and 1.
 #'
 #' @returns An sf object with POINT geometry with a bias_weight column
@@ -39,11 +39,25 @@
 #' grid$bias_weight <- runif(nrow(grid), min = 0, max = 1)
 #' bias_weights <- grid
 
+sampling_bias_manual <- function(occurrences_sf, bias_weights) {
 
-#####
-sampling_bias_manual <- function(occurrences_sf,bias_weights) {
+  ### Start checks
 
-  # Check if bias_weights has a column named bias_weight
+  # 1. check input classes
+
+  # Occurrences_sf is already checked in sample_observations.
+
+  if (!"sf" %in% class(bias_weights)) {
+    cli::cli_abort(c(
+      "{.var bias_weights} must be an sf object.",
+      "x" = "You've supplied a {.cls {class(bias_weights)}} object."
+    ))
+  }
+  # To do: Check also for spatRaster object? ####
+
+  # 2. Other checks
+
+  # Check if bias_weights has a column named bias_weight, if not, raise error
   if (!("bias_weight" %in% names(bias_weights))) {
     cli::cli_abort(c(
       "{.var bias_weights} must have a column named `bias_weight`.",
@@ -61,12 +75,27 @@ sampling_bias_manual <- function(occurrences_sf,bias_weights) {
     ))
   }
 
-  # To do: Check also for spatRaster object?
-
-  # To do: Check if rescaling is needed
-  if (){
-
+  # Check if the values of occurrences_sf$bias_weight are positive
+  # seed is a positive value
+  if (!(all(occurrences_sf$bias_weight) >= 0)) {
+    cli::cli_abort(c(
+      "The column `bias_weight` must consist of numeric values between 0 and 1
+      OR positive integers.",
+      "x" = "The column `bias_weight` has negative values."
+    ))
   }
+
+  ### End checks
+
+  # Rescale bias_weight if needed
+  if ((!(0 <= detection_probability) && !(detection_probability <= 1))) {
+    cli::cli_abort(c(
+      "Weights  must be numeric values between 0
+      and 1 OR positive integers.",
+      "x" = "You've supplied XXX."
+    ))
+  }
+
 
   # Intersection
   observations <- st_intersection(occurrences_sf, bias_weights)
@@ -79,6 +108,3 @@ sampling_bias_manual <- function(occurrences_sf,bias_weights) {
 
 
 }
-
-
-
