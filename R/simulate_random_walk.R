@@ -54,7 +54,7 @@ simulate_random_walk <- function(
 
   # Generate random steps and accumulate them
   for (i in 2:n_time_points) {
-    step <- rnorm(1, mean = 0, sd = sd_step)
+    step <- stats::rnorm(1, mean = 0, sd = sd_step)
     lambdas[i] <- lambdas[i - 1] + step
   }
 
