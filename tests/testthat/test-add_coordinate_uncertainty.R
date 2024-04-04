@@ -17,8 +17,9 @@ test_that("add_coordinate_uncertainty() returns sf object", {
 })
 
 test_that("add_coordinate_uncertainty() add the right coordinate uncertainty", {
-  n_observations <- 4
-  coords_uncertanty_set <- 1000
+  # set the number of observations and coordinate uncertainty to test
+  n_observations <- 19
+  coords_uncertanty_set <- 4876
   # create observations_sf object to be used as an input
   observations_sf <-
     data.frame(
