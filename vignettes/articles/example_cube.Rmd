@@ -16,6 +16,8 @@ library(simcuber)
 library(dplyr)
 library(sf)
 library(ggplot2)
+library(tidyverse)
+library(magrittr)
 ```
 
 # Create random points
@@ -41,15 +43,9 @@ observations_sf <- data.frame(
   lat = runif(n_points, ylim[1], ylim[2]),
   long = runif(n_points, xlim[1], xlim[2]),
   aggregate = FALSE,
-  
   coordinateUncertaintyInMeters = coordinate_uncertainty
-) %>%
-  st_as_sf(coords = c("long", "lat"), crs = 3035)
+) %>% st_as_sf(coords = c("long", "lat"), crs = 3035, remove = FALSE)
 ```
-
-# add column decimalLat & decimalLong
-
-
 
 
 # Add buffer uncertainty in meters around points
@@ -78,6 +74,64 @@ grid <- grid_designation(
   seed = 123
 )
 ```
+
+# Also get sampled points to visualise
+
+```{r}
+sampled_points <- grid_designation(
+  observations = observations_sf,
+  grid = grid_df,
+  seed = 123,
+  aggregate = FALSE)
+```
+
+# Create occurrence cube
+```{r}
+occurrence_cube_df <- grid_designation(
+  observations = observations_sf,
+  grid = grid_df,
+  seed = 123)
+```
+
+# visualize output 1
+
+
+```{r}
+ggplot() +
+  geom_sf(data = grid_df, linewidth = 1, color = "red", fill = "lightgreen") +
+  geom_sf(data = observations_sf, colour = "firebrick") +
+  geom_sf(data = observations_buffered, fill = alpha("firebrick", 0.5)) +
+  theme_void()
+```
+
+
+
+
+# Visualise output complete
+```{r}
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+  geom_sf(data = sampled_points, colour = "blue") +
+  geom_sf(data = observations_sf, colour = "firebrick") +
+  geom_sf(data = observations_buffered, fill = alpha("firebrick", 0.5)) +
+ # geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  theme_void()
+
+```
+# Visualise output grid
+```{r}
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+# geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  theme_void()
+
+```
+
+
+
+
 
 visualize grid
 
