@@ -52,9 +52,7 @@ test_that("add_coordinate_uncertainty() returns error on non sf occurrence input
   )
 })
 
-test_that(
-  "add_coordinate_uncertainty() returns error when occurrence geompetry is different from POINT",
-  {
+test_that("add_coordinate_uncertainty() returns error when occurrence geompetry is different from POINT", {
 
   }
 )
