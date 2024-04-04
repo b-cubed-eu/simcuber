@@ -39,6 +39,11 @@
 #'
 #' @export
 #'
+#' @importFrom dplyr mutate rowwise select filter
+#' @importFrom cli cli_abort
+#' @importFrom stats rbinom
+#' @importFrom magrittr %>%
+#'
 #' @examples
 #'
 #' # add example here ...

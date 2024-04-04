@@ -16,6 +16,10 @@
 #' containing the sampling probability based on sampling bias.
 #'
 #' @export
+#'
+#' @importFrom cli cli_abort
+#' @importFrom sf st_intersection st_filter
+#'
 #' @examples
 #' # Set seed for reproducibility
 #' set.seed(123)
