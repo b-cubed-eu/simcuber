@@ -31,8 +31,6 @@
 #' @importFrom mnormt rmnorm
 #'
 #' @examples
-#'
-#' library(simcuber)
 #' library(sf)
 #' library(dplyr)
 #'
@@ -114,7 +112,7 @@ sample_from_binormal_circle <- function(
   # Set seed if provided
   if (!is.na(seed)) {
     if (is.numeric(seed)) {
-      set.seed(seed)
+      withr::local_seed(seed)
     } else {
       cli::cli_abort(c(
         "{.var seed} must be a numeric vector of length 1.",

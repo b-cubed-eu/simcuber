@@ -1,19 +1,19 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# simcuber <a href="https://b-cubed-eu.github.io/simcuber/"><img src="man/figures/logo.png" align="right" height="120" alt="simcuber website"/></a>
+# gcube <a href="https://b-cubed-eu.github.io/gcube/"><img src="man/figures/logo.png" align="right" height="120" alt="gcube website"/></a>
 
 <!-- badges: start -->
 
 [![CRAN
-status](https://www.r-pkg.org/badges/version/simcuber)](https://CRAN.R-project.org/package=simcuber)
-[![R-CMD-check](https://github.com/b-cubed-eu/simcuber/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/simcuber/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/b-cubed-eu/simcuber/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/simcuber/)
+status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
+[![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
 [![repo
 status](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
 <!-- badges: end -->
 
-The goal of **simcuber** is to provide a simulation framework for
+The goal of **gcube** is to provide a simulation framework for
 biodiversity data cubes using the R programming language. This can start
 from simulating multiple species distributed in a landscape over a
 temporal scope. In a second phase, the simulation of a variety of
@@ -36,7 +36,7 @@ You can install the development version from
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("b-cubed-eu/simcuber")
+remotes::install_github("b-cubed-eu/gcube")
 ```
 
 ## Example
@@ -44,7 +44,7 @@ remotes::install_github("b-cubed-eu/simcuber")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(simcuber)
+library(gcube)
 ```
 
 …
