@@ -5,13 +5,17 @@
 #' @param initial_average_abundance A positive integer value indicating the
 #' average number of occurrences to be simulated within the extend of `polygon`
 #' at the first time point. This value will be used as mean of a Poisson
-#'  distribution (lambda parameter).
+#' distribution (lambda parameter).
 #' @param n_time_points A positive integer value indicating the number of time
 #' points to simulate.
-#' @param temporal_autocorr `NA`, or a function which generates
-#' a trend in abundance over time. Only used if `time_points > 1`. When there
-#' are multiple time points the function will by default use the internal
-#' `simulate_random_walk()` function.
+#' @param temporal_autocorr `NA` (default), or a function which generates
+#' a trend in abundance over time. Only used if `time_points > 1`. By default,
+#' the function will sample `n_time_points` times from a Poisson
+#' distribution with average (lambda) `initial_average_abundance`. When a
+#' function is specified (e.g. the internal `simulate_random_walk()` function)
+#' `n_time_points` average abundances (lambdas) are calculated using
+#' `initial_average_abundance` and any additional arguments passed.
+#' See examples.
 #' @param ... Additional argument to be passed to the `temporal_autocorr`
 #' function.
 #' @param seed A positive numeric value. The seed for random number generation
@@ -23,6 +27,7 @@
 #' @export
 #'
 #' @examples
+#'
 #' library(simcuber)
 #' library(ggplot)
 #'
@@ -137,7 +142,7 @@
 simulate_timeseries <- function(
     initial_average_abundance = 50,
     n_time_points = 10,
-    temporal_autocorr = ifelse(n_time_points ==  1, NA, simulate_random_walk),
+    temporal_autocorr = NA,
     ...,
     seed = NA) {
   # Checks
