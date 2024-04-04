@@ -7,6 +7,7 @@ library(tidyverse)
 library(geodata)
 library(corrplot)
 library(car)
+install.packages("usethis")
 # worldclim_global(var, res, path, version="2.1", ...)
 # worldclim_country(country, var, path, version="2.1", ...)
 # worldclim_tile(var, lon, lat, path, version="2.1", ...)
@@ -134,3 +135,7 @@ for (i in 1:Number_species) {
 }
 print(Outputs)
 Outputs[[1]]
+
+
+usethis::use_vignette("my-vignette")
+

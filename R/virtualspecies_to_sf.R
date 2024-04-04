@@ -35,7 +35,7 @@
 #'
 #' out <- virtualspecies_to_sf(nsp = 1, covariates_stack = stack_bio)
 #
-stack_bio %>% nrow()
+
 virtualspecies_to_sf <- function(
     nsp = 10,
     covariates_stack,
