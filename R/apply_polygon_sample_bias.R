@@ -18,8 +18,6 @@
 #' @returns An sf object with POINT geometry with a bias_weight column
 #' containing the sampling probability based on sampling bias.
 #'
-#' @export
-#'
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom magrittr %>%
 #' @importFrom sf st_within
