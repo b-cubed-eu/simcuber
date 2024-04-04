@@ -39,11 +39,14 @@ BugReports: https://github.com/b-cubed-eu/simcuber/issues
 Imports:
     cli,
     dplyr,
+    gstat,
     magrittr,
     mnormt,
     rlang,
     sf,
     stats,
+    terra,
+    vegan,
     withr
 Suggests: 
     ggplot2,
