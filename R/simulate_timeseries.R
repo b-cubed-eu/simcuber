@@ -28,8 +28,7 @@
 #'
 #' @examples
 #'
-#' library(simcuber)
-#' library(ggplot)
+#' library(ggplot2)
 #'
 #' ## 1. Use the function simulate_random_walk()
 #' simulate_timeseries(
@@ -204,10 +203,10 @@ simulate_timeseries <- function(
         n_time_points,
         ...)
     }
-    timeseries <- rpois(n_time_points, lambdas)
+    timeseries <- stats::rpois(n_time_points, lambdas)
   } else {
     # When it's NA, generate timeseries using a Poisson distribution
-    timeseries <- rpois(n_time_points, initial_average_abundance)
+    timeseries <- stats::rpois(n_time_points, initial_average_abundance)
   }
 
   return(timeseries)
