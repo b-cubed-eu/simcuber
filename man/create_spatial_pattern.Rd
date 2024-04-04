@@ -17,14 +17,16 @@ create_spatial_pattern(
 
 \item{resolution}{a numeric value defining the resolution of the raster cell}
 
-\item{spatial_pattern}{define the spatial pattern. It could be a character string
-"random" or "clustered", in which "random" is the default. The user is able to
-provide a numeric value between 1 and 100. 1 is "random" and 5 is "clustered.
-As large the number more broad is the size of the clusters area. See details.}
+\item{spatial_pattern}{define the spatial pattern. It could be a character
+string "random" or "clustered", in which "random" is the default. The user
+is able to provide a numeric value between 1 and 100. 1 is "random" and 5
+is "clustered. As large the number more broad is the size of the clusters
+area.}
 
 \item{seed}{integer. set a seed to randomization}
 
-\item{n_sim}{number of simulations. Each simulation is a different layer in the raster.}
+\item{n_sim}{number of simulations. Each simulation is a different layer in
+the raster.}
 }
 \value{
 an object of class SpatRaster
@@ -40,8 +42,7 @@ plot(plgn)
 spat_random <- create_spatial_pattern(
   plgn,
   resolution = 0.1,
-  seed = 123,
-  n_sim = 4)
+  seed = 123)
 
 plot(spat_random)
 
@@ -51,8 +52,7 @@ spat_clust<- create_spatial_pattern(
   plgn,
   resolution = 0.1,
   spatial_pattern = "clustered",
-  seed = 123,
-  n_sim = 4)
+  seed = 123)
 
 plot(spat_clust)
 
@@ -63,8 +63,7 @@ spat_small <- create_spatial_pattern(
   plgn,
   resolution = 0.1,
   spatial_pattern = 5,
-  seed = 123,
-  n_sim = 4)
+  seed = 123)
 
 plot(spat_small)
 
@@ -73,8 +72,7 @@ spat_medium <- create_spatial_pattern(
   plgn,
   resolution = 0.1,
   spatial_pattern = 10,
-  seed = 123,
-  n_sim = 4)
+  seed = 123)
 
 plot(spat_medium)
 
@@ -83,8 +81,7 @@ spat_large <- create_spatial_pattern(
   plgn,
   resolution = 0.1,
   spatial_pattern = 100,
-  seed = 123,
-  n_sim = 4)
+  seed = 123)
 
 plot(spat_large)
 

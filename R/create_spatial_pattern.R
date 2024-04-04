@@ -4,12 +4,14 @@
 #'
 #' @param polygon an sf object of geometry type POLYGON
 #' @param resolution a numeric value defining the resolution of the raster cell
-#' @param spatial_pattern define the spatial pattern. It could be a character string
-#'  "random" or "clustered", in which "random" is the default. The user is able to
-#'  provide a numeric value between 1 and 100. 1 is "random" and 5 is "clustered.
-#'  As large the number more broad is the size of the clusters area. See details.
+#' @param spatial_pattern define the spatial pattern. It could be a character
+#'   string "random" or "clustered", in which "random" is the default. The user
+#'   is able to provide a numeric value between 1 and 100. 1 is "random" and 5
+#'   is "clustered. As large the number more broad is the size of the clusters
+#'   area.
 #' @param seed integer. set a seed to randomization
-#' @param n_sim number of simulations. Each simulation is a different layer in the raster.
+#' @param n_sim number of simulations. Each simulation is a different layer in
+#'   the raster.
 #'
 #' @return an object of class SpatRaster
 #' @export
@@ -72,7 +74,7 @@
 #' @import gstat
 #' @importFrom cli cli_abort
 #' @importFrom withr local_seed
-#'
+#' @importFrom vegan decostand
 #'
 create_spatial_pattern <- function(
   polygon,
@@ -92,8 +94,9 @@ create_spatial_pattern <- function(
     ))
   }
 
-  # create a reference raster with same extent as the polygon and user defined resolution
-  templ <- terra::rast(terra::vect(polygon), res=resolution)
+  # create a reference raster with same extent as the polygon and user defined
+  # resolution
+  templ <- terra::rast(terra::vect(polygon), res = resolution)
   poly_raster <- terra::rasterize(terra::vect(plgn), templ)
 
   dfxy <- as.data.frame(poly_raster, xy = TRUE)
@@ -112,8 +115,10 @@ create_spatial_pattern <- function(
       cli::cli_abort(
         c(paste(
           "When class of {.var spatial_pattern} is",
-          "{.cls {class(spatial_pattern)}} you should provide 'random' or 'clustered' as string"),
-          "x" = "You've provided the string '{spatial_pattern}' in {.var spatial_pattern}"
+          "{.cls {class(spatial_pattern)}} you should provide 'random' or
+          'clustered' as string"),
+          "x" = "You've provided the string '{spatial_pattern}' in
+          {.var spatial_pattern}"
         )
       )
     }
@@ -151,18 +156,29 @@ create_spatial_pattern <- function(
     }
   }
 
-  # !idea: we can allow the user to provide a gstat object with other vgm model...
-  gstat_model <- gstat::gstat(formula=z~1, locations=~x+y, dummy=T, beta=1,
-                       model=gstat::vgm(psill=0.5, model="Sph", range=range_size,
-                                 nugget = 0), nmax=2)
+  # !idea: we can allow the user to provide a gstat object with other vgm model
+  gstat_model <- gstat::gstat(
+    formula = z~1,
+    locations = ~x+y,
+    dummy = T,
+    beta = 1,
+    model = gstat::vgm(
+      psill = 0.5,
+      model = "Sph",
+      range = range_size,
+      nugget = 0),
+    nmax = 2)
 
-  dfxy_pred <- predict(gstat_model, newdata=dfxy, nsim=n_sim)
+  dfxy_pred <- stats::predict(gstat_model, newdata = dfxy, nsim = n_sim)
 
 
   # standardize values between 0 and 1
   dfxy_std <- dfxy_pred %>%
     dplyr::mutate(
-      dplyr::across(dplyr::starts_with("sim"), ~vegan::decostand(.x, "range"))
+      dplyr::across(
+        dplyr::starts_with("sim"),
+        ~vegan::decostand(.x, "range")
+        )
     )
 
   r <- terra::rast(dfxy_std)
