@@ -48,15 +48,13 @@ add_coordinate_uncertainty <- function(
 
   ## checks
   ## is it sf object
-  if(!inherits(occurrences, "sf")){
-
+  if (!inherits(occurrences, "sf")) {
     cli::cli_abort(c(
       "{.var occurrences}  must be an object of class 'sf'",
       "x" = paste(
         "You've supplied an object of class {.cls {class(occurrences)}}"
       )
     ))
-
   }
 
   ## is geometry type POINT?
