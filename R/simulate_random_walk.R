@@ -2,7 +2,7 @@
 #'
 #' The function simulates occurrences of a species in a temporal extent.
 #'
-#' @param initial_average_abundance A positive integer value indicating the
+#' @param initial_average_occurrences A positive integer value indicating the
 #' average number of occurrences to be simulated within the extend of `polygon`
 #' at time point 1. This value will be used as mean of a Poisson distribution
 #' (lambda parameter).
@@ -21,14 +21,14 @@
 #' @examples
 #'
 #' simulate_random_walk(
-#'   initial_average_abundance = 50,
+#'   initial_average_occurrences = 50,
 #'   n_time_points = 10,
 #'   sd_step = 1,
-#'   seed = 123)
+#'   seed = 123
+#' )
 #'
-
 simulate_random_walk <- function(
-    initial_average_abundance = 50,
+    initial_average_occurrences = 50,
     n_time_points = 10,
     sd_step = 0.05,
     seed = NA) {
@@ -40,9 +40,11 @@ simulate_random_walk <- function(
     } else {
       cli::cli_abort(c(
         "{.var seed} must be an numeric vector of length 1.",
-        "x" = paste("You've supplied a {.cls {class(seed)}} vector",
-                    "of length {length(seed)}."))
+        "x" = paste(
+          "You've supplied a {.cls {class(seed)}} vector",
+          "of length {length(seed)}."
         )
+      ))
     }
   }
 
@@ -50,7 +52,7 @@ simulate_random_walk <- function(
   lambdas <- numeric(n_time_points)
 
   # Set the initial abundance
-  lambdas[1] <- initial_average_abundance
+  lambdas[1] <- initial_average_occurrences
 
   # Generate random steps and accumulate them
   for (i in 2:n_time_points) {
