@@ -21,6 +21,9 @@
 #' @importFrom sf st_intersection st_filter st_agr
 #'
 #' @examples
+#' # Load packages
+#' library(sf)
+#' library(dplyr)
 #' # Set seed for reproducibility
 #' set.seed(123)
 #'
@@ -36,17 +39,27 @@
 #' # Can be used as occurrences input argument
 #' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 #'
-#' grid <- st_sf(st_make_grid(occurrences_sf) %>% st_sf)
-#' grid$bias_weight <- runif(nrow(grid), min = 0, max = 1)
-#' bias_weights <- grid
+#' grid <- st_sf(st_make_grid(occurrences_sf) %>% st_sf())
+#'
+#' # Bias weights between 0 and 1
+#' grid1 <- grid %>%
+#'   mutate(bias_weight = runif(nrow(grid), min = 0, max = 1))
+#'
+#' sampling_bias_manual(occurrences_sf, grid1)
+#'
+#' # Bias weights larger than 1
+#' grid2 <- grid %>%
+#'   mutate(bias_weight = rpois(nrow(grid), 20))
+#'
+#' sampling_bias_manual(occurrences_sf, grid2)
 
 sampling_bias_manual <- function(occurrences_sf, bias_weights) {
   ### Start checks
   # 1. check input classes
-  if (!("sf" %in% class(occurrences))) {
+  if (!("sf" %in% class(occurrences_sf))) {
     cli::cli_abort(c(
-      "{.var occurrences} must be an sf object.",
-      "x" = "You've supplied a {.cls {class(occurrences)}} object."
+      "{.var occurrences_sf} must be an sf object.",
+      "x" = "You've supplied a {.cls {class(occurrences_sf)}} object."
     ))
   }
   if (!"sf" %in% class(bias_weights)) {
@@ -108,7 +121,7 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
     bias_weights$bias_weight <- bias_weights$bias_weight / maxweight
   }
 
-  # Intersection
+  # Take intersection to add bias weights to occurrence points
   sf::st_agr(occurrences_sf) <- "constant"
   sf::st_agr(bias_weights) <- "constant"
   weighted_occurrences <- sf::st_intersection(occurrences_sf, bias_weights)
