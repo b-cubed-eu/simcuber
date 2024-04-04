@@ -1,0 +1,106 @@
+# Prepare example datasets
+
+## set seed for reproducible observations object
+set.seed(123)
+
+## Create four random points
+n_points <- 4
+xlim <- c(3841000, 3842000)
+ylim <- c(3110000, 3112000)
+coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
+
+observations <- data.frame(
+  lat = runif(n_points, ylim[1], ylim[2]),
+  long = runif(n_points, xlim[1], xlim[2]),
+  coordinateUncertaintyInMeters = coordinate_uncertainty
+) %>%
+  sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
+
+## Create bias_area polygon overlapping two of the points
+selected_observations <- sf::st_union(observations[2:3,])
+bias_area <- sf::st_convex_hull(selected_observations) %>%
+  sf::st_buffer(dist = 100) %>%
+  sf::st_as_sf()
+
+## Set bias_strength
+bias_strength <- 2
+
+# Unit tests
+# apply_polygon_sample_bias <- function(observations,
+#                                       bias_area,
+#                                       bias_strength = 1)
+
+test_that("arguments are of the right class", {
+  # observations are sf dataframe
+  expect_error(apply_polygon_sample_bias(data.frame(x = 1, y = 1),
+                                         bias_area,
+                                         bias_strength),
+               regexp = "`observations` must be an sf object",
+               fixed = TRUE)
+  expect_error(apply_polygon_sample_bias(observations = 1,
+                                         bias_area,
+                                         bias_strength),
+               regexp = "`observations` must be an sf object",
+               fixed = TRUE)
+  expect_error(apply_polygon_sample_bias(observations = "string",
+                                         bias_area,
+                                         bias_strength),
+               regexp = "`observations` must be an sf object",
+               fixed = TRUE)
+
+  # bias_area is sf polygon dataframe
+  expect_error(apply_polygon_sample_bias(observations,
+                                         data.frame(x = 1, y = 1),
+                                         bias_strength = 1),
+               regexp = "`bias_area` must be an sf object",
+               fixed = TRUE)
+  expect_error(apply_polygon_sample_bias(observations,
+                                         bias_area = 1,
+                                         bias_strength = 1),
+               regexp = "`bias_area` must be an sf object",
+               fixed = TRUE)
+  expect_error(apply_polygon_sample_bias(observations,
+                                         bias_area = "string",
+                                         bias_strength = 1),
+               regexp = "`bias_area` must be an sf object",
+               fixed = TRUE)
+
+  # bias_strength is numeric
+  expect_error(apply_polygon_sample_bias(observations,
+                                         bias_area = bias_area,
+                                         bias_strength = data.frame(x = 1, y = 1)),
+               regexp = "`bias_strength` must be a numeric object",
+               fixed = TRUE)
+  expect_error(apply_polygon_sample_bias(observations,
+                                         bias_area = bias_area,
+                                         bias_strength = "string"),
+               regexp = "`bias_strength` must be a numeric object",
+               fixed = TRUE)
+})
+
+test_that("arguments are of the right length", {
+  # bias_strength has length 1
+  expect_error(apply_polygon_sample_bias(observations,
+                                         bias_area,
+                                         bias_strength = rep(3, 3)),
+               regexp = "`bias_strength` must be a numeric vector of length 1.",
+               fixed = TRUE)
+})
+
+test_that("bias_weight column contains values between 0 and 1", {
+  # Test whether bias_weight column contains correct values
+  result <- apply_polygon_sample_bias(observations,
+                                      bias_area,
+                                      bias_strength = bias_strength)
+  expect_true(all(result$bias_weight > 0 & result$bias_weight < 1))
+})
+
+test_that("only one column (bias_weight) is added to observations", {
+  # Test whether only one column (bias_weight) is added
+  result <- apply_polygon_sample_bias(observations,
+                                      bias_area,
+                                      bias_strength = bias_strength)
+  expect_equal(ncol(result), ncol(observations) + 1)  # Checking if only one column is added
+  expect_true("bias_weight" %in% names(result))  # Checking if the added column is bias_weight
+})
+
