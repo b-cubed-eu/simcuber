@@ -15,7 +15,7 @@ observations_sf1 <- data.frame(
 set.seed(123)
 coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 observations_sf2 <- observations_sf1 %>%
-  mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
+  dplyr::mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
 
 ## dataset without geometry
 observations_sf3 <- observations_sf2 %>%
@@ -127,13 +127,13 @@ test_that("coordinateUncertaintyInMeters column is handled correctly", {
 # original point are not larger than their coordinate uncertainty
 test_smaller_distances <- function(observations, seed = NA) {
   sample_dists <- sample_from_uniform_circle(observations, seed = seed) %>%
-    mutate(dist = sf::st_distance(geometry, observations,
+    dplyr::mutate(dist = sf::st_distance(geometry, observations,
                               by_element = TRUE),
            dist = as.numeric(dist)) %>%
     dplyr::pull(dist)
   test_dists_df <- observations %>%
     sf::st_drop_geometry() %>%
-    mutate(dist = sample_dists,
+    dplyr::mutate(dist = sample_dists,
            test = dist < coordinateUncertaintyInMeters)
 
   return(all(test_dists_df$test))
@@ -145,7 +145,7 @@ test_that("distance to new point falls within coordinate uncertainty", {
     ## no seed
     expect_equal(
       sample_from_uniform_circle(observations_sf1) %>%
-        mutate(dist = sf::st_distance(geometry, observations_sf1,
+        dplyr::mutate(dist = sf::st_distance(geometry, observations_sf1,
                                   by_element = TRUE),
                dist = as.numeric(dist)) %>%
         dplyr::pull(dist),
@@ -153,14 +153,14 @@ test_that("distance to new point falls within coordinate uncertainty", {
     ## different seeds
     expect_equal(
       sample_from_uniform_circle(observations_sf1, seed = 123) %>%
-        mutate(dist = sf::st_distance(geometry, observations_sf1,
+        dplyr::mutate(dist = sf::st_distance(geometry, observations_sf1,
                                   by_element = TRUE),
                dist = as.numeric(dist)) %>%
         dplyr::pull(dist),
       rep(0, nrow(observations_sf1)))
     expect_equal(
       sample_from_uniform_circle(observations_sf1, seed = 456) %>%
-        mutate(dist = sf::st_distance(geometry, observations_sf1,
+        dplyr::mutate(dist = sf::st_distance(geometry, observations_sf1,
                                   by_element = TRUE),
                dist = as.numeric(dist)) %>%
         dplyr::pull(dist),
