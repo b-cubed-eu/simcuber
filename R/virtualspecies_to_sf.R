@@ -65,14 +65,16 @@ virtualspecies_to_sf <- function(
 
   presence.points <- sampleOccurrences(new.pres,
                                        n = 40,
-                                       type = "presence-absence",
+                                       type = "presence only",
                                        sample.prevalence = 0.5,
                                        detection.probability = 0.8,
                                        correct.by.suitability = TRUE,
                                        plot = TRUE)
 
-  Outputs_i = data.frame(i, presence.points$sample.points)
-  names(Outputs_i) <- c("species", "x", "y")
+  sf_occurrences <- presence.points$sample.points %>%
+    st_as_sf(coords = c("x", "y"))
 
+  suitab_raster <- random.sp$suitab.raster
 
+  return(list(sf_occurrences = sf_occurrences, suitab_raster = suitab_raster))
 }
