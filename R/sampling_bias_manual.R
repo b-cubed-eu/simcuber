@@ -31,16 +31,37 @@
 #' occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 #'
 #' grid <- st_sf(st_make_grid(occurrences_sf) %>% st_sf)
-#' grid$weights <- runif(nrow(grid), min = 0, max = 1)
+#' grid$bias_weight <- runif(nrow(grid), min = 0, max = 1)
 #' bias_weights <- grid
 
 
 #####
 sampling_bias_manual <- function(occurrences_sf,bias_weights) {
 
-  # Check the size of the grid, if too small, raise error
+  # Check if all occurrences (points) are in the grid, if not, raise error
 
-  # Check if rescaling is needed
+  points_in_grid <- st_filter(occurrences_sf, bias_weights)
+
+  if (!identical(points_in_grid, occurrences_sf)) {
+    cli::cli_abort(c(
+      "{.var bias_weights} must be a grid that encompasses all occurrences.",
+      "x" = "You've supplied a grid that does not encompass all occurrences."
+    ))
+  }
+
+
+  # To do: Check also for spatRaster object?
+
+  # To do: Check if rescaling is needed
+
+  # Intersection
+  observations <- st_intersection(occurrences_sf, bias_weights)
+
+  # To do: Check if the column names are correct
+
+  # To do: not the same return as polygon does, with(out) UncertainityInMeter?
+
+  return(observations)
 
 
 }
