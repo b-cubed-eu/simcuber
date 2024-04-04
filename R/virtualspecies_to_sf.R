@@ -4,10 +4,10 @@
 #' an sf object with the virtual species occurrences as well as its environmental
 #' suitability over space
 #'
-#'
-#' @param nspecies numeric values indicate the number of desired virtual species
 #' @param covariates_stack raster stack of the ecological variables from which
 #' the virtual species are created.
+#' @param nocc numeric values indicate the number of desired occurrences for the
+#' virtual species, by default is 100.
 #' @param polygon An sf object with POLYGON geometry indicating the spatial
 #' extend to simulate occurrences. If `NA` (the default), the virtual species is
 #' generated in the entire area of the stack.
@@ -33,12 +33,11 @@
 #'
 #' stack_bio <- worldclim_country(country = "Belgium", var = "bio", res=0.5, path=tempdir())
 #'
-#' out <- virtualspecies_to_sf(nsp = 1, covariates_stack = stack_bio)
-#
+#' out <- virtualspecies_to_sf(covariates_stack = stack_bio)
 
 virtualspecies_to_sf <- function(
-    nsp = 10,
     covariates_stack,
+    nocc = 100,
     polygon = NA,
     seed = NA){
 
@@ -51,28 +50,27 @@ virtualspecies_to_sf <- function(
     ))
   }
 
-  random.sp <- generateRandomSp(raster.stack = covariates_stack,
+  random.sp <- generateRandomSp(raster.stack = stack_bio,
                                 convert.to.PA = FALSE,
                                 species.type = "multiplicative",
                                 relations = "gaussian",
                                 realistic.sp = TRUE,
                                 plot = FALSE)
 
-  new.pres <-convertToPA(random.sp,
+  new.pres <- convertToPA(random.sp,
                          beta = "random",
-                         alpha = -0.05, plot = FALSE,
-                         species.prevalence = 0.02)
+                         plot = FALSE)
 
   presence.points <- sampleOccurrences(new.pres,
-                                       n = 40,
+                                       n = 100,
                                        type = "presence only",
                                        sample.prevalence = 0.5,
                                        detection.probability = 0.8,
                                        correct.by.suitability = TRUE,
-                                       plot = TRUE)
+                                       plot = F)
 
   sf_occurrences <- presence.points$sample.points %>%
-    st_as_sf(coords = c("x", "y"))
+    st_as_sf(coords = c("x", "y"), crs = crs)
 
   suitab_raster <- random.sp$suitab.raster
 
