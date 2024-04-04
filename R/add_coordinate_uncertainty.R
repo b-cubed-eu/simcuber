@@ -59,7 +59,7 @@ add_coordinate_uncertainty <- function(
 
   ## is geometry type POINT?
   is_point <- sf::st_geometry_type(occurrences, by_geometry = FALSE) == "POINT"
-  if(!is_point){
+  if(!is_point) {
     cli::cli_abort(c(
       "{.var occurrences} must be a 'sf' object with POINT geometry",
       "x" = "You've supplied an 'sf' object of geometry type {.cls {sf::st_geometry_type(occurrences, by_geometry = FALSE)}}"
@@ -86,5 +86,5 @@ add_coordinate_uncertainty <- function(
 
   occurrences$coordinateUncertaintyInMeters <- coords_uncertainty_meters
 
-  occurrences
+  return(occurrences)
 }
