@@ -44,7 +44,6 @@ Imports:
     rlang,
     sf,
     stats,
-    terra,
     withr
 Suggests: 
     ggplot2,
