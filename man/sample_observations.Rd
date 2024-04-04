@@ -67,5 +67,23 @@ probability and sampling bias.
 }
 \examples{
 
-# add example here
+# add example here ...
+
+# This is just to create an example polygon for input
+library(sf)
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Simulate some occurrence data with coordinates and time points
+num_points <- 10
+occurrences <- data.frame(
+  lon = runif(num_points, min = -180, max = 180),
+  lat = runif(num_points, min = -90, max = 90),
+  time_point = 0
+  )
+
+# Convert the occurrence data to an sf object
+# Can be used as occurrences input argument
+points_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 }
