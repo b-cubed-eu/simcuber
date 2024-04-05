@@ -13,13 +13,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# gcube <a href="https://b-cubed-eu.github.io/gcube/"><img src="man/figures/logo.png" align="right" height="120" alt="gcube website"/></a>
+# gcube <a href="https://b-cubed-eu.github.io/gcube/"><img src="man/figures/logo.png" alt="gcube website" align="right" height="120"/></a>
 
 <!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
-[![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
-[![repo status](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+
+[![CRAN status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube) [![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml) [![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/) [![repo status](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+
 <!-- badges: end -->
 
 The goal of **gcube** is to provide a simulation framework for biodiversity data cubes using the R programming language. This can start from simulating multiple species distributed in a landscape over a temporal scope. In a second phase, the simulation of a variety of observation processes and effort can generate actual occurrence datasets. Based on their (simulated) spatial uncertainty, occurrences can then be designated to a grid to form a data cube.
@@ -41,6 +40,76 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(gcube)
+library(tidyverse)
+library(rnaturalearthdata)
+library(rnaturalearth)
+library(terra)
+library(sf)
+library(patchwork)
+
+
+# Get a polygon to add points to
+belgium <- ne_countries(scale = "medium", country = "Belgium",
+                        returnclass = "sf") %>% 
+  dplyr::select(1) 
+
+ggplot() + 
+  geom_sf(data = belgium, 
+          fill = "grey80",
+          col = "black") +
+  theme_minimal()
 ```
 
-...
+## Occurrence process
+We generate occurrence points within the polygon of interest, these are the "real" occurrences of the species, whether we have observed them or not. 
+In the `r simulate_occurrences()` function the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
+
+```{r simulate occurrences}
+# occ <- simulate_occurrences(polygon_sf)
+occ <- st_sample(belgium, 50) %>% st_as_sf()
+
+ggplot() + 
+  geom_sf(data = belgium, 
+          fill = "grey80",
+          col = "black") +
+  geom_sf(data = occ) +
+  theme_minimal()
+```
+
+## Detection process
+In this step we define the sampling process, based on the detection probability of the species and the sampling effort.
+```{r}
+# sampled_occ <- sample_observations(
+#   occ,
+#   detection_probability = 0.5,
+#   sampling_bias = "no bias"
+# )
+sampled_occ <- sample_n(occ, 25)
+
+ggplot() + 
+  geom_sf(data = belgium, 
+          fill = "grey80",
+          col = "black") +
+  geom_sf(data = occ) +
+  geom_sf(data = sampled_occ, col = "darkorange") +
+  ggtitle("One form of detection") +
+  theme_minimal()
+ggplot() + 
+  geom_sf(data = belgium, 
+          fill = "grey80",
+          col = "black") +
+  geom_sf(data = occ) +
+  geom_sf(data = sampled_occ[1:10,], col = "darkorange") +
+  ggtitle("Another form of detection") +
+  theme_minimal()
+
+```
+
+## Grid designation process
+Finally, occurrences are defined to a grid to create a occurrence cube.
+```{r grid designation}
+# Define your grid
+
+```
+
+Before assigning to the grid users can decide to add a coordinate uncertainty. 
