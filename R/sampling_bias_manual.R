@@ -63,6 +63,7 @@
 #'  geom_sf_text(data = grid2, aes(label = bias_weight)) +
 #'  geom_sf(data = occurrence_bias_sf, aes(colour = bias_weight)) +
 #'  scale_color_gradient(trans = "reverse")
+
 sampling_bias_manual <- function(occurrences_sf, bias_weights) {
   ### Start checks
   # 1. check input classes

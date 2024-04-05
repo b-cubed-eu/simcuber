@@ -47,7 +47,7 @@ occurrences <- data.frame(
 # Convert the occurrence data to an sf object
 occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
-# Create bias_area polygon overlapping two of the points
+# Create bias_area polygon overlapping at least two of the points
 selected_observations <- st_union(occurrences_sf[2:3,])
 bias_area <- st_convex_hull(selected_observations) \%>\%
   st_buffer(dist = 100) \%>\%
@@ -64,6 +64,7 @@ occurrence_bias_sf \%>\%
   mutate(bias_weight_f = as.factor(round(bias_weight, 3))) \%>\%
   ggplot() +
     geom_sf(data = bias_area) +
-    geom_sf(aes(colour = bias_weight_f))
+    geom_sf(aes(colour = bias_weight_f)) +
+    ggtitle("Sampling Bias via Polygon")
 
 }
