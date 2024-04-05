@@ -38,7 +38,7 @@ times sampling probability within the \code{bias_area} than outside. Conversely,
 a value of 0.5 will result in half less samples within the \code{bias_area} than
 outside.}
 
-\item{bias_weights}{\code{NA} or a raster layer (sf object with POLYGON geometry.
+\item{bias_weights}{\code{NA} or a raster layer (sf object with POLYGON geometry).
 Only used if \code{sampling_bias = "manual"}. The raster of bias weights to be
 applied to the sampling of occurrences. Higher weights mean a higher
 probability of sampling. Weights can be numeric values between 0 and 1 or
@@ -50,15 +50,15 @@ to make results reproducible. If \code{NA} (the default), no seed is used.}
 \value{
 An sf object with POINT geometry containing the locations of the
 sampled observations, a \code{detection_probability} column containing the
-detection probability for each observation (will be the same for all), and a
+detection probability for each observation (will be the same for all), a
 \code{bias_weight} column containing the sampling probability based on sampling
-bias, a \code{sampling_probability} column containing the combined sampling
+bias, and a \code{sampling_probability} column containing the combined sampling
 probability from detection probability and sampling bias for each
 observation.
 }
 \description{
 The function samples observations from occurrences based on detection
-probability and sampling bias.
+probability and sampling bias by implementing a Bernouilli trial.
 }
 \examples{
 # Load packages
@@ -103,7 +103,7 @@ sample_observations(
   seed = 123
   )
 
-# Sample observations with sampling bias in a polygon
+# Sample observations with sampling bias given manually in a grid
 # Create raster grid with bias weights between 0 and 1
 grid <- st_make_grid(occurrences_sf) \%>\%
   st_sf() \%>\%
