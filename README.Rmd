@@ -47,7 +47,6 @@ library(terra)
 library(sf)
 library(patchwork)
 
-
 # Get a polygon to add points to
 belgium <- ne_countries(scale = "medium", country = "Belgium",
                         returnclass = "sf") %>% 
@@ -66,7 +65,9 @@ In the `r simulate_occurrences()` function the user can specify different levels
 
 ```{r simulate occurrences}
 # occ <- simulate_occurrences(polygon_sf)
-occ <- st_sample(belgium, 50) %>% st_as_sf()
+occ <- st_sample(belgium, 50) %>% st_as_sf() %>% 
+  rename(geometry = x) %>% 
+  mutate(time_point = 1)
 
 ggplot() + 
   geom_sf(data = belgium, 
@@ -77,39 +78,57 @@ ggplot() +
 ```
 
 ## Detection process
-In this step we define the sampling process, based on the detection probability of the species and the sampling effort.
+In this step we define the sampling process, based on the detection probability of the species and the sampling effort. 
 ```{r}
-# sampled_occ <- sample_observations(
-#   occ,
-#   detection_probability = 0.5,
-#   sampling_bias = "no bias"
-# )
-sampled_occ <- sample_n(occ, 25)
+obs <- sample_observations(
+  occ,
+  detection_probability = 0.5,
+  sampling_bias = "no_bias"
+)
+# sampled_occ <- sample_n(occ, 25)
 
 ggplot() + 
   geom_sf(data = belgium, 
           fill = "grey80",
           col = "black") +
   geom_sf(data = occ) +
-  geom_sf(data = sampled_occ, col = "darkorange") +
-  ggtitle("One form of detection") +
+  geom_sf(data = obs, col = "darkorange") +
+  ggtitle("Detected occurrences in orange") +
   theme_minimal()
-ggplot() + 
-  geom_sf(data = belgium, 
-          fill = "grey80",
-          col = "black") +
-  geom_sf(data = occ) +
-  geom_sf(data = sampled_occ[1:10,], col = "darkorange") +
-  ggtitle("Another form of detection") +
-  theme_minimal()
-
 ```
 
 ## Grid designation process
-Finally, occurrences are defined to a grid to create a occurrence cube.
+Finally, occurrences are designated to a grid to create a occurrence cube.
 ```{r grid designation}
+sf_use_s2(FALSE)
+# Add buffer uncertainty in meters around points, randomly sampled from gamma distribution
+buffered_obs <- add_coordinate_uncertainty(
+  obs,
+  coords_uncertainty_meters = 10)
+
 # Define your grid
+grid_df <- st_make_grid(
+  belgium, # grid as the extent of polygon
+  n = c(10,10)) %>% 
+  st_intersection(belgium) %>% 
+  st_as_sf() %>% 
+  rename(geometry = x)
+plot(grid_df)  
+
+gridded_obs <- grid_designation(
+  observations = obs,
+  grid = grid_df)
+
+ggplot() + 
+  geom_sf(data = belgium,
+          fill = "grey80",
+          col = "black") +
+  geom_sf(data = occ) +
+  geom_sf(data = obs, col = "darkorange") +
+  geom_sf(data = gridded_obs, aes(fill = n)) +
+  scale_fill_continuous("Number of\nobservations", type = "viridis") +
+  theme_minimal()
 
 ```
 
-Before assigning to the grid users can decide to add a coordinate uncertainty. 
+
