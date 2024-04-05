@@ -13,23 +13,25 @@ create_spatial_pattern(
 )
 }
 \arguments{
-\item{polygon}{an sf object of geometry type POLYGON}
+\item{polygon}{An sf object of geometry type POLYGON}
 
-\item{resolution}{a numeric value defining the resolution of the raster cell}
+\item{resolution}{A numeric value defining the resolution of the raster cell}
 
-\item{spatial_pattern}{define the spatial pattern. It could be a character
+\item{spatial_pattern}{Define the spatial pattern. It could be a character
 string "random" or "clustered", in which "random" is the default. The user
 is able to provide a numeric value >= 1, where 1 is "random" and 10
 is "clustered" built in options. As large the number more broad is the size
 of the clusters area. See details.}
 
-\item{seed}{integer. set a seed to randomization}
+\item{seed}{The seed for random number generation to make results
+reproducible. If \code{NA} (the default), no seed is used.}
 
-\item{n_sim}{number of simulations. Each simulation is a different layer in
-the raster.}
+\item{n_sim}{Number of simulations. Each simulation is a different layer in
+the raster. Default 1.}
 }
 \value{
-an object of class SpatRaster
+An object of class SpatRaster with a spatial pattern for the area of
+the given polygon.
 }
 \description{
 It creates a raster with a spatial pattern for the area of a polygon.
@@ -44,6 +46,7 @@ spherical variogram model
 \examples{
 
 library(sf)
+library(terra)
 
 plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
 plot(plgn)
@@ -93,7 +96,6 @@ spat_large <- create_spatial_pattern(
   seed = 123)
 
 plot(spat_large, main = "large scale clustered pattern")
-
 
 }
 \seealso{
