@@ -62,7 +62,8 @@
 #'   mutate(bias_weight_f = as.factor(round(bias_weight, 3))) %>%
 #'   ggplot() +
 #'     geom_sf(data = bias_area) +
-#'     geom_sf(aes(colour = bias_weight_f))
+#'     geom_sf(aes(colour = bias_weight_f)) +
+#'     ggtitle("Sampling Bias via Polygon")
 #'
 
 apply_polygon_sample_bias <- function(occurrences_sf,

@@ -31,9 +31,9 @@
 #'
 #' @returns An sf object with POINT geometry containing the locations of the
 #' sampled observations, a `detection_probability` column containing the
-#' detection probability for each observation (will be the same for all), and a
+#' detection probability for each observation (will be the same for all), a
 #' `bias_weight` column containing the sampling probability based on sampling
-#' bias, a `sampling_probability` column containing the combined sampling
+#' bias, and a `sampling_probability` column containing the combined sampling
 #' probability from detection probability and sampling bias for each
 #' observation.
 #'
@@ -89,7 +89,7 @@
 #'   seed = 123
 #'   )
 #'
-#' # Sample observations with sampling bias in a polygon
+#' # Sample observations with sampling bias given manually in a grid
 #' # Create raster grid with bias weights between 0 and 1
 #' grid <- st_make_grid(occurrences_sf) %>%
 #'   st_sf() %>%
