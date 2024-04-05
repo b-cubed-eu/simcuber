@@ -14,10 +14,11 @@
 #' `"clustered"` to 0.9 and `"regular"` to -0.9.
 #' @param n_time_points A positive integer value indicating the number of time
 #' points to simulate.
-#' @param temporal_autocorr `NA`, `"random_walk"` or a function which generates
-#' a trend in abundance over time. Only used if `time_points > 1`. When there
-#' are multiple time points the function will by default use a `"random_walk"`
-#' function.
+#' @param temporal_function `NA` (default), or a function which generates
+#' a trend in abundance over time. Only used if `n_time_points > 1`. By default,
+#' the function will sample `n_time_points` times from a Poisson
+#' distribution with average (lambda) `initial_average_occurrences`. When a
+#' function is specified (e.g. the internal `simulate_random_walk()` function).
 #' @param spatiotemporal_autocorr A numeric value between indicating the
 #' strength of spatiotemporal autocorrelation.
 #' @param seed A positive numeric value. The seed for random number generation
@@ -51,7 +52,7 @@ simulate_occurrences <- function(
     initial_average_abundance = 50,
     spatial_autocorr = c("random", "clustered", "regular"),
     n_time_points = 10,
-    temporal_autocorr = ifelse(n_time_points ==  1, NA, "random_walk"),
+    temporal_function = NA,
     spatiotemporal_autocorr = NA,
     seed = NA) {
 
@@ -59,10 +60,11 @@ simulate_occurrences <- function(
   # to be done check plgn is a sf polygon
 
   # Simulate the timeseries
-  ts <- simulate_timeseries(initial_average_occurrences = initial_average_abundance,
-                            n_time_points = n_time_points,
-                            temporal_function = NA,     # to be added!
-                            seed = seed)
+  ts <- simulate_timeseries(
+    initial_average_occurrences = initial_average_abundance,
+    n_time_points = n_time_points,
+    temporal_function = temporal_function,
+    seed = seed)
 
   # Create the random field
   boxplgn <- st_bbox(plgn)
