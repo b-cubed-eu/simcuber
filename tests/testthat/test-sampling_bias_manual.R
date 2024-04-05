@@ -93,3 +93,30 @@ test_that("arguments are of the right class", {
   )
   }
 )
+
+## expect right output format
+test_that("sampling_bias_manual() returns sf object", {
+  expect_s3_class(
+    sampling_bias_manual(points_sf1, bias_weights01_sf),
+    "data.frame"
+  )
+  expect_s3_class(
+    sampling_bias_manual(points_sf1, bias_weights01_sf),
+    "sf"
+  )
+})
+test_that("sampling_bias_manual() returns bias_weight column", {
+  expect_named(
+    sampling_bias_manual(points_sf1, bias_weights01_sf),
+    c("time_point", "bias_weight", "geometry")
+  )
+  expect_type(
+    sampling_bias_manual(points_sf1, bias_weights_integers_sf) %>%
+      dplyr::pull("bias_weight"),
+    "double"
+  )
+  expect_true(is.numeric(x = dplyr::pull(
+    sampling_bias_manual(points_sf1, bias_weights01_sf),
+    "bias_weight"
+  )))
+})
