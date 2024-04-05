@@ -44,7 +44,6 @@ Imports:
     mnormt,
     rlang,
     sf,
-    spatstat,
     stats,
     terra,
     withr
