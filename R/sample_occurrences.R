@@ -41,7 +41,7 @@ sample_occurrences <- function(
   }
 
   # centre the values of the raster (mean = 0)
-  rs_mean <- global(rs, "mean", na.rm=TRUE)[,1]
+  rs_mean <- terra::global(rs, "mean", na.rm=TRUE)[,1]
   rs2 <- rs - rs_mean
 
   # increase contrast between high and low values

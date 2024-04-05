@@ -46,6 +46,7 @@ Imports:
     sf,
     spatstat,
     stats,
+    terra,
     withr
 Suggests: 
     ggplot2,
