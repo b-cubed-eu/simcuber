@@ -39,6 +39,7 @@ BugReports: https://github.com/b-cubed-eu/gcube/issues
 Imports:
     cli,
     dplyr,
+    gstat,
     magrittr,
     methods,
     mnormt,
@@ -46,6 +47,7 @@ Imports:
     sf,
     stats,
     terra,
+    vegan,
     withr
 Suggests: 
     ggplot2,
