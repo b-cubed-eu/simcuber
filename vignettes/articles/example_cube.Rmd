@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# load libraries
+# Load libraries
 
 ```{r}
 library(gcube)
@@ -30,14 +30,14 @@ add variables here: n_points ; xlim ; ylim
 
 ```{r}
 
-n_points <- 10
+n_points <- 13 
 xlim <- c(3841000, 3842000)
 ylim <- c(3110000, 3112000)
 coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 
 ```
 
-# create spatial dataframe with occurrences
+# Create spatial dataframe with occurrences
 
 create random occurrences following *uniform distribution* within the bounding box
 define CRS
@@ -130,7 +130,7 @@ ggplot() +
 ```
 
 
-# also get sampled points to visualise
+# Also get sampled points to visualise
 
 ```{r}
 sampled_points <- grid_designation(
@@ -141,9 +141,9 @@ sampled_points <- grid_designation(
 ```
 
 
-# visualize output
+# Visualize output
 
-points are designated to grid, bufer is visible
+points are designated to grid, buffer is visible
 
 
 ```{r}
