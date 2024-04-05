@@ -21,7 +21,7 @@
 #' times sampling probability within the `bias_area` than outside. Conversely,
 #' a value of 0.5 will result in half less samples within the `bias_area` than
 #' outside.
-#' @param bias_weights `NA` or a raster layer (sf object with POLYGON geometry.
+#' @param bias_weights `NA` or a raster layer (sf object with POLYGON geometry).
 #' Only used if `sampling_bias = "manual"`. The raster of bias weights to be
 #' applied to the sampling of occurrences. Higher weights mean a higher
 #' probability of sampling. Weights can be numeric values between 0 and 1 or
@@ -137,10 +137,10 @@ sample_observations <- function(
 
   # 2. other checks
   # Detection_probability is a numeric value between 0 and 1
-  if ((!(0 <= detection_probability) && !(detection_probability <= 1))) {
+  if ((!(0 <= detection_probability) | !(detection_probability <= 1))) {
     cli::cli_abort(c(
       "{.var detection_probability} must be a numeric value between 0 and 1.",
-      "x" = "You've supplied {.cls {class(detection_probability)}} as
+      "x" = "You've supplied {(detection_probability)} as
       {.var detection_probability}."
     ))
   }
