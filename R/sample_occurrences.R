@@ -10,7 +10,6 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' library(spatstat)
 #' library(sf)
 #'
@@ -22,7 +21,7 @@
 #'
 #' plot(r)
 #' plot(pts_occ, add = TRUE, color = "black")
-#' }
+#'
 #' @importFrom sf st_geometry_type
 
 sample_occurrences <- function(

@@ -18,7 +18,6 @@ An sf object with POINT geometry
 Draws occurrences (points) from a spatial random field (raster)
 }
 \examples{
-\dontrun{
 library(spatstat)
 library(sf)
 
@@ -30,5 +29,5 @@ pts_occ <- sample_occurrences(rs = r, ts = timeseries)
 
 plot(r)
 plot(pts_occ, add = TRUE, color = "black")
-}
+
 }
