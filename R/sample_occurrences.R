@@ -31,7 +31,7 @@ sample_occurrences <- function(
 
   # checks
   # check if rs is a terra raster
-  if (!is(rs, "SpatRaster")) {
+  if (!methods::is(rs, "SpatRaster")) {
     cli::cli_abort(c("{.var rs} is not a SpatRaster."))
   }
 

@@ -40,6 +40,7 @@ Imports:
     cli,
     dplyr,
     magrittr,
+    methods,
     mnormt,
     rlang,
     sf,
