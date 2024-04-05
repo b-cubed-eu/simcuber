@@ -65,8 +65,6 @@ The function designates observations to cells of a given grid to create an
 aggregated data cube.
 }
 \examples{
-
-library(simcuber)
 library(sf)
 library(dplyr)
 

@@ -33,8 +33,6 @@ equal to the observation point and the variance equal to
 the uncertainty circle.
 }
 \examples{
-
-library(simcuber)
 library(sf)
 library(dplyr)
 

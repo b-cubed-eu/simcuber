@@ -24,8 +24,6 @@
 #' @importFrom stats runif
 #'
 #' @examples
-#'
-#' library(simcuber)
 #' library(sf)
 #'
 #' set.seed(123)
@@ -75,7 +73,7 @@ sample_from_uniform_circle <- function(
   # Set seed if provided
   if (!is.na(seed)) {
     if (is.numeric(seed)) {
-      set.seed(seed)
+      withr::local_seed(seed)
     } else {
       cli::cli_abort(c(
         "{.var seed} must be a numeric vector of length 1.",
@@ -121,7 +119,7 @@ sample_from_uniform_circle <- function(
       coords = c("x_new", "y_new"),
       crs = sf::st_crs(observations)
     ) %>%
-    dplyr::select(.data$coordinateUncertaintyInMeters)
+    dplyr::select("coordinateUncertaintyInMeters")
 
   return(new_points)
 }
