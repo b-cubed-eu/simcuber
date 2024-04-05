@@ -1,4 +1,15 @@
 ---
+title: "loop_cube"
+author: "Dimitri Brosens"
+date: "2024-04-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
 title: "example_cube"
 ---
 
@@ -30,28 +41,44 @@ define grid bounding box:
 add variables here: n_points ; xlim ; ylim
 
 ```{r}
+n_sim <- 5
+out_list <- vector("list", length = n_sim)
 
-n_points <- 13 
-xlim <- c(3841000, 3842000)
-ylim <- c(3110000, 3112000)
-coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
-
+for (i in seq_len(n_sim)) {
+  n_points <- 13 
+  xlim <- c(3841000, 3842000)
+  ylim <- c(3110000, 3112000)
+  coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
+  
+  observations_sf <- data.frame(
+    lat = runif(n_points, ylim[1], ylim[2]),
+    long = runif(n_points, xlim[1], xlim[2]),
+    aggregate = TRUE,
+    coordinateUncertaintyInMeters = coordinate_uncertainty
+  ) %>% st_as_sf(coords = c("long", "lat"), crs = 3035, remove = FALSE)
+  
+  observations_buffered <- observations_sf %>%
+    st_buffer(observations_sf$coordinateUncertaintyInMeters)
+  
+  grid_df <- st_make_grid(
+    observations_buffered,
+    square = TRUE,
+    cellsize = c(200, 200)
+  ) %>%
+    st_sf()
+  
+  occurrence_cube_df <- grid_designation(
+    observations = observations_sf,
+    grid = grid_df,
+    seed = 123)
+  
+  occurrence_cube_df$sim <- i
+  
+  out_list[[i]] <- occurrence_cube_df
+}
+occurrence_sims_df <- do.call(rbind.data.frame, out_list)
 ```
 
-# Create spatial dataframe with occurrences
-
-create random occurrences following *uniform distribution* within the bounding box
-define CRS
-aggregate TRUE or FALSE
-
-```{r}
-observations_sf <- data.frame(
-  lat = runif(n_points, ylim[1], ylim[2]),
-  long = runif(n_points, xlim[1], xlim[2]),
-  aggregate = TRUE,
-  coordinateUncertaintyInMeters = coordinate_uncertainty
-) %>% st_as_sf(coords = c("long", "lat"), crs = 3035, remove = FALSE)
-```
 
 # Visualize points
 
@@ -68,8 +95,7 @@ add a buffer ('coordinateUncertaintyInMeters') around the observations
 
 ```{r}
 
-observations_buffered <- observations_sf %>%
-  st_buffer(observations_sf$coordinateUncertaintyInMeters)
+
 ```
 
 
@@ -85,12 +111,7 @@ ggplot(data = observations_buffered) +
 
 
 ```{r}
-grid_df <- st_make_grid(
-  observations_buffered,
-  square = TRUE,
-  cellsize = c(200, 200)
-) %>%
-  st_sf()
+
 ```
 
 visualize grid
