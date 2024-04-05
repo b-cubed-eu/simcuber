@@ -96,6 +96,3 @@ virtualspecies_to_sf <- function(
   }
 
 }
-
-
-
