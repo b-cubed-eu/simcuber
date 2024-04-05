@@ -6,12 +6,14 @@
 #' @param resolution a numeric value defining the resolution of the raster cell
 #' @param spatial_pattern define the spatial pattern. It could be a character
 #'   string "random" or "clustered", in which "random" is the default. The user
-#'   is able to provide a numeric value between 1 and 100. 1 is "random" and 5
-#'   is "clustered. As large the number more broad is the size of the clusters
-#'   area.
+#'   is able to provide a numeric value >= 1, where 1 is "random" and 10
+#'   is "clustered" built in options. As large the number more broad is the size
+#'   of the clusters area.
 #' @param seed integer. set a seed to randomization
 #' @param n_sim number of simulations. Each simulation is a different layer in
 #'   the raster.
+#'
+#'
 #'
 #' @return an object of class SpatRaster
 #' @export
@@ -131,8 +133,8 @@ create_spatial_pattern <- function(
 
   #
   if(is.numeric(spatial_pattern)){
-    # value should be between 1 and 100
-    if(dplyr::between(spatial_pattern, 1, 100)){
+    # value should be equal or larger than 1
+    if(spatial_pattern >= 1){
       multiplier <- spatial_pattern
     }else{
       cli::cli_abort("")
