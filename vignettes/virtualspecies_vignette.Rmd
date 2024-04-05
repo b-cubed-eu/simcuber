@@ -42,7 +42,7 @@ plot(covariates_stack)
 ```
 ```{r }
 virtualspecies_to_sf <- function(
-  nsp = 10,
+  nsp = 11,
   covariates_stack,
   polygon = NA,
   seed = NA){
