@@ -34,18 +34,6 @@
 #'
 #' # add example here ...
 #'
-#' # This is just to create an example polygon for input
-#' library(sf)
-#'
-#' # Define the coordinates of the polygon vertices
-#' polygon <- st_polygon(list(rbind(c(0, 0),
-#'                                  c(1, 0),
-#'                                  c(1, 1),
-#'                                  c(0, 1),
-#'                                  c(0, 0))))
-#' # Convert the polygon to an sf object
-#' # Can be used as polygon input argument
-#' polygon_sf <- st_sfc(polygon)
 
 simulate_occurrences <- function(
     plgn,
