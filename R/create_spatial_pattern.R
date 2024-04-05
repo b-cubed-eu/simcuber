@@ -107,8 +107,9 @@ create_spatial_pattern <- function(
 
   # create a reference raster with same extent as the polygon and user defined
   # resolution
-  templ <- terra::rast(terra::vect(polygon), res = resolution)
-  poly_raster <- terra::rasterize(terra::vect(plgn), templ)
+  poly_vect <- terra::vect(polygon)
+  templ <- terra::rast(poly_vect, res = resolution)
+  poly_raster <- terra::rasterize(poly_vect, templ)
 
   dfxy <- as.data.frame(poly_raster, xy = TRUE)
 
