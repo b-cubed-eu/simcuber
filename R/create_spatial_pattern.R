@@ -2,16 +2,17 @@
 #'
 #' It creates a raster with a spatial pattern for the area of a polygon.
 #'
-#' @param polygon an sf object of geometry type POLYGON
-#' @param resolution a numeric value defining the resolution of the raster cell
-#' @param spatial_pattern define the spatial pattern. It could be a character
+#' @param polygon An sf object of geometry type POLYGON
+#' @param resolution A numeric value defining the resolution of the raster cell
+#' @param spatial_pattern Define the spatial pattern. It could be a character
 #'   string "random" or "clustered", in which "random" is the default. The user
 #'   is able to provide a numeric value >= 1, where 1 is "random" and 10
 #'   is "clustered" built in options. As large the number more broad is the size
 #'   of the clusters area. See details.
-#' @param seed integer. set a seed to randomization
-#' @param n_sim number of simulations. Each simulation is a different layer in
-#'   the raster.
+#' @param seed The seed for random number generation to make results
+#' reproducible. If `NA` (the default), no seed is used.
+#' @param n_sim Number of simulations. Each simulation is a different layer in
+#'   the raster. Default 1.
 #'
 #' @details
 #'   the \code{spatial_pattern} argument change the range parameter of the
@@ -22,12 +23,23 @@
 #'
 #' @seealso [gstat::vgm()] and its \code{range} argument
 #'
-#' @return an object of class SpatRaster
+#' @return An object of class SpatRaster with a spatial pattern for the area of
+#' the given polygon.
+#'
 #' @export
+#'
+#' @import terra
+#' @import sf
+#' @import gstat
+#' @importFrom dplyr between mutate across starts_with
+#' @importFrom cli cli_abort
+#' @importFrom withr local_seed
+#' @importFrom vegan decostand
 #'
 #' @examples
 #'
 #' library(sf)
+#' library(terra)
 #'
 #' plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
 #' plot(plgn)
@@ -78,15 +90,7 @@
 #'
 #' plot(spat_large, main = "large scale clustered pattern")
 #'
-#'
-#' @import terra
-#' @import sf
-#' @import gstat
-#' @importFrom dplyr between mutate across starts_with
-#' @importFrom cli cli_abort
-#' @importFrom withr local_seed
-#' @importFrom vegan decostand
-#'
+
 create_spatial_pattern <- function(
   polygon,
   resolution,
