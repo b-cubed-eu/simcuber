@@ -8,12 +8,19 @@
 #'   string "random" or "clustered", in which "random" is the default. The user
 #'   is able to provide a numeric value >= 1, where 1 is "random" and 10
 #'   is "clustered" built in options. As large the number more broad is the size
-#'   of the clusters area.
+#'   of the clusters area. See details.
 #' @param seed integer. set a seed to randomization
 #' @param n_sim number of simulations. Each simulation is a different layer in
 #'   the raster.
 #'
+#' @details
+#'   the \code{spatial_pattern} argument change the range parameter of the
+#'   spherical variogram model. \code{spatial_pattern = 1} means the range has
+#'   the same size of the grid cell, which is defined in \code{resolution}
+#'   argument. We use the functon [gstat::vgm()] to implement the
+#'   spherical variogram model
 #'
+#' @seealso [gstat::vgm()] and its \code{range} argument
 #'
 #' @return an object of class SpatRaster
 #' @export
