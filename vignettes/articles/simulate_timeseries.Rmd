@@ -10,14 +10,17 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(simcuber)
+library(gcube)
 library(ggplot2)
 ```
+
 ## 1. Use the function simulate_random_walk()
+temporal function is simulate_random_walk()
+
 ```{r}
 simulate_timeseries(
   initial_average_occurrences = 50,
-  n_time_points = 10,
+  n_time_points = 2,
   temporal_function = simulate_random_walk,
   sd_step = 1,
   seed = 123
@@ -28,6 +31,7 @@ simulate_timeseries(
 
 ## 2. Visualising multiple draws
 # Set seed for reproducibility
+
 ```{r}
 set.seed(123)
 ```
@@ -36,7 +40,7 @@ set.seed(123)
 # Draw n_sim abundances from Poisson distribution using random walk
 ```{r}
 n_sim <- 10
-n_time_points <- 50
+n_time_points <- 2
 sd_step <- 1
 list_abundances <- vector("list", length = n_sim)
 
@@ -47,7 +51,7 @@ list_abundances <- vector("list", length = n_sim)
 ```{r}
 for (i in seq_len(n_sim)) {
   abundances <- simulate_timeseries(
-    initial_average_occurrences = 50,
+    initial_average_occurrences = 2,
     n_time_points = n_time_points,
     temporal_function = simulate_random_walk,
     sd_step = sd_step

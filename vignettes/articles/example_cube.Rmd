@@ -12,22 +12,22 @@ knitr::opts_chunk$set(
 # load libraries
 
 ```{r}
-library(simcuber)
-library(dplyr)
+library(gcube)
 library(sf)
-library(ggplot2)
 library(tidyverse)
-library(magrittr)
+
 ```
 
 # Create random points
 
-n_points: number of needed virtual occurrences in the grid
-Define grid bounding box: 
+n_points: number of needed virtual occurrences in a grid
+
+define grid bounding box: 
               xlim: bounding box
               ylim: bounding box
 
-Add variables here
+add variables here: n_points ; xlim ; ylim
+
 ```{r}
 
 n_points <- 10
@@ -39,9 +39,9 @@ coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 
 # create spatial dataframe with occurrences
 
-Create random occurrences following uniform distribution within the bounding box
-Define CRS
-Aggregate TRUE or FALSE
+create random occurrences following *uniform distribution* within the bounding box
+define CRS
+aggregate TRUE or FALSE
 
 ```{r}
 observations_sf <- data.frame(
@@ -54,7 +54,7 @@ observations_sf <- data.frame(
 
 # Visualize points
 
-Simple observation of randomized points in grid
+simple observation of randomized points within bounding box
 
 ```{r}
 ggplot(data = observations_sf) +
@@ -63,6 +63,8 @@ ggplot(data = observations_sf) +
 
 # Add buffer uncertainty in meters around points
 
+add a buffer ('coordinateUncertaintyInMeters') around the observations
+
 ```{r}
 
 observations_buffered <- observations_sf %>%
@@ -70,14 +72,17 @@ observations_buffered <- observations_sf %>%
 ```
 
 
-Visualize bufer
+visualize virtual observations with buffer
+
 ```{r}
 ggplot(data = observations_buffered) +
-  geom_sf(color = "red", fill = "darkgreen")
+  geom_sf(color = "cyan3", fill = "cyan")
 ```
 
 
 # Create grid
+
+
 ```{r}
 grid_df <- st_make_grid(
   observations_buffered,
@@ -90,13 +95,16 @@ grid_df <- st_make_grid(
 visualize grid
 
 ```{r}
-ggplot(data = grid) +
-  geom_sf(color = "red", fill = "darkgreen")
+ggplot(data = grid_df) +
+  geom_sf(color = "darkolivegreen4", fill = "aquamarine")
 ```
 
 
 
 # Grid designation
+
+use the grid designation function to point observations to grid squares
+
 ```{r}
 occurrence_cube_df <- grid_designation(
   observations = observations_sf,
@@ -106,29 +114,23 @@ occurrence_cube_df <- grid_designation(
 
 # Visualise Grid designation
 ```{r}
+# ggplot() +
+#   geom_sf(data = occurrence_cube_df, linewidth = 1, aes(fill = as.factor(n))) +
+#   geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+#  # scale_fill_manual() + 
+# # geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+#   theme_void()
+
 ggplot() +
   geom_sf(data = occurrence_cube_df, linewidth = 1, aes(fill = as.factor(n))) +
   geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
- # scale_fill_manual() + 
-# geom_sf(data = grid_df, color = "red", fill = "darkgreen")
-  theme_void()
-
-```
-# Visualise Grid designation2
-```{r}
-ggplot() +
-  geom_sf(data = occurrence_cube_df, linewidth = 1, aes(fill = factor(n))) +
- # scale_fill_manual() +
-  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
- #  
-# geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  scale_fill_manual(values = c("darkolivegreen1", "aquamarine2", "darkolivegreen3","cyan")) + 
   theme_void()
 
 ```
 
 
-
-# Also get sampled points to visualise
+# also get sampled points to visualise
 
 ```{r}
 sampled_points <- grid_designation(
@@ -139,14 +141,16 @@ sampled_points <- grid_designation(
 ```
 
 
-# visualize output 1
+# visualize output
+
+points are designated to grid, bufer is visible
 
 
 ```{r}
 ggplot() +
-  geom_sf(data = grid_df, linewidth = 1, color = "red", fill = "lightgreen") +
+  geom_sf(data = grid_df, linewidth = 1, color = "aquamarine", fill = "lightgreen") +
   
-  geom_sf(data = observations_sf, colour = "firebrick") +
+  geom_sf(data = observations_sf, colour = "lightgreen") +
   geom_sf(data = observations_buffered, fill = alpha("firebrick", 0.5)) +
   theme_void()
 ```
@@ -155,25 +159,22 @@ ggplot() +
 
 
 # Visualise output complete
+
+Complete output. 
+Grid with number of designated sampled occurrences to the grid. 
+
+
 ```{r}
+
 ggplot() +
-  geom_sf(data = occurrence_cube_df, linewidth = 1) +
-  geom_sf_text(data = occurrence_cube_df, aes(label = n) +
+  geom_sf(data = occurrence_cube_df, linewidth = 1, aes(fill = as.factor(n))) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
   geom_sf(data = sampled_points, colour = "blue") +
   geom_sf(data = observations_sf, colour = "firebrick") +
   geom_sf(data = observations_buffered, fill = alpha("firebrick", 0.5)) +
- # geom_sf(data = grid_df, color = "red", fill = "darkgreen")
+  scale_fill_manual(values = c("darkolivegreen1", "aquamarine2", "darkolivegreen3","cyan")) + 
   theme_void()
 
-```
-
-trying
-
-```{r}
-ggplot() +
-  geom_sf(data = grid, linewidth = 1, color = "red", fill = "lightgreen") +
-  geom_sf(data = grid, aes(label = n) ) +
-  theme_void()
 ```
 
 
