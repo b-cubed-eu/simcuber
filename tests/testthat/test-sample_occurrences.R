@@ -24,7 +24,27 @@ test_that("sample_occurrences() returns valid sf POINT geometry", {
 })
 
 test_that("sample_occurrences() fails on invalid input argument", {
+  # build raster to test on
+  test_raster <-
+    terra::rast(
+      ncol = 50,
+      nrow = 50,
+      xmin = 0,
+      xmax = 50,
+      ymin = 0,
+      ymax = 50
+    )
+  terra::values(test_raster) <- 1:terra::ncell(test_raster)
+
   expect_error(
-    sample_occurrences(data.frame(5:9))
+    sample_occurrences(data.frame(5:9)),
+    regexp = "`rs` is not a SpatRaster.",
+    fixed = TRUE
+  )
+
+  expect_error(
+    sample_occurrences(test_raster, "not a numeric"),
+    regexp = "`ts` must be an numeric vector",
+    fixed = TRUE
   )
 })
