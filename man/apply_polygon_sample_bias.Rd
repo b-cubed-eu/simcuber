@@ -4,10 +4,10 @@
 \alias{apply_polygon_sample_bias}
 \title{Generate a sampling bias via a polygon}
 \usage{
-apply_polygon_sample_bias(observations, bias_area, bias_strength = 1)
+apply_polygon_sample_bias(occurrences_sf, bias_area, bias_strength = 1)
 }
 \arguments{
-\item{observations}{An sf object with POINT geometry.}
+\item{occurrences_sf}{An sf object with POINT geometry.}
 
 \item{bias_area}{An sf object with POLYGON geometry. The area in which the
 sampling will be biased.}
@@ -28,29 +28,43 @@ This function adds a sampling bias weight column containing the sample
 probability based on sampling bias within a polygon.
 }
 \examples{
+# Load packages
 library(sf)
+library(dplyr)
+library(ggplot2)
 
+# Set seed for reproducibility
 set.seed(123)
 
-# Create four random points
-n_points <- 4
-xlim <- c(3841000, 3842000)
-ylim <- c(3110000, 3112000)
+# Simulate some occurrence data with coordinates and time points
+num_points <- 10
+occurrences <- data.frame(
+  lon = runif(num_points, min = -180, max = 180),
+  lat = runif(num_points, min = -90, max = 90),
+  time_point = 0
+  )
 
-observations_sf <- data.frame(
-  lat = runif(n_points, ylim[1], ylim[2]),
-  long = runif(n_points, xlim[1], xlim[2])
-) \%>\%
-  st_as_sf(coords = c("long", "lat"), crs = 3035)
+# Convert the occurrence data to an sf object
+occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
 
-# Create bias_area polygon overlapping two of the points
-selected_observations <- st_union(observations_sf[2:3,])
+# Create bias_area polygon overlapping at least two of the points
+selected_observations <- st_union(occurrences_sf[2:3,])
 bias_area <- st_convex_hull(selected_observations) \%>\%
   st_buffer(dist = 100) \%>\%
   st_as_sf()
 
-bias_strength <- 2
+occurrence_bias_sf <- apply_polygon_sample_bias(
+  occurrences_sf,
+  bias_area,
+  bias_strength = 2)
+occurrence_bias_sf
 
-apply_polygon_sample_bias(observations_sf, bias_area, bias_strength)
+# Visualise where the bias is
+occurrence_bias_sf \%>\%
+  mutate(bias_weight_f = as.factor(round(bias_weight, 3))) \%>\%
+  ggplot() +
+    geom_sf(data = bias_area) +
+    geom_sf(aes(colour = bias_weight_f)) +
+    ggtitle("Sampling Bias via Polygon")
 
 }
