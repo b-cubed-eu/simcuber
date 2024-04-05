@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' library(spatstat)
+#' library(terra)
 #' library(sf)
 #'
 #' r <- rast(ncol = 50, nrow = 50, xmin = 0, xmax = 50, ymin = 0, ymax = 50)
