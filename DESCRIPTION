@@ -43,6 +43,7 @@ Imports:
     mnormt,
     rlang,
     sf,
+    spatstat,
     stats,
     withr
 Suggests: 
