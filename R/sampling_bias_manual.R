@@ -89,6 +89,11 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
     ))
   }
 
+  # Check if crs is the same
+  if (sf::st_crs(occurrences_sf) != sf::st_crs(bias_weights)) {
+    cli::cli_abort("sf::st_crs(observations) == sf::st_crs(grid) is not TRUE")
+  }
+
   # Check if all occurrences (points) are in the grid
   points_in_grid <- sf::st_filter(occurrences_sf, bias_weights)
   if (!identical(points_in_grid, occurrences_sf)) {
@@ -131,9 +136,11 @@ sampling_bias_manual <- function(occurrences_sf, bias_weights) {
     bias_weights$bias_weight <- bias_weights$bias_weight / maxweight
   }
 
-  # Take intersection to add bias weights to occurrence points
+  # Explicitly assume that the attribute is constant throughout the geometry
   sf::st_agr(occurrences_sf) <- "constant"
   sf::st_agr(bias_weights) <- "constant"
+
+  # Take intersection to add bias weights to occurrence points
   weighted_occurrences <- sf::st_intersection(occurrences_sf, bias_weights)
 
   return(weighted_occurrences)
