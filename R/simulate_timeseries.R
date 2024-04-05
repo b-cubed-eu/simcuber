@@ -163,7 +163,7 @@ simulate_timeseries <- function(
         "x" = "You've supplied a {.cls {class(initial_average_occurrences)}}
       value of {initial_average_occurrences}."
       ),
-      class = "simcuber_error_wrong_argument_type"
+      class = "gcube_error_wrong_argument_type"
     )
   }
   # Check if n_time_points is a positive integer
@@ -174,7 +174,7 @@ simulate_timeseries <- function(
         "x" = "You've supplied a {.cls {class(n_time_points)}}
              value of {n_time_points}."
       ),
-      class = "simcuber_error_wrong_argument_type"
+      class = "gcube_error_wrong_argument_type"
     )
   }
   # Check if temporal_function is NA or a function
@@ -186,7 +186,7 @@ simulate_timeseries <- function(
         "x" = "You've supplied a {.cls {class(temporal_function)}}",
         "value of {temporal_function}."
       ),
-      class = "simcuber_error_wrong_argument_type"
+      class = "gcube_error_wrong_argument_type"
     )
   }
   # Set seed if provided
@@ -200,7 +200,7 @@ simulate_timeseries <- function(
           "x" = "You've supplied a {.cls {class(seed)}}
           vector of length {length(seed)}."
         ),
-        class = "simcuber_error_wrong_argument_type"
+        class = "gcube_error_wrong_argument_type"
       )
     }
   }

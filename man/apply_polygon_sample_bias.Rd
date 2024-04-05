@@ -28,8 +28,6 @@ This function adds a sampling bias weight column containing the sample
 probability based on sampling bias within a polygon.
 }
 \examples{
-
-library(simcuber)
 library(sf)
 
 set.seed(123)
