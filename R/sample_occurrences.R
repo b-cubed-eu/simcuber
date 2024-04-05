@@ -43,7 +43,7 @@ sample_occurrences <- function(
   rs2 <- rs - rs_mean
 
   # increase contrast between high and low values
-  a <- 5 # a = 1 -> logistic  a > 1  => steeper sigmoid (higher contrast)
+  a <- 30 # a = 1 -> logistic  a > 1  => steeper sigmoid (higher contrast)
   rs3 <- 1 / (1 + exp(-a * rs2))
 
   # For each time step sample points from the raster

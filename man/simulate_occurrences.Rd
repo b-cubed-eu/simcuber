@@ -5,17 +5,17 @@
 \title{Simulate occurrences within spatiotemporal scope}
 \usage{
 simulate_occurrences(
-  polygon,
+  plgn,
   initial_average_abundance = 50,
   spatial_autocorr = c("random", "clustered", "regular"),
   n_time_points = 10,
-  temporal_autocorr = ifelse(n_time_points == 1, NA, "random_walk"),
+  temporal_function = NA,
   spatiotemporal_autocorr = NA,
   seed = NA
 )
 }
 \arguments{
-\item{polygon}{An sf object with POLYGON geometry indicating the spatial
+\item{plgn}{An sf object with POLYGON geometry indicating the spatial
 extend to simulate occurrences.}
 
 \item{initial_average_abundance}{A positive integer value indicating the
@@ -30,10 +30,11 @@ value between -1 and 1 representing Moran's I. \code{"random"} corresponds to 0,
 \item{n_time_points}{A positive integer value indicating the number of time
 points to simulate.}
 
-\item{temporal_autocorr}{\code{NA}, \code{"random_walk"} or a function which generates
-a trend in abundance over time. Only used if \code{time_points > 1}. When there
-are multiple time points the function will by default use a \code{"random_walk"}
-function.}
+\item{temporal_function}{\code{NA} (default), or a function which generates
+a trend in abundance over time. Only used if \code{n_time_points > 1}. By default,
+the function will sample \code{n_time_points} times from a Poisson
+distribution with average (lambda) \code{initial_average_occurrences}. When a
+function is specified (e.g. the internal \code{simulate_random_walk()} function).}
 
 \item{spatiotemporal_autocorr}{A numeric value between indicating the
 strength of spatiotemporal autocorrelation.}
@@ -54,16 +55,4 @@ and/or temporal extend.
 
 # add example here ...
 
-# This is just to create an example polygon for input
-library(sf)
-
-# Define the coordinates of the polygon vertices
-polygon <- st_polygon(list(rbind(c(0, 0),
-                                 c(1, 0),
-                                 c(1, 1),
-                                 c(0, 1),
-                                 c(0, 0))))
-# Convert the polygon to an sf object
-# Can be used as polygon input argument
-polygon_sf <- st_sfc(polygon)
 }
