@@ -36,6 +36,8 @@ It creates a raster with a spatial pattern for the area of a polygon.
 }
 \examples{
 
+library(sf)
+
 plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
 plot(plgn)
 # random pattern by default

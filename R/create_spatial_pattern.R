@@ -18,6 +18,8 @@
 #'
 #' @examples
 #'
+#' library(sf)
+#'
 #' plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
 #' plot(plgn)
 #' # random pattern by default
@@ -68,10 +70,10 @@
 #' plot(spat_large)
 #'
 #'
-#' @import dplyr
 #' @import terra
 #' @import sf
 #' @import gstat
+#' @importFrom dplyr between mutate across starts_with
 #' @importFrom cli cli_abort
 #' @importFrom withr local_seed
 #' @importFrom vegan decostand
