@@ -25,8 +25,6 @@ The function samples occurrences of a species within the uncertainty circle
 around each observation assuming a Uniform distribution.
 }
 \examples{
-
-library(simcuber)
 library(sf)
 
 set.seed(123)
