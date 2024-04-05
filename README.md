@@ -67,7 +67,7 @@ library(rnaturalearth)
 #> 
 #>     countries110
 library(terra)
-#> terra 1.7.29
+#> terra 1.7.71
 #> 
 #> Attaching package: 'terra'
 #> 
@@ -76,14 +76,6 @@ library(terra)
 #>     extract
 library(sf)
 #> Linking to GEOS 3.11.2, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE
-library(patchwork)
-#> 
-#> Attaching package: 'patchwork'
-#> 
-#> The following object is masked from 'package:terra':
-#> 
-#>     area
-
 
 # Get a polygon to add points to
 belgium <- ne_countries(scale = "medium", country = "Belgium",
@@ -102,13 +94,18 @@ ggplot() +
 ## Occurrence process
 
 We generate occurrence points within the polygon of interest, these are
-the “real” occurrences of the species, whether we observed them or not.
-In the function the user can specify different levels of spatial
-clustering, and can define the trend change of the species over time.
+the “real” occurrences of the species, whether we have observed them or
+not. In the simulate_occurrences() function the user can specify
+different levels of spatial clustering, and can define the trend change
+of the species over time.
 
 ``` r
-# occ <- simulate_occurrences(polygon_sf)
-occ <- st_sample(belgium, 50) %>% st_as_sf()
+belgium <- belgium %>% st_set_crs(value = NA)
+occ <- simulate_occurrences(belgium,
+                            initial_average_abundance = 50,
+                            n_time_points = 1) %>% 
+  rename(time_point  = time)
+#> [using unconditional Gaussian simulation]
 
 ggplot() + 
   geom_sf(data = belgium, 
@@ -126,36 +123,65 @@ In this step we define the sampling process, based on the detection
 probability of the species and the sampling effort.
 
 ``` r
-# sampled_occ <- sample_observations(
-#   occ,
-#   detection_probability = 0.5,
-#   sampling_bias = "no bias"
-# )
-sampled_occ <- sample_n(occ, 25)
+obs <- sample_observations(
+  occ,
+  detection_probability = 0.5,
+  sampling_bias = "no_bias"
+)
+# sampled_occ <- sample_n(occ, 25)
 
 ggplot() + 
   geom_sf(data = belgium, 
           fill = "grey80",
           col = "black") +
   geom_sf(data = occ) +
-  geom_sf(data = sampled_occ, col = "darkorange") +
-  ggtitle("One form of detection") +
+  geom_sf(data = obs, col = "darkorange") +
+  ggtitle("Detected occurrences in orange") +
   theme_minimal()
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
+## Grid designation process
+
+Finally, occurrences are designated to a grid to create a occurrence
+cube.
+
 ``` r
+sf_use_s2(FALSE)
+#> Spherical geometry (s2) switched off
+# Add buffer uncertainty in meters around points, randomly sampled from gamma distribution
+buffered_obs <- add_coordinate_uncertainty(
+  obs,
+  coords_uncertainty_meters = 10)
+
+# Define your grid
+grid_df <- st_make_grid(
+  belgium, # grid as the extent of polygon
+  n = c(10,10)) %>% 
+  st_intersection(belgium) %>% 
+  st_as_sf() %>% 
+  rename(geometry = x)
+plot(grid_df)  
+```
+
+<img src="man/figures/README-grid designation-1.png" width="100%" />
+
+``` r
+
+gridded_obs <- grid_designation(
+  observations = obs,
+  grid = grid_df)
+#> Warning: No column `coordinateUncertaintyInMeters` present! Assuming no uncertainty
+#> around observations.
+
 ggplot() + 
-  geom_sf(data = belgium, 
+  geom_sf(data = belgium,
           fill = "grey80",
           col = "black") +
-  geom_sf(data = occ) +
-  geom_sf(data = sampled_occ[1:10,], col = "darkorange") +
-  ggtitle("Another form of detection") +
+  geom_sf(data = gridded_obs, aes(fill = n)) +
+  scale_fill_continuous("Number of\nobservations", type = "viridis") +
   theme_minimal()
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" />
-
-## Grid designation process
+<img src="man/figures/README-grid designation-2.png" width="100%" />

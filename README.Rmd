@@ -45,7 +45,6 @@ library(rnaturalearthdata)
 library(rnaturalearth)
 library(terra)
 library(sf)
-library(patchwork)
 
 # Get a polygon to add points to
 belgium <- ne_countries(scale = "medium", country = "Belgium",
@@ -61,13 +60,14 @@ ggplot() +
 
 ## Occurrence process
 We generate occurrence points within the polygon of interest, these are the "real" occurrences of the species, whether we have observed them or not. 
-In the `r simulate_occurrences()` function the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
+In the simulate_occurrences() function the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
 
 ```{r simulate occurrences}
-# occ <- simulate_occurrences(polygon_sf)
-occ <- st_sample(belgium, 50) %>% st_as_sf() %>% 
-  rename(geometry = x) %>% 
-  mutate(time_point = 1)
+belgium <- belgium %>% st_set_crs(value = NA)
+occ <- simulate_occurrences(belgium,
+                            initial_average_abundance = 50,
+                            n_time_points = 1) %>% 
+  rename(time_point  = time)
 
 ggplot() + 
   geom_sf(data = belgium, 
@@ -101,10 +101,6 @@ ggplot() +
 Finally, occurrences are designated to a grid to create a occurrence cube.
 ```{r grid designation}
 sf_use_s2(FALSE)
-# Add buffer uncertainty in meters around points, randomly sampled from gamma distribution
-buffered_obs <- add_coordinate_uncertainty(
-  obs,
-  coords_uncertainty_meters = 10)
 
 # Define your grid
 grid_df <- st_make_grid(
@@ -113,7 +109,7 @@ grid_df <- st_make_grid(
   st_intersection(belgium) %>% 
   st_as_sf() %>% 
   rename(geometry = x)
-plot(grid_df)  
+
 
 gridded_obs <- grid_designation(
   observations = obs,
@@ -123,8 +119,6 @@ ggplot() +
   geom_sf(data = belgium,
           fill = "grey80",
           col = "black") +
-  geom_sf(data = occ) +
-  geom_sf(data = obs, col = "darkorange") +
   geom_sf(data = gridded_obs, aes(fill = n)) +
   scale_fill_continuous("Number of\nobservations", type = "viridis") +
   theme_minimal()
