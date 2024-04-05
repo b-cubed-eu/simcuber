@@ -28,7 +28,7 @@
 #'   resolution = 0.1,
 #'   seed = 123)
 #'
-#' plot(spat_random)
+#' plot(spat_random, main = "random pattern")
 #'
 #' # built in clustered pattern
 #'
@@ -38,7 +38,7 @@
 #'   spatial_pattern = "clustered",
 #'   seed = 123)
 #'
-#' plot(spat_clust)
+#' plot(spat_clust, main = "built in clustered pattern")
 #'
 #' # user defined spatial pattern
 #' ## small scale cluster
@@ -49,7 +49,7 @@
 #'   spatial_pattern = 5,
 #'   seed = 123)
 #'
-#' plot(spat_small)
+#' plot(spat_small, main = "small scale clustered pattern")
 #'
 #' ## medium scale cluster (the built in clustered pattern)
 #' spat_medium <- create_spatial_pattern(
@@ -58,7 +58,7 @@
 #'   spatial_pattern = 10,
 #'   seed = 123)
 #'
-#' plot(spat_medium)
+#' plot(spat_medium, main = "medium scale clustered pattern")
 #'
 #' ## large scale cluster
 #' spat_large <- create_spatial_pattern(
@@ -67,7 +67,7 @@
 #'   spatial_pattern = 100,
 #'   seed = 123)
 #'
-#' plot(spat_large)
+#' plot(spat_large, main = "large scale clustered pattern")
 #'
 #'
 #' @import terra
