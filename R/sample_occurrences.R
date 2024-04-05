@@ -29,8 +29,6 @@ sample_occurrences <- function(
     rs,
     ts){
 
-  require(spatstat)
-
   # checks
   # check if rs is a terra raster
   if (!is(rs, "SpatRaster")) {
