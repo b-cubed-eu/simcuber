@@ -54,7 +54,7 @@ sample_occurrences <- function(
   occ_pf <- NULL
 
   for (t in 1:length(ts)) {
-    occ_p <- spatstat::spatSample(x = rs3, size = ts[t], method = "weights",
+    occ_p <- terra::spatSample(x = rs3, size = ts[t], method = "weights",
                        replace = TRUE,  as.points = TRUE)
     occ_sf <- sf::st_as_sf(occ_p)
     occ_sf$time <- t
