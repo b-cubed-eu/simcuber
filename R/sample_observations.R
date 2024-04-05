@@ -1,7 +1,7 @@
 #' Sample observations from a larger occurrence dataset
 #'
 #' The function samples observations from occurrences based on detection
-#' probability and sampling bias.
+#' probability and sampling bias by implementing a Bernouilli trial.
 #'
 #' @param occurrences An sf object with POINT geometry.
 #' @param detection_probability A numeric value between 0 and 1, corresponding
