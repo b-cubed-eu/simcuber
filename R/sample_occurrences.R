@@ -27,8 +27,7 @@
 
 sample_occurrences <- function(
     rs,
-    ts){
-
+    ts) {
   # checks
   # check if rs is a terra raster
   if (!methods::is(rs, "SpatRaster")) {
@@ -41,11 +40,11 @@ sample_occurrences <- function(
   }
 
   # centre the values of the raster (mean = 0)
-  rs_mean <- terra::global(rs, "mean", na.rm=TRUE)[,1]
+  rs_mean <- terra::global(rs, "mean", na.rm = TRUE)[, 1]
   rs2 <- rs - rs_mean
 
   # increase contrast between high and low values
-  a <- 5  # a = 1 -> logistic  a > 1  => steeper sigmoid (higher contrast)
+  a <- 5 # a = 1 -> logistic  a > 1  => steeper sigmoid (higher contrast)
   rs3 <- 1 / (1 + exp(-a * rs2))
 
   # For each time step sample points from the raster
@@ -54,8 +53,10 @@ sample_occurrences <- function(
   occ_pf <- NULL
 
   for (t in 1:length(ts)) {
-    occ_p <- terra::spatSample(x = rs3, size = ts[t], method = "weights",
-                       replace = TRUE,  as.points = TRUE)
+    occ_p <- terra::spatSample(
+      x = rs3, size = ts[t], method = "weights",
+      replace = TRUE, as.points = TRUE
+    )
     occ_sf <- sf::st_as_sf(occ_p)
     occ_sf$time <- t
     occ_pf <- rbind(occ_pf, occ_sf)
@@ -66,4 +67,3 @@ sample_occurrences <- function(
 
   return(occ_pf)
 }
-
