@@ -92,13 +92,13 @@
 #'
 
 create_spatial_pattern <- function(
-  polygon,
-  resolution,
-  spatial_pattern = c("random", "clustered"),
-  seed = NA,
-  n_sim = 1
-){
-
+    polygon,
+    resolution,
+    spatial_pattern = c("random", "clustered"),
+    seed = NA,
+    n_sim = 1
+  ){
+  ### Start checks
   if (length(seed) != 1) {
     cli::cli_abort(c(
       "{.var seed} must be a numeric vector of length 1.",
@@ -117,16 +117,15 @@ create_spatial_pattern <- function(
   dfxy <- as.data.frame(poly_raster, xy = TRUE)
 
   # define the spatial pattern ----
-  if(is.character(spatial_pattern)){
-
-    if(spatial_pattern[1] == "random"){
+  if (is.character(spatial_pattern)) {
+    if (spatial_pattern[1] == "random") {
       multiplier <- 1
     }
-    if(spatial_pattern[1] == "clustered"){
+    if (spatial_pattern[1] == "clustered") {
       multiplier <- 10
     }
 
-    if(!any(spatial_pattern[1] %in% c("random", "clustered"))){
+    if (!any(spatial_pattern[1] %in% c("random", "clustered"))) {
       cli::cli_abort(
         c(paste(
           "When class of {.var spatial_pattern} is",
@@ -143,14 +142,15 @@ create_spatial_pattern <- function(
   }
 
   #
-  if(is.numeric(spatial_pattern)){
+  if (is.numeric(spatial_pattern)) {
     # value should be equal or larger than 1
-    if(spatial_pattern >= 1){
+    if (spatial_pattern >= 1) {
       multiplier <- spatial_pattern
-    }else{
+    } else {
       cli::cli_abort("")
     }
   }
+  ### End checks
 
   range_size <- resolution * multiplier
 
@@ -171,7 +171,7 @@ create_spatial_pattern <- function(
     }
   }
 
-  # !idea: we can allow the user to provide a gstat object with other vgm model
+  # Use gstat object with vgm model to create spatial pattern
   gstat_model <- gstat::gstat(
     formula = z~1,
     locations = ~x+y,
@@ -184,10 +184,10 @@ create_spatial_pattern <- function(
       nugget = 0),
     nmax = 2)
 
+  # Predict pattern based on vgm model
   dfxy_pred <- stats::predict(gstat_model, newdata = dfxy, nsim = n_sim)
 
-
-  # standardize values between 0 and 1
+  # Standardise values between 0 and 1
   dfxy_std <- dfxy_pred %>%
     dplyr::mutate(
       dplyr::across(
@@ -196,7 +196,6 @@ create_spatial_pattern <- function(
         )
     )
 
-  r <- terra::rast(dfxy_std)
-
-  r
+  # Return final raster
+  return(terra::rast(dfxy_std))
 }
