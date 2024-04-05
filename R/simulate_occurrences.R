@@ -32,7 +32,43 @@
 #'
 #' @examples
 #'
-#' # add example here ...
+#' # Load Packages
+#'
+#' library(sf)
+#' library(ggplot2)
+#'
+#' plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
+#' plot(plgn)
+#'
+#' occ_sf <- simulate_occurrences(
+#'   plgn,
+#'   n_time_points = 4,
+#'   initial_average_abundance = 100
+#'   )
+#'
+#'   ggplot() +
+#'     geom_sf(data = occ_sf) +
+#'     geom_sf(data = plgn, fill = NA) +
+#'     facet_wrap("time") +
+#'     labs(
+#'         title = "Occurrences with random spatial and temporal pattern",
+#'         subtitle = "4 time steps") +
+#'     theme_bw()
+#'
+#'  occ_sf_100 <- simulate_occurrences(
+#'    plgn,
+#'    spatial_autocorr = 100,
+#'    n_time_points = 4,
+#'    initial_average_abundance = 100)
+#'
+#'  ggplot() +
+#'    geom_sf(data = occ_sf_100) +
+#'    geom_sf(data = plgn, fill = NA) +
+#'    facet_wrap("time") +
+#'    labs(
+#'      title = "Occurrences with structured spatial and temporal pattern",
+#'      subtitle = "4 time steps") +
+#'    theme_bw()
 #'
 
 simulate_occurrences <- function(
