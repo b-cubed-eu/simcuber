@@ -3,7 +3,7 @@
 #' The function simulates occurrences of a species within a given spatial
 #' and/or temporal extend.
 #'
-#' @param polygon An sf object with POLYGON geometry indicating the spatial
+#' @param plgn An sf object with POLYGON geometry indicating the spatial
 #' extend to simulate occurrences.
 #' @param initial_average_abundance A positive integer value indicating the
 #' average number of occurrences to be simulated within the extend of `polygon`
@@ -47,7 +47,7 @@
 #' polygon_sf <- st_sfc(polygon)
 
 simulate_occurrences <- function(
-    polygon,
+    plgn,
     initial_average_abundance = 50,
     spatial_autocorr = c("random", "clustered", "regular"),
     n_time_points = 10,
@@ -55,5 +55,31 @@ simulate_occurrences <- function(
     spatiotemporal_autocorr = NA,
     seed = NA) {
 
-  # ...
+  # Do some tests
+  # to be done check plgn is a sf polygon
+
+  # Simulate the timeseries
+  ts <- simulate_timeseries(initial_average_occurrences = initial_average_abundance,
+                            n_time_points = n_time_points,
+                            temporal_function = NA,     # to be added!
+                            seed = seed)
+
+  # Create the random field
+  boxplgn <- st_bbox(plgn)
+  plgn_maxr <- max(boxplgn[3] - boxplgn[1], boxplgn[4] - boxplgn[2])
+  res <- plgn_maxr / 100
+
+  rs_pattern <- create_spatial_pattern(polygon = plgn,
+                                       resolution = res,
+                                       spatial_pattern = spatial_autocorr,
+                                       seed = NA,
+                                       n_sim = 1)
+
+  # Sample occurrences from raster
+  occ <- sample_occurrences(
+    rs = rs_pattern,
+    ts = ts)
+
+  # Return the occurences (sf point geometry)
+  return(occ)
 }

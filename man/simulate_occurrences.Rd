@@ -5,7 +5,7 @@
 \title{Simulate occurrences within spatiotemporal scope}
 \usage{
 simulate_occurrences(
-  polygon,
+  plgn,
   initial_average_abundance = 50,
   spatial_autocorr = c("random", "clustered", "regular"),
   n_time_points = 10,
@@ -15,7 +15,7 @@ simulate_occurrences(
 )
 }
 \arguments{
-\item{polygon}{An sf object with POLYGON geometry indicating the spatial
+\item{plgn}{An sf object with POLYGON geometry indicating the spatial
 extend to simulate occurrences.}
 
 \item{initial_average_abundance}{A positive integer value indicating the
