@@ -10,13 +10,8 @@ occurrences <- data.frame(
 )
 points_sf1 <- sf::st_as_sf(occurrences, coords = c("lon", "lat"))
 
-## dataset with coordinateUncertaintyInMeters
-coordinate_uncertainty <- rgamma(10, shape = 5, rate = 0.1)
-points_sf2 <- points_sf1 %>%
-  dplyr::mutate(coordinateUncertaintyInMeters = coordinate_uncertainty)
-
 ## dataset without geometry
-points_sf3 <- points_sf2 %>%
+points_sf2 <- points_sf1 %>%
   sf::st_drop_geometry()
 
 
@@ -27,7 +22,7 @@ test_that("arguments are of the right class", {
   expect_error(sample_observations(occurrences = occurrences),
                regexp = "`occurrences` must be an sf object.",
                fixed = TRUE)
-  expect_error(sample_observations(occurrences = points_sf3),
+  expect_error(sample_observations(occurrences = points_sf2),
                regexp = "`occurrences` must be an sf object.",
                fixed = TRUE)
   expect_error(sample_observations(occurrences = "string"),
@@ -48,12 +43,6 @@ test_that("arguments are of the right class", {
                regexp = "`sampling_bias` must be a character vector of length 1.",
                fixed = TRUE)
 
-  # coordinate_uncertainty_meters is a numeric value
-  expect_error(sample_observations(points_sf1,
-                                   coordinate_uncertainty_meters = "1"),
-               regexp = "`coordinate_uncertainty_meters` must be a positive numeric value.",
-               fixed = TRUE)
-
 
   # bias_area ...
 
@@ -63,12 +52,9 @@ test_that("arguments are of the right class", {
 
   # seed is a numeric value
   expect_error(sample_observations(points_sf1, seed = TRUE),
-               regexp = "`seed` must be NA or a positive integer.",
+               regexp = "`seed` must be a numeric vector of length 1",
                fixed = TRUE)
-  expect_error(sample_observations(points_sf1, seed = -1),
-             regexp = "`seed` must be NA or a positive integer.",
+  expect_error(sample_observations(points_sf1, seed = "123"),
+             regexp = "`seed` must be a numeric vector of length 1",
              fixed = TRUE)
-  expect_error(sample_observations(points_sf1, seed = 2.34),
-               regexp = "`seed` must be NA or a positive integer.",
-               fixed = TRUE)
  })
