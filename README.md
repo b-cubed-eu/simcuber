@@ -49,8 +49,8 @@ library(gcube)
 library(tidyverse)
 #> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 #> ✔ dplyr     1.1.4     ✔ readr     2.1.4
-#> ✔ forcats   1.0.0     ✔ stringr   1.5.0
-#> ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
+#> ✔ forcats   1.0.0     ✔ stringr   1.5.1
+#> ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
 #> ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
 #> ✔ purrr     1.0.2     
 #> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -58,8 +58,9 @@ library(tidyverse)
 #> ✖ dplyr::lag()    masks stats::lag()
 #> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 library(rnaturalearthdata)
+#> Warning: package 'rnaturalearthdata' was built under R version 4.3.3
 library(rnaturalearth)
-#> Support for Spatial objects (`sp`) will be deprecated in {rnaturalearth} and will be removed in a future release of the package. Please use `sf` objects with {rnaturalearth}. For example: `ne_download(returnclass = 'sf')`
+#> Warning: package 'rnaturalearth' was built under R version 4.3.3
 #> 
 #> Attaching package: 'rnaturalearth'
 #> 
@@ -67,6 +68,7 @@ library(rnaturalearth)
 #> 
 #>     countries110
 library(terra)
+#> Warning: package 'terra' was built under R version 4.3.3
 #> terra 1.7.71
 #> 
 #> Attaching package: 'terra'
@@ -75,6 +77,7 @@ library(terra)
 #> 
 #>     extract
 library(sf)
+#> Warning: package 'sf' was built under R version 4.3.3
 #> Linking to GEOS 3.11.2, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE
 
 # Get a polygon to add points to
@@ -115,7 +118,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/README-simulate occurrences-1.png" width="100%" />
+<img src="man/figures/README-simulate-occurrences-1.png" width="100%" />
 
 ## Detection process
 
@@ -150,10 +153,6 @@ cube.
 ``` r
 sf_use_s2(FALSE)
 #> Spherical geometry (s2) switched off
-# Add buffer uncertainty in meters around points, randomly sampled from gamma distribution
-buffered_obs <- add_coordinate_uncertainty(
-  obs,
-  coords_uncertainty_meters = 10)
 
 # Define your grid
 grid_df <- st_make_grid(
@@ -162,12 +161,7 @@ grid_df <- st_make_grid(
   st_intersection(belgium) %>% 
   st_as_sf() %>% 
   rename(geometry = x)
-plot(grid_df)  
-```
 
-<img src="man/figures/README-grid designation-1.png" width="100%" />
-
-``` r
 
 gridded_obs <- grid_designation(
   observations = obs,
@@ -184,4 +178,4 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/README-grid designation-2.png" width="100%" />
+<img src="man/figures/README-grid-designation-1.png" width="100%" />

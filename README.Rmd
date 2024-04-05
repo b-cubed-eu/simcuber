@@ -62,7 +62,7 @@ ggplot() +
 We generate occurrence points within the polygon of interest, these are the "real" occurrences of the species, whether we have observed them or not. 
 In the simulate_occurrences() function the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
 
-```{r simulate occurrences}
+```{r simulate-occurrences}
 belgium <- belgium %>% st_set_crs(value = NA)
 occ <- simulate_occurrences(belgium,
                             initial_average_abundance = 50,
@@ -99,7 +99,7 @@ ggplot() +
 
 ## Grid designation process
 Finally, occurrences are designated to a grid to create a occurrence cube.
-```{r grid designation}
+```{r grid-designation}
 sf_use_s2(FALSE)
 
 # Define your grid
