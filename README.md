@@ -42,140 +42,189 @@ remotes::install_github("b-cubed-eu/gcube")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you the workflow for simulating a
+biodiversity data cube. This is divided in three steps or processes:
+
+1.  Occurrence process
+2.  Detection process
+3.  Grid designation process
+
+The functions are set up such that a single polygon as input is enough
+to go through this workflow using default arguments. The user can change
+these arguments to allow for more flexibility.
 
 ``` r
+# Load packages
 library(gcube)
-library(tidyverse)
-#> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-#> ✔ dplyr     1.1.4     ✔ readr     2.1.4
-#> ✔ forcats   1.0.0     ✔ stringr   1.5.1
-#> ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-#> ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-#> ✔ purrr     1.0.2     
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
-#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-library(rnaturalearthdata)
-#> Warning: package 'rnaturalearthdata' was built under R version 4.3.3
-library(rnaturalearth)
-#> Warning: package 'rnaturalearth' was built under R version 4.3.3
-#> 
-#> Attaching package: 'rnaturalearth'
-#> 
-#> The following object is masked from 'package:rnaturalearthdata':
-#> 
-#>     countries110
-library(terra)
-#> Warning: package 'terra' was built under R version 4.3.3
-#> terra 1.7.71
-#> 
-#> Attaching package: 'terra'
-#> 
-#> The following object is masked from 'package:tidyr':
-#> 
-#>     extract
-library(sf)
-#> Warning: package 'sf' was built under R version 4.3.3
-#> Linking to GEOS 3.11.2, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE
 
-# Get a polygon to add points to
-belgium <- ne_countries(scale = "medium", country = "Belgium",
-                        returnclass = "sf") %>% 
-  dplyr::select(1) 
+library(sf)      # working with spatial objects
+library(dplyr)   # data wrangling
+library(ggplot2) # visualisation with ggplot
+```
 
+We create a random polygon as input.
+
+``` r
+# Create a polygon to simulate occurrences
+polygon <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
+
+# Visualise
 ggplot() + 
-  geom_sf(data = belgium, 
-          fill = "grey80",
-          col = "black") +
+  geom_sf(data = polygon) +
   theme_minimal()
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-polygon-1.png" width="80%" />
 
-## Occurrence process
+### Occurrence process
 
-We generate occurrence points within the polygon of interest, these are
-the “real” occurrences of the species, whether we have observed them or
-not. In the simulate_occurrences() function the user can specify
-different levels of spatial clustering, and can define the trend change
-of the species over time.
+We generate occurrence points within the polygon using the
+`simulate_occurrences()` function. These are the “real” occurrences of
+the species, whether we have observed them or not. In the
+`simulate_occurrences()` function, the user can specify different levels
+of spatial clustering, and can define the trend change of the species
+over time.
 
 ``` r
-belgium <- belgium %>% st_set_crs(value = NA)
-occ <- simulate_occurrences(belgium,
-                            initial_average_abundance = 50,
-                            n_time_points = 1) %>% 
-  rename(time_point  = time)
+# Simulate occurrences within polygon
+occurrences_df <- simulate_occurrences(
+  plgn = polygon,
+  seed = 123)
 #> [using unconditional Gaussian simulation]
 
+# Visualise
 ggplot() + 
-  geom_sf(data = belgium, 
-          fill = "grey80",
-          col = "black") +
-  geom_sf(data = occ) +
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrences_df) +
   theme_minimal()
 ```
 
-<img src="man/figures/README-simulate-occurrences-1.png" width="100%" />
+<img src="man/figures/README-simulate-occurrences-1.png" width="80%" />
 
-## Detection process
+### Detection process
 
 In this step we define the sampling process, based on the detection
-probability of the species and the sampling effort.
+probability of the species and the sampling bias. This is done using the
+`sample_observations()` function. The default sampling bias is
+`"no_bias"`, but bias can also be inserted using a polygon or a grid.
 
 ``` r
-obs <- sample_observations(
-  occ,
+# Detect occurrences
+detections_df_raw <- sample_observations(
+  occurrences = occurrences_df,
   detection_probability = 0.5,
-  sampling_bias = "no_bias"
-)
-# sampled_occ <- sample_n(occ, 25)
+  seed = 123)
 
+# Visualise
 ggplot() + 
-  geom_sf(data = belgium, 
-          fill = "grey80",
-          col = "black") +
-  geom_sf(data = occ) +
-  geom_sf(data = obs, col = "darkorange") +
-  ggtitle("Detected occurrences in orange") +
+  geom_sf(data = polygon) +
+  geom_sf(data = detections_df_raw,
+          aes(colour = sampling_status)) +
   theme_minimal()
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-detect-occurrences-1.png" width="80%" />
 
-## Grid designation process
-
-Finally, occurrences are designated to a grid to create a occurrence
-cube.
+We select the detected occurrences and add an uncertainty to these
+observations. This can be done using the `add_coordinate_uncertainty()`
+function.
 
 ``` r
-sf_use_s2(FALSE)
-#> Spherical geometry (s2) switched off
+# Select detected occurrences only
+detections_df <- detections_df_raw %>%
+  dplyr::filter(sampling_status == "detected")
 
-# Define your grid
-grid_df <- st_make_grid(
-  belgium, # grid as the extent of polygon
-  n = c(10,10)) %>% 
-  st_intersection(belgium) %>% 
-  st_as_sf() %>% 
-  rename(geometry = x)
+# Add coordinate uncertainty
+set.seed(123)
+coord_uncertainty_vec <- rgamma(nrow(detections_df), shape = 2, rate = 6)
+observations_df <- add_coordinate_uncertainty(
+  observations = detections_df,
+  coords_uncertainty_meters = coord_uncertainty_vec)
 
+# Created and sf object with uncertainty circles to visualise
+buffered_observations <- st_buffer(
+  observations_df,
+  observations_df$coordinateUncertaintyInMeters)
 
-gridded_obs <- grid_designation(
-  observations = obs,
-  grid = grid_df)
-#> Warning: No column `coordinateUncertaintyInMeters` present! Assuming no uncertainty
-#> around observations.
-
+# Visualise
 ggplot() + 
-  geom_sf(data = belgium,
-          fill = "grey80",
-          col = "black") +
-  geom_sf(data = gridded_obs, aes(fill = n)) +
-  scale_fill_continuous("Number of\nobservations", type = "viridis") +
+  geom_sf(data = polygon) +
+  geom_sf(data = buffered_observations,
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = observations_df, colour = "firebrick") +
   theme_minimal()
 ```
 
-<img src="man/figures/README-grid-designation-1.png" width="100%" />
+<img src="man/figures/README-uncertainty-occurrences-1.png" width="80%" />
+
+### Grid designation process
+
+Finally, observations are designated to a grid to create an occurrence
+cube. We create a grid over the spatial extend using
+`sf::st_make_grid()`.
+
+``` r
+# Define a grid over spatial extend
+grid_df <- st_make_grid(
+    buffered_observations,
+    square = TRUE,
+    cellsize = c(1.2, 1.2)
+  ) %>%
+  st_sf() %>%
+  mutate(intersect = as.vector(st_intersects(geometry, polygon,
+                                             sparse = F))) %>%
+  dplyr::filter(intersect == TRUE) %>%
+  dplyr::select(-"intersect")
+```
+
+To create an occurrence cube, `grid_designation()` will randomly take a
+point within the uncertainty circle around the observations. These
+points can be extracted by setting the argument `aggregate = FALSE`.
+
+``` r
+# Create occurrence cube
+occurrence_cube_df <- grid_designation(
+  observations = observations_df,
+  grid = grid_df,
+  seed = 123)
+
+# Get sampled points within uncertainty circle
+sampled_points <- grid_designation(
+  observations = observations_df,
+  grid = grid_df,
+  aggregate = FALSE,
+  seed = 123)
+
+# Visualise grid designation
+ggplot() +
+  geom_sf(data = occurrence_cube_df, linewidth = 1) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+  geom_sf(data = buffered_observations,
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = sampled_points, colour = "blue") +
+  geom_sf(data = observations_df, colour = "firebrick") +
+  scale_x_continuous(limits = c(st_bbox(polygon)$xmin, st_bbox(polygon)$xmax)) +
+  scale_y_continuous(limits = c(st_bbox(polygon)$ymin, st_bbox(polygon)$ymax)) +
+  labs(x = "", y = "", fill = "n") +
+  theme_minimal()
+```
+
+<img src="man/figures/README-grid-designation-1.png" width="80%" />
+
+The output gives the number of observations per grid cell and minimal
+coordinate uncertainty per grid cell.
+
+``` r
+# Visualise minimal coordinate uncertainty
+ggplot() +
+  geom_sf(data = occurrence_cube_df, aes(fill = min_coord_uncertainty),
+          alpha = 0.5, linewidth = 1) +
+  geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
+  scale_x_continuous(limits = c(st_bbox(polygon)$xmin, st_bbox(polygon)$xmax)) +
+  scale_y_continuous(limits = c(st_bbox(polygon)$ymin, st_bbox(polygon)$ymax)) +
+  scale_fill_continuous(type = "viridis") +
+  labs(x = "", y = "") +
+  theme_minimal()
+```
+
+<img src="man/figures/README-visualise-designation-1.png" width="80%" />

@@ -26,6 +26,8 @@
 #'
 #' @export
 #'
+#' @importFrom stats rpois
+#'
 #' @examples
 #'
 #' library(ggplot2)
@@ -148,15 +150,17 @@
 #'   scale_x_continuous(breaks = seq(0, n_time_points, 5)) +
 #'   theme_minimal() +
 #'   theme(legend.position = "")
+
 simulate_timeseries <- function(
     initial_average_occurrences = 50,
-    n_time_points = 10,
+    n_time_points = 1,
     temporal_function = NA,
     ...,
     seed = NA) {
   # Checks
   # Check if initial_average_occurrences is a positive integer
-  if (!is.numeric(initial_average_occurrences) | initial_average_occurrences <= 0) {
+  if (!is.numeric(initial_average_occurrences) |
+      initial_average_occurrences <= 0) {
     cli::cli_abort(
       c(
         "{.var initial_average_occurrences} must be a positive integer.",

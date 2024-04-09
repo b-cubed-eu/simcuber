@@ -52,9 +52,10 @@ An sf object with POINT geometry containing the locations of the
 sampled observations, a \code{detection_probability} column containing the
 detection probability for each observation (will be the same for all), a
 \code{bias_weight} column containing the sampling probability based on sampling
-bias, and a \code{sampling_probability} column containing the combined sampling
+bias, a \code{sampling_probability} column containing the combined sampling
 probability from detection probability and sampling bias for each
-observation.
+observation, and a \code{sampling_status} column indicating whether the
+occurrence was detected (observations) or not (unobserved occurrences).
 }
 \description{
 The function samples observations from occurrences based on detection

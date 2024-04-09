@@ -16,12 +16,11 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr mutate select
+#' @import dplyr
+#' @import sf
+#' @importFrom stats runif
 #' @importFrom rlang .data
 #' @importFrom cli cli_abort cli_warn
-#' @importFrom sf st_coordinates st_drop_geometry st_as_sf
-#' @importFrom magrittr %>%
-#' @importFrom stats runif
 #'
 #' @examples
 #' library(sf)
@@ -100,8 +99,8 @@ sample_from_uniform_circle <- function(
   uncertainty_points <-
     observations %>%
     dplyr::mutate(
-      random_angle = runif(nrow(observations), 0, 2 * pi),
-      random_r = sqrt(runif(nrow(observations), 0, 1)) *
+      random_angle = stats::runif(nrow(observations), 0, 2 * pi),
+      random_r = sqrt(stats::runif(nrow(observations), 0, 1)) *
         .data$coordinateUncertaintyInMeters
     )
 

@@ -33,16 +33,16 @@
 #' sampled observations, a `detection_probability` column containing the
 #' detection probability for each observation (will be the same for all), a
 #' `bias_weight` column containing the sampling probability based on sampling
-#' bias, and a `sampling_probability` column containing the combined sampling
+#' bias, a `sampling_probability` column containing the combined sampling
 #' probability from detection probability and sampling bias for each
-#' observation.
+#' observation, and a `sampling_status` column indicating whether the
+#' occurrence was detected (observations) or not (unobserved occurrences).
 #'
 #' @export
 #'
-#' @importFrom dplyr mutate rowwise select filter ungroup
-#' @importFrom cli cli_abort
+#' @import dplyr
 #' @importFrom stats rbinom
-#' @importFrom magrittr %>%
+#' @importFrom cli cli_abort
 #' @importFrom withr local_seed
 #' @importFrom rlang .data
 #'
@@ -192,16 +192,14 @@ sample_observations <- function(
       sampling_probability = .data$detection_probability * .data$bias_weight
     ) %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(sample_status = stats::rbinom(1, 1,
-                                                .data$sampling_probability)) %>%
-    dplyr::ungroup()
-
-  # Filter observations
-  observations <- occurrences_combi %>%
-    dplyr::filter(.data$sample_status == 1) %>%
+    dplyr::mutate(sampling_status = stats::rbinom(1, 1,
+                                                  .data$sampling_probability),
+                  sampling_status = ifelse(.data$sampling_status == 1,
+                                           "detected", "undetected")) %>%
+    dplyr::ungroup() %>%
     dplyr::select("time_point", "detection_probability", "bias_weight",
-                  "sampling_probability", "geometry")
+                  "sampling_probability", "sampling_status", "geometry")
 
   # Return the observed occurrences
-  return(observations)
+  return(occurrences_combi)
 }

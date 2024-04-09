@@ -4,21 +4,22 @@
 \alias{add_coordinate_uncertainty}
 \title{Add coordinate uncertainty}
 \usage{
-add_coordinate_uncertainty(occurrences, coords_uncertainty_meters = 25)
+add_coordinate_uncertainty(observations, coords_uncertainty_meters = 25)
 }
 \arguments{
-\item{occurrences}{A sf object with POINT geometry}
+\item{observations}{An sf object with POINT geometry.}
 
-\item{coords_uncertainty_meters}{a value or a vector of numeric values}
+\item{coords_uncertainty_meters}{A numeric value or a vector of numeric
+values indicating the coordinate uncertainty associated with oberservations.}
 }
 \value{
-A sf object with POINT geometry with an additional column named 'coordinateUncertaintyInMeters'
+An sf object with POINT geometry with an additional column
+\code{coordinateUncertaintyInMeters}.
 }
 \description{
-Adds a collum to the occurrences sf object with the coordinate uncertainty in meters
+Adds a column to the observations sf object with the coordinate uncertainty in meters.
 }
 \examples{
-
 
 library(sf)
 library(dplyr)

@@ -20,10 +20,9 @@
 #'
 #' @export
 #'
+#' @import sf
+#' @import dplyr
 #' @importFrom cli cli_abort
-#' @importFrom magrittr %>%
-#' @importFrom sf st_within
-#' @importFrom dplyr mutate
 #'
 #' @examples
 #' # Load packages

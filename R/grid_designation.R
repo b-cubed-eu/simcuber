@@ -43,12 +43,10 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr group_by_at summarise n ungroup full_join join_by
-#' select_at mutate
+#' @import dplyr
+#' @import sf
 #' @importFrom rlang .data
 #' @importFrom cli cli_abort cli_warn
-#' @importFrom sf st_drop_geometry st_crs st_agr st_intersection st_as_sf
-#' @importFrom magrittr %>%
 #'
 #' @examples
 #' library(sf)

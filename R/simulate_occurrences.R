@@ -9,9 +9,11 @@
 #' average number of occurrences to be simulated within the extend of `polygon`
 #' at time point 1. This value will be used as mean of a Poisson distribution
 #' (lambda parameter).
-#' @param spatial_autocorr `"random"`, `"clustered"`, `"regular"` or a numeric
-#' value between -1 and 1 representing Moran's I. `"random"` corresponds to 0,
-#' `"clustered"` to 0.9 and `"regular"` to -0.9.
+#' @param spatial_autocorr Define the spatial pattern. It could be a character
+#'   string `"random"` or `"clustered"`, in which `"random"` is the default.
+#'   The user is able to provide a numeric value >= 1 (1 is "random" and
+#'   10 is "clustered"). A larger number means a broader size of the clusters
+#'   area. See details.
 #' @param n_time_points A positive integer value indicating the number of time
 #' points to simulate.
 #' @param temporal_function `NA` (default), or a function which generates
@@ -30,10 +32,11 @@
 #'
 #' @export
 #'
+#' @import sf
+#'
 #' @examples
 #'
 #' # Load Packages
-#'
 #' library(sf)
 #' library(ggplot2)
 #'
@@ -46,36 +49,36 @@
 #'   initial_average_abundance = 100
 #'   )
 #'
-#'   ggplot() +
-#'     geom_sf(data = occ_sf) +
-#'     geom_sf(data = plgn, fill = NA) +
-#'     facet_wrap("time") +
-#'     labs(
-#'         title = "Occurrences with random spatial and temporal pattern",
-#'         subtitle = "4 time steps") +
-#'     theme_bw()
+#' ggplot() +
+#'  geom_sf(data = occ_sf) +
+#'  geom_sf(data = plgn, fill = NA) +
+#'  facet_wrap("time_point") +
+#'  labs(
+#'       title = "Occurrences with random\nspatial and temporal pattern",
+#'       subtitle = "4 time steps") +
+#'  theme_bw()
 #'
-#'  occ_sf_100 <- simulate_occurrences(
-#'    plgn,
-#'    spatial_autocorr = 100,
-#'    n_time_points = 4,
+#' occ_sf_100 <- simulate_occurrences(
+#'   plgn,
+#'   spatial_autocorr = 100,
+#'   n_time_points = 4,
 #'    initial_average_abundance = 100)
 #'
-#'  ggplot() +
-#'    geom_sf(data = occ_sf_100) +
-#'    geom_sf(data = plgn, fill = NA) +
-#'    facet_wrap("time") +
-#'    labs(
-#'      title = "Occurrences with structured spatial and temporal pattern",
-#'      subtitle = "4 time steps") +
-#'    theme_bw()
+#' ggplot() +
+#'   geom_sf(data = occ_sf_100) +
+#'   geom_sf(data = plgn, fill = NA) +
+#'   facet_wrap("time_point") +
+#'   labs(
+#'        title = "Occurrences with structured\nspatial and temporal pattern",
+#'        subtitle = "4 time steps") +
+#'   theme_bw()
 #'
 
 simulate_occurrences <- function(
     plgn,
     initial_average_abundance = 50,
-    spatial_autocorr = c("random", "clustered", "regular"),
-    n_time_points = 10,
+    spatial_autocorr = c("random", "clustered"),
+    n_time_points = 1,
     temporal_function = NA,
     spatiotemporal_autocorr = NA,
     seed = NA) {
@@ -91,7 +94,7 @@ simulate_occurrences <- function(
     seed = seed)
 
   # Create the random field
-  boxplgn <- st_bbox(plgn)
+  boxplgn <- sf::st_bbox(plgn)
   plgn_maxr <- max(boxplgn[3] - boxplgn[1], boxplgn[4] - boxplgn[2])
   res <- plgn_maxr / 100
 
@@ -102,7 +105,7 @@ simulate_occurrences <- function(
                                        n_sim = 1)
 
   # Sample occurrences from raster
-  occ <- sample_occurrences(
+  occ <- sample_occurrences_from_raster(
     rs = rs_pattern,
     ts = ts)
 

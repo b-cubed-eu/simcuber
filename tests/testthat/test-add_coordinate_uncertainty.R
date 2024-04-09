@@ -73,7 +73,7 @@ test_that("add_coordinate_uncertainty() returns error on wrong length of coords_
       observations_sf,
       coords_uncertainty_meters = rep(1234, n_observations + 1)
     ),
-    regexp = "`coords_uncertainty_meters` has diferent length than the number of rows in `occurrences`",
+    regexp = "`coords_uncertainty_meters` has diferent length than the number of rows in `observations`",
     fixed = TRUE
   )
 
@@ -82,7 +82,7 @@ test_that("add_coordinate_uncertainty() returns error on wrong length of coords_
       observations_sf,
       coords_uncertainty_meters = rep(1234, n_observations + 1)
     ),
-    regexp = "You've supplied `coords_uncertainty_meters` of length 8 but `occurrences` has 7 rows."
+    regexp = "You've supplied `coords_uncertainty_meters` of length 8 but `observations` has 7 rows."
   )
 })
 
@@ -92,7 +92,7 @@ test_that("add_coordinate_uncertainty() returns error on non sf occurrence input
   # Use an expectation per line of the error.
   expect_error(
     add_coordinate_uncertainty(not_an_sf_object),
-    regexp = "`occurrences` must be an object of class 'sf'",
+    regexp = "`observations` must be an object of class 'sf'",
     fixed = TRUE
   )
   expect_error(
