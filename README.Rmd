@@ -86,22 +86,20 @@ ggplot() +
 
 ### Detection process
 
-In this step we define the sampling process, based on the detection probability of the species and the sampling effort.
+In this step we define the sampling process, based on the detection probability of the species and the sampling bias.
+This is done using the `sample_observations()` function.
+The default sampling bias is `"no_bias"`, but bias can also be inserted using a polygon or a grid.
 
 ```{r}
-obs <- sample_observations(
-  occ,
+observations_df <- sample_observations(
+  occurrences = occurrences_df,
   detection_probability = 0.5,
-  sampling_bias = "no_bias"
-)
+  seed = 123)
 
 ggplot() + 
-  geom_sf(data = belgium, 
-          fill = "grey80",
-          col = "black") +
-  geom_sf(data = occ) +
-  geom_sf(data = obs, col = "darkorange") +
-  ggtitle("Detected occurrences in orange") +
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrences_df) +
+  geom_sf(data = observations_df, aes(colour = sampling_status))
   theme_minimal()
 ```
 
@@ -110,8 +108,6 @@ ggplot() +
 Finally, occurrences are designated to a grid to create a occurrence cube.
 
 ```{r grid-designation}
-sf_use_s2(FALSE)
-
 # Define your grid
 grid_df <- st_make_grid(
   belgium, # grid as the extent of polygon
