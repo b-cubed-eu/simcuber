@@ -61,7 +61,7 @@ We create a random polygon as input.
 # Create a polygon to simulate occurrences
 polygon <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
 
-# Visualise ggplot
+# Visualise
 ggplot() + 
   geom_sf(data = polygon) +
   theme_minimal()
@@ -74,10 +74,12 @@ These are the "real" occurrences of the species, whether we have observed them o
 In the `simulate_occurrences()` function, the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
 
 ```{r simulate-occurrences}
+# Simulate occurrences within polygon
 occurrences_df <- simulate_occurrences(
   plgn = polygon,
   seed = 123)
 
+# Visualise
 ggplot() + 
   geom_sf(data = polygon) +
   geom_sf(data = occurrences_df) +
@@ -91,15 +93,40 @@ This is done using the `sample_observations()` function.
 The default sampling bias is `"no_bias"`, but bias can also be inserted using a polygon or a grid.
 
 ```{r}
-observations_df <- sample_observations(
+# Detect occurrences
+detections_df_raw <- sample_observations(
   occurrences = occurrences_df,
   detection_probability = 0.5,
   seed = 123)
 
+# Visualise
 ggplot() + 
   geom_sf(data = polygon) +
-  geom_sf(data = occurrences_df) +
-  geom_sf(data = observations_df, aes(colour = sampling_status))
+  geom_sf(data = detections_df_raw,
+          aes(colour = sampling_status)) +
+  theme_minimal()
+```
+
+We select the detected occurrences and add an uncertainty to these observations.
+This can be done using the `add_coordinate_uncertainty()` function.
+
+```{r}
+# Select detected occurrences only
+detections_df <- detections_df_raw %>%
+  dplyr::filter(sampling_status == "detected")
+
+# Add coordinate uncertainty
+observations_df <- add_coordinate_uncertainty(
+  observations = detections_df,
+  coords_uncertainty_meters = 0.3)
+
+# Visualise
+ggplot() + 
+  geom_sf(data = polygon) +
+  geom_sf(data = st_buffer(observations_df,
+                           observations_df$coordinateUncertaintyInMeters),
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = observations_df) +
   theme_minimal()
 ```
 
