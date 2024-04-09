@@ -59,7 +59,7 @@ sample_occurrences <- function(
       replace = TRUE, as.points = TRUE
     )
     occ_sf <- sf::st_as_sf(occ_p)
-    occ_sf$time <- t
+    occ_sf$time_point <- t
     occ_pf <- rbind(occ_pf, occ_sf)
   }
 
