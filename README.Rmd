@@ -39,39 +39,48 @@ remotes::install_github("b-cubed-eu/gcube")
 ## Example
 
 This is a basic example which shows you the workflow for simulating a biodiversity data cube.
+This is divided in three steps or processes:
+
+1.  Occurrence process
+2.  Detection process
+3.  Grid designation process
+
+The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
+The user can change these arguments to allow for more flexibility.
 
 
 ```{r example}
 # Load packages
-library(gcube)   # loads dplyr and sf as well
+library(gcube)   # loads dplyr and sf dependencies as well
 library(ggplot2) # visualisation with ggplot
+```
 
+We create a random polygon as input.
+
+```{r example}
 # Create a polygon to simulate occurrences
-plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
+polygon <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
 
 # Visualise ggplot
-ggplot(data = plgn) + 
-  geom_sf() +
+ggplot() + 
+  geom_sf(data = polygon) +
   theme_minimal()
 ```
 
 ### Occurrence process
 
-We generate occurrence points within the polygon of interest, these are the "real" occurrences of the species, whether we have observed them or not. 
-In the simulate_occurrences() function the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
+We generate occurrence points within the polygon using the `simulate_occurrences()` function.
+These are the "real" occurrences of the species, whether we have observed them or not. 
+In the `simulate_occurrences()` function, the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
 
 ```{r simulate-occurrences}
-belgium <- belgium %>% st_set_crs(value = NA)
-occ <- simulate_occurrences(belgium,
-                            initial_average_abundance = 50,
-                            n_time_points = 1) %>% 
-  rename(time_point  = time)
+occurrences_df <- simulate_occurrences(
+  plgn = polygon,
+  seed = 123)
 
 ggplot() + 
-  geom_sf(data = belgium, 
-          fill = "grey80",
-          col = "black") +
-  geom_sf(data = occ) +
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrences_df) +
   theme_minimal()
 ```
 
@@ -85,7 +94,6 @@ obs <- sample_observations(
   detection_probability = 0.5,
   sampling_bias = "no_bias"
 )
-# sampled_occ <- sample_n(occ, 25)
 
 ggplot() + 
   geom_sf(data = belgium, 
