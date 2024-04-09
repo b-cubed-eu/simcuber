@@ -8,7 +8,7 @@ simulate_occurrences(
   plgn,
   initial_average_abundance = 50,
   spatial_autocorr = c("random", "clustered"),
-  n_time_points = 10,
+  n_time_points = 1,
   temporal_function = NA,
   spatiotemporal_autocorr = NA,
   seed = NA
