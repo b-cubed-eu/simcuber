@@ -30,6 +30,8 @@
 #'
 #' @export
 #'
+#' @import sf
+#'
 #' @examples
 #'
 #' # Load Packages
@@ -91,7 +93,7 @@ simulate_occurrences <- function(
     seed = seed)
 
   # Create the random field
-  boxplgn <- st_bbox(plgn)
+  boxplgn <- sf::st_bbox(plgn)
   plgn_maxr <- max(boxplgn[3] - boxplgn[1], boxplgn[4] - boxplgn[2])
   res <- plgn_maxr / 100
 

@@ -28,10 +28,11 @@
 #'
 #' @export
 #'
-#' @import terra
 #' @import sf
-#' @import gstat
-#' @importFrom dplyr between mutate across starts_with
+#' @import dplyr
+#' @importFrom stats predict
+#' @importFrom terra vect rast rasterize
+#' @importFrom gstat vgm gstat
 #' @importFrom cli cli_abort
 #' @importFrom withr local_seed
 #' @importFrom vegan decostand

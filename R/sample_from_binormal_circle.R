@@ -23,11 +23,10 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr select
+#' @import dplyr
+#' @import sf
 #' @importFrom rlang .data
 #' @importFrom cli cli_abort cli_warn
-#' @importFrom sf st_coordinates st_as_sf st_crs
-#' @importFrom magrittr %>%
 #' @importFrom mnormt rmnorm
 #'
 #' @examples

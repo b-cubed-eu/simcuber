@@ -18,6 +18,8 @@
 #'
 #' @export
 #'
+#' @importFrom stats rnorm
+#'
 #' @examples
 #'
 #' simulate_random_walk(

@@ -5,9 +5,12 @@
 #' @param rs a raster object (terra)
 #' @param ts vector with the number of occurrences by time step
 #'
-#' @return
-#' An sf object with POINT geometry
+#' @return An sf object with POINT geometry
+#'
 #' @export
+#'
+#' @import sf
+#' @importFrom terra spatSample global
 #'
 #' @examples
 #' library(terra)
@@ -22,14 +25,13 @@
 #' plot(r)
 #' plot(pts_occ, add = TRUE, color = "black")
 #'
-#' @importFrom sf st_geometry_type
 
 sample_occurrences <- function(
     rs,
     ts) {
   # checks
   # check if rs is a terra raster
-  if (!methods::is(rs, "SpatRaster")) {
+  if (!"SpatRaster" %in% class(rs)) {
     cli::cli_abort(c("{.var rs} is not a SpatRaster."))
   }
 

@@ -17,8 +17,8 @@
 #'
 #' @export
 #'
+#' @import sf
 #' @importFrom cli cli_abort
-#' @importFrom sf st_intersection st_filter st_agr
 #'
 #' @examples
 #' # Load packages

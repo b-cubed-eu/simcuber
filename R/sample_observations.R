@@ -39,10 +39,9 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr mutate rowwise select filter ungroup
-#' @importFrom cli cli_abort
+#' @import dplyr
 #' @importFrom stats rbinom
-#' @importFrom magrittr %>%
+#' @importFrom cli cli_abort
 #' @importFrom withr local_seed
 #' @importFrom rlang .data
 #'

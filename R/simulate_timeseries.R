@@ -26,6 +26,8 @@
 #'
 #' @export
 #'
+#' @importFrom stats rpois
+#'
 #' @examples
 #'
 #' library(ggplot2)
@@ -156,7 +158,8 @@ simulate_timeseries <- function(
     seed = NA) {
   # Checks
   # Check if initial_average_occurrences is a positive integer
-  if (!is.numeric(initial_average_occurrences) | initial_average_occurrences <= 0) {
+  if (!is.numeric(initial_average_occurrences) |
+      initial_average_occurrences <= 0) {
     cli::cli_abort(
       c(
         "{.var initial_average_occurrences} must be a positive integer.",
