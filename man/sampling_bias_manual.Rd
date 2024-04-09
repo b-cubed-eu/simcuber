@@ -40,7 +40,7 @@ occurrences <- data.frame(
   lon = runif(num_points, min = -180, max = 180),
   lat = runif(num_points, min = -90, max = 90),
   time_point = 0
-  )
+)
 
 # Convert the occurrence data to an sf object
 occurrences_sf <- st_as_sf(occurrences, coords = c("lon", "lat"))
