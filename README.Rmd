@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -36,29 +38,25 @@ remotes::install_github("b-cubed-eu/gcube")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you the workflow for simulating a biodiversity data cube.
+
 
 ```{r example}
-library(gcube)
-library(tidyverse)
-library(rnaturalearthdata)
-library(rnaturalearth)
-library(terra)
-library(sf)
+# Load packages
+library(gcube)   # loads dplyr and sf as well
+library(ggplot2) # visualisation with ggplot
 
-# Get a polygon to add points to
-belgium <- ne_countries(scale = "medium", country = "Belgium",
-                        returnclass = "sf") %>% 
-  dplyr::select(1) 
+# Create a polygon to simulate occurrences
+plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
 
-ggplot() + 
-  geom_sf(data = belgium, 
-          fill = "grey80",
-          col = "black") +
+# Visualise ggplot
+ggplot(data = plgn) + 
+  geom_sf() +
   theme_minimal()
 ```
 
-## Occurrence process
+### Occurrence process
+
 We generate occurrence points within the polygon of interest, these are the "real" occurrences of the species, whether we have observed them or not. 
 In the simulate_occurrences() function the user can specify different levels of spatial clustering, and can define the trend change of the species over time.
 
@@ -77,8 +75,10 @@ ggplot() +
   theme_minimal()
 ```
 
-## Detection process
-In this step we define the sampling process, based on the detection probability of the species and the sampling effort. 
+### Detection process
+
+In this step we define the sampling process, based on the detection probability of the species and the sampling effort.
+
 ```{r}
 obs <- sample_observations(
   occ,
@@ -97,8 +97,10 @@ ggplot() +
   theme_minimal()
 ```
 
-## Grid designation process
+### Grid designation process
+
 Finally, occurrences are designated to a grid to create a occurrence cube.
+
 ```{r grid-designation}
 sf_use_s2(FALSE)
 
@@ -124,5 +126,3 @@ ggplot() +
   theme_minimal()
 
 ```
-
-
