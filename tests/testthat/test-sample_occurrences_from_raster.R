@@ -1,4 +1,4 @@
-test_that("sample_occurrences() returns valid sf POINT geometry", {
+test_that("sample_occurrences_from_raster() returns valid sf POINT geometry", {
   # build timeseries and raster to test on
   test_raster <-
     terra::rast(
@@ -13,17 +13,17 @@ test_that("sample_occurrences() returns valid sf POINT geometry", {
   timeseries <- c(20, 40, 60)
 
   expect_s3_class(
-    sample_occurrences(rs = test_raster, ts = timeseries),
+    sample_occurrences_from_raster(rs = test_raster, ts = timeseries),
     "data.frame"
   )
 
   expect_s3_class(
-    sample_occurrences(rs = test_raster, ts = timeseries),
+    sample_occurrences_from_raster(rs = test_raster, ts = timeseries),
     "sf"
   )
 })
 
-test_that("sample_occurrences() fails on invalid input argument", {
+test_that("sample_occurrences_from_raster() fails on invalid input argument", {
   # build raster to test on
   test_raster <-
     terra::rast(
@@ -37,13 +37,13 @@ test_that("sample_occurrences() fails on invalid input argument", {
   terra::values(test_raster) <- 1:terra::ncell(test_raster)
 
   expect_error(
-    sample_occurrences(data.frame(5:9)),
+    sample_occurrences_from_raster(data.frame(5:9)),
     regexp = "`rs` is not a SpatRaster.",
     fixed = TRUE
   )
 
   expect_error(
-    sample_occurrences(test_raster, "not a numeric"),
+    sample_occurrences_from_raster(test_raster, "not a numeric"),
     regexp = "`ts` must be an numeric vector",
     fixed = TRUE
   )

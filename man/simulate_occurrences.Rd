@@ -56,7 +56,6 @@ and/or temporal extend.
 \examples{
 
 # Load Packages
-
 library(sf)
 library(ggplot2)
 
@@ -69,28 +68,28 @@ occ_sf <- simulate_occurrences(
   initial_average_abundance = 100
   )
 
-  ggplot() +
-    geom_sf(data = occ_sf) +
-    geom_sf(data = plgn, fill = NA) +
-    facet_wrap("time") +
-    labs(
-        title = "Occurrences with random spatial and temporal pattern",
-        subtitle = "4 time steps") +
-    theme_bw()
+ggplot() +
+ geom_sf(data = occ_sf) +
+ geom_sf(data = plgn, fill = NA) +
+ facet_wrap("time_point") +
+ labs(
+      title = "Occurrences with random\nspatial and temporal pattern",
+      subtitle = "4 time steps") +
+ theme_bw()
 
- occ_sf_100 <- simulate_occurrences(
-   plgn,
-   spatial_autocorr = 100,
-   n_time_points = 4,
+occ_sf_100 <- simulate_occurrences(
+  plgn,
+  spatial_autocorr = 100,
+  n_time_points = 4,
    initial_average_abundance = 100)
 
- ggplot() +
-   geom_sf(data = occ_sf_100) +
-   geom_sf(data = plgn, fill = NA) +
-   facet_wrap("time") +
-   labs(
-     title = "Occurrences with structured spatial and temporal pattern",
-     subtitle = "4 time steps") +
-   theme_bw()
+ggplot() +
+  geom_sf(data = occ_sf_100) +
+  geom_sf(data = plgn, fill = NA) +
+  facet_wrap("time_point") +
+  labs(
+       title = "Occurrences with structured\nspatial and temporal pattern",
+       subtitle = "4 time steps") +
+  theme_bw()
 
 }
