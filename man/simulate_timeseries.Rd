@@ -6,7 +6,7 @@
 \usage{
 simulate_timeseries(
   initial_average_occurrences = 50,
-  n_time_points = 10,
+  n_time_points = 1,
   temporal_function = NA,
   ...,
   seed = NA

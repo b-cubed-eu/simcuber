@@ -150,9 +150,10 @@
 #'   scale_x_continuous(breaks = seq(0, n_time_points, 5)) +
 #'   theme_minimal() +
 #'   theme(legend.position = "")
+
 simulate_timeseries <- function(
     initial_average_occurrences = 50,
-    n_time_points = 10,
+    n_time_points = 1,
     temporal_function = NA,
     ...,
     seed = NA) {

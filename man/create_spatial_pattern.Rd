@@ -18,10 +18,10 @@ create_spatial_pattern(
 \item{resolution}{A numeric value defining the resolution of the raster cell}
 
 \item{spatial_pattern}{Define the spatial pattern. It could be a character
-string "random" or "clustered", in which "random" is the default. The user
-is able to provide a numeric value >= 1, where 1 is "random" and 10
-is "clustered" built in options. As large the number more broad is the size
-of the clusters area. See details.}
+string \code{"random"} or \code{"clustered"}, in which \code{"random"} is the default.
+The user is able to provide a numeric value >= 1 (1 is "random" and
+10 is "clustered"). A larger number means a broader size of the clusters
+area. See details.}
 
 \item{seed}{The seed for random number generation to make results
 reproducible. If \code{NA} (the default), no seed is used.}

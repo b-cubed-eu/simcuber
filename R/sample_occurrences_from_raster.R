@@ -20,13 +20,13 @@
 #' values(r) <- 1:ncell(r)
 #' timeseries <- c(20, 40, 60)
 #'
-#' pts_occ <- sample_occurrences(rs = r, ts = timeseries)
+#' pts_occ <- sample_occurrences_from_raster(rs = r, ts = timeseries)
 #'
 #' plot(r)
 #' plot(pts_occ, add = TRUE, color = "black")
 #'
 
-sample_occurrences <- function(
+sample_occurrences_from_raster <- function(
     rs,
     ts) {
   # checks
@@ -59,7 +59,7 @@ sample_occurrences <- function(
       replace = TRUE, as.points = TRUE
     )
     occ_sf <- sf::st_as_sf(occ_p)
-    occ_sf$time <- t
+    occ_sf$time_point <- t
     occ_pf <- rbind(occ_pf, occ_sf)
   }
 
