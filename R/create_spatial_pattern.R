@@ -5,10 +5,10 @@
 #' @param polygon An sf object of geometry type POLYGON
 #' @param resolution A numeric value defining the resolution of the raster cell
 #' @param spatial_pattern Define the spatial pattern. It could be a character
-#'   string "random" or "clustered", in which "random" is the default. The user
-#'   is able to provide a numeric value >= 1, where 1 is "random" and 10
-#'   is "clustered" built in options. As large the number more broad is the size
-#'   of the clusters area. See details.
+#'   string `"random"` or `"clustered"`, in which `"random"` is the default.
+#'   The user is able to provide a numeric value >= 1 (1 is "random" and
+#'   10 is "clustered"). A larger number means a broader size of the clusters
+#'   area. See details.
 #' @param seed The seed for random number generation to make results
 #' reproducible. If `NA` (the default), no seed is used.
 #' @param n_sim Number of simulations. Each simulation is a different layer in

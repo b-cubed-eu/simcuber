@@ -7,7 +7,7 @@
 simulate_occurrences(
   plgn,
   initial_average_abundance = 50,
-  spatial_autocorr = c("random", "clustered", "regular"),
+  spatial_autocorr = c("random", "clustered"),
   n_time_points = 10,
   temporal_function = NA,
   spatiotemporal_autocorr = NA,
@@ -23,9 +23,11 @@ average number of occurrences to be simulated within the extend of \code{polygon
 at time point 1. This value will be used as mean of a Poisson distribution
 (lambda parameter).}
 
-\item{spatial_autocorr}{\code{"random"}, \code{"clustered"}, \code{"regular"} or a numeric
-value between -1 and 1 representing Moran's I. \code{"random"} corresponds to 0,
-\code{"clustered"} to 0.9 and \code{"regular"} to -0.9.}
+\item{spatial_autocorr}{Define the spatial pattern. It could be a character
+string \code{"random"} or \code{"clustered"}, in which \code{"random"} is the default.
+The user is able to provide a numeric value >= 1 (1 is "random" and
+10 is "clustered"). A larger number means a broader size of the clusters
+area. See details.}
 
 \item{n_time_points}{A positive integer value indicating the number of time
 points to simulate.}
