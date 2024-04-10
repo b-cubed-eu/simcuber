@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulate_random_walk.R
 \name{simulate_random_walk}
 \alias{simulate_random_walk}
-\title{Simulates a random walk}
+\title{Simulate a random walk over time}
 \usage{
 simulate_random_walk(
   initial_average_occurrences = 50,
@@ -41,5 +41,11 @@ simulate_random_walk(
   sd_step = 1,
   seed = 123
 )
-
 }
+\seealso{
+Other occurrence: 
+\code{\link{create_spatial_pattern}()},
+\code{\link{sample_occurrences_from_raster}()},
+\code{\link{simulate_timeseries}()}
+}
+\concept{occurrence}

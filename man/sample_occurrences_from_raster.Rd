@@ -31,3 +31,10 @@ plot(r)
 plot(pts_occ, add = TRUE, color = "black")
 
 }
+\seealso{
+Other occurrence: 
+\code{\link{create_spatial_pattern}()},
+\code{\link{simulate_random_walk}()},
+\code{\link{simulate_timeseries}()}
+}
+\concept{occurrence}

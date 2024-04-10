@@ -44,7 +44,6 @@ occurrences.
 The function simulates a timeseries for the abundance of a species.
 }
 \examples{
-
 library(ggplot2)
 
 ## 1. Use the function simulate_random_walk()
@@ -166,3 +165,10 @@ ggplot(data_abundances, aes(x = time, y = abundance, colour = factor(sim))) +
   theme_minimal() +
   theme(legend.position = "")
 }
+\seealso{
+Other occurrence: 
+\code{\link{create_spatial_pattern}()},
+\code{\link{sample_occurrences_from_raster}()},
+\code{\link{simulate_random_walk}()}
+}
+\concept{occurrence}

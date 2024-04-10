@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_spatial_pattern.R
 \name{create_spatial_pattern}
 \alias{create_spatial_pattern}
-\title{Create spatial pattern}
+\title{Create spatial pattern within a polygon}
 \usage{
 create_spatial_pattern(
   polygon,
@@ -96,8 +96,13 @@ spat_large <- create_spatial_pattern(
   seed = 123)
 
 plot(spat_large, main = "large scale clustered pattern")
-
 }
 \seealso{
 \code{\link[gstat:vgm]{gstat::vgm()}} and its \code{range} argument
+
+Other occurrence: 
+\code{\link{sample_occurrences_from_raster}()},
+\code{\link{simulate_random_walk}()},
+\code{\link{simulate_timeseries}()}
 }
+\concept{occurrence}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_coordinate_uncertainty.R
 \name{add_coordinate_uncertainty}
 \alias{add_coordinate_uncertainty}
-\title{Add coordinate uncertainty}
+\title{Add coordinate uncertainty to observations}
 \usage{
 add_coordinate_uncertainty(observations, coords_uncertainty_meters = 25)
 }
@@ -46,5 +46,11 @@ add_coordinate_uncertainty(
   observations_sf,
   coords_uncertainty_meters = rgamma(n_points, shape = 5, rate = 0.1)
 )
-
 }
+\seealso{
+Other main: 
+\code{\link{grid_designation}()},
+\code{\link{sample_observations}()},
+\code{\link{simulate_occurrences}()}
+}
+\concept{main}

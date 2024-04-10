@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulate_occurrences.R
 \name{simulate_occurrences}
 \alias{simulate_occurrences}
-\title{Simulate occurrences within spatiotemporal scope}
+\title{Simulate occurrences within a spatiotemporal scope}
 \usage{
 simulate_occurrences(
   plgn,
@@ -54,7 +54,6 @@ The function simulates occurrences of a species within a given spatial
 and/or temporal extend.
 }
 \examples{
-
 # Load Packages
 library(sf)
 library(ggplot2)
@@ -91,5 +90,11 @@ ggplot() +
        title = "Occurrences with structured\nspatial and temporal pattern",
        subtitle = "4 time steps") +
   theme_bw()
-
 }
+\seealso{
+Other main: 
+\code{\link{add_coordinate_uncertainty}()},
+\code{\link{grid_designation}()},
+\code{\link{sample_observations}()}
+}
+\concept{main}
