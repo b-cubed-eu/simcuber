@@ -1,4 +1,4 @@
-#' Generate a sampling bias via a grid.
+#' Generate a sampling bias via a grid
 #'
 #' The function uses a sampling bias that is manually provided by the user.
 #' The user provides a grid layer (bias_weights) in which each cell contains the

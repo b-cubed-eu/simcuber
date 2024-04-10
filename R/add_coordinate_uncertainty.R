@@ -1,4 +1,4 @@
-#' Add coordinate uncertainty
+#' Add coordinate uncertainty to observations
 #'
 #' Adds a column to the observations sf object with the coordinate uncertainty in meters.
 #'

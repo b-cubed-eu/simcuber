@@ -1,4 +1,4 @@
-#' Create spatial pattern
+#' Create spatial pattern within a polygon
 #'
 #' It creates a raster with a spatial pattern for the area of a polygon.
 #'

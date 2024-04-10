@@ -1,4 +1,4 @@
-#' Simulate occurrences within spatiotemporal scope
+#' Simulate occurrences within a spatiotemporal scope
 #'
 #' The function simulates occurrences of a species within a given spatial
 #' and/or temporal extend.

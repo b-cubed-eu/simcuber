@@ -1,4 +1,4 @@
-#' Simulates a random walk
+#' Simulate a random walk over time
 #'
 #' The function simulates occurrences of a species in a temporal extent.
 #'
