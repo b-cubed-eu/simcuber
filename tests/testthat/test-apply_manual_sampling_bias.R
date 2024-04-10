@@ -46,21 +46,21 @@ bias_weights_nogeom <- bias_weights01_sf %>%
 test_that("arguments are of the right class", {
   # occurrences_sf is an sf object
   expect_error(
-    sampling_bias_manual(
+    apply_manual_sampling_bias(
       occurrences_sf = occurrences,
       bias_weights = bias_weights01_sf
     ),
     class = "gcube_error_class_occurrences_sf"
   )
   expect_error(
-    sampling_bias_manual(
+    apply_manual_sampling_bias(
       occurrences_sf = points_sf2,
       bias_weights = bias_weights01_sf
     ),
     class = "gcube_error_class_occurrences_sf"
   )
   expect_error(
-    sampling_bias_manual(
+    apply_manual_sampling_bias(
       occurrences_sf = "string",
       bias_weights = bias_weights01_sf
     ),
@@ -69,14 +69,14 @@ test_that("arguments are of the right class", {
 
   # bias_weights is an sf object
   expect_error(
-    sampling_bias_manual(
+    apply_manual_sampling_bias(
       occurrences_sf = points_sf1,
       bias_weights = bias_weights_df
     ),
     class = "gcube_error_class_bias_weights"
   )
   expect_error(
-    sampling_bias_manual(
+    apply_manual_sampling_bias(
       occurrences_sf = points_sf1,
       bias_weights = bias_weights_nogeom
     ),
@@ -85,7 +85,7 @@ test_that("arguments are of the right class", {
 
   # bias_weights has a column named bias_weight
   expect_error(
-    sampling_bias_manual(
+    apply_manual_sampling_bias(
       occurrences_sf = points_sf1,
       bias_weights = grid_sf_withoutweights
     ),
@@ -95,28 +95,28 @@ test_that("arguments are of the right class", {
 )
 
 ## expect right output format
-test_that("sampling_bias_manual() returns sf object", {
+test_that("apply_manual_sampling_bias() returns sf object", {
   expect_s3_class(
-    sampling_bias_manual(points_sf1, bias_weights01_sf),
+    apply_manual_sampling_bias(points_sf1, bias_weights01_sf),
     "data.frame"
   )
   expect_s3_class(
-    sampling_bias_manual(points_sf1, bias_weights01_sf),
+    apply_manual_sampling_bias(points_sf1, bias_weights01_sf),
     "sf"
   )
 })
-test_that("sampling_bias_manual() returns bias_weight column", {
+test_that("apply_manual_sampling_bias() returns bias_weight column", {
   expect_named(
-    sampling_bias_manual(points_sf1, bias_weights01_sf),
+    apply_manual_sampling_bias(points_sf1, bias_weights01_sf),
     c("time_point", "bias_weight", "geometry")
   )
   expect_type(
-    sampling_bias_manual(points_sf1, bias_weights_integers_sf) %>%
+    apply_manual_sampling_bias(points_sf1, bias_weights_integers_sf) %>%
       dplyr::pull("bias_weight"),
     "double"
   )
   expect_true(is.numeric(x = dplyr::pull(
-    sampling_bias_manual(points_sf1, bias_weights01_sf),
+    apply_manual_sampling_bias(points_sf1, bias_weights01_sf),
     "bias_weight"
   )))
 })

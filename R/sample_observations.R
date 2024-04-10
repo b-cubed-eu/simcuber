@@ -175,12 +175,12 @@ sample_observations <- function(
 
   # Create and merge bias weights with occurrences
   if (sampling_bias == "polygon") {
-    occurrences <- apply_polygon_sample_bias(
+    occurrences <- apply_polygon_sampling_bias(
       occurrences_sf = occurrences,
       bias_area = bias_area,
       bias_strength = bias_strength)
   } else if (sampling_bias == "manual") {
-    occurrences <- sampling_bias_manual(
+    occurrences <- apply_manual_sampling_bias(
       occurrences_sf = occurrences,
       bias_weights = bias_weights
     )

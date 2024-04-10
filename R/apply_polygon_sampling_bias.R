@@ -52,7 +52,7 @@
 #'   st_buffer(dist = 100) %>%
 #'   st_as_sf()
 #'
-#' occurrence_bias_sf <- apply_polygon_sample_bias(
+#' occurrence_bias_sf <- apply_polygon_sampling_bias(
 #'   occurrences_sf,
 #'   bias_area,
 #'   bias_strength = 2)
@@ -66,7 +66,7 @@
 #'     geom_sf(aes(colour = bias_weight_f)) +
 #'     ggtitle("Sampling Bias via Polygon")
 
-apply_polygon_sample_bias <- function(occurrences_sf,
+apply_polygon_sampling_bias <- function(occurrences_sf,
                                       bias_area,
                                       bias_strength = 1) {
   ### Start checks
