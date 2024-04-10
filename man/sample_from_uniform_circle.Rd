@@ -48,3 +48,8 @@ sample_from_uniform_circle(
   seed = 123
 )
 }
+\seealso{
+Other designation: 
+\code{\link{sample_from_binormal_circle}()}
+}
+\concept{designation}

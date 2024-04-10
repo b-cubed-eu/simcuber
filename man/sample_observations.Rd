@@ -118,3 +118,10 @@ sample_observations(
   seed = 123
   )
 }
+\seealso{
+Other main: 
+\code{\link{add_coordinate_uncertainty}()},
+\code{\link{grid_designation}()},
+\code{\link{simulate_occurrences}()}
+}
+\concept{main}

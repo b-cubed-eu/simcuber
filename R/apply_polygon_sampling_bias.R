@@ -1,13 +1,11 @@
 #' Generate a sampling bias via a polygon
 #'
-#' This function adds a sampling bias weight column containing the sample
-#' probability based on sampling bias within a polygon.
+#' The function adds a sampling bias weight column containing the sample
+#' probability based on bias strength within a given polygon.
 #'
 #' @param occurrences_sf An sf object with POINT geometry.
-#'
 #' @param bias_area An sf object with POLYGON geometry. The area in which the
 #' sampling will be biased.
-#'
 #' @param bias_strength A positive numeric value. The strength of the bias to
 #' be applied in the biased area (as a multiplier). Above 1, area will be
 #' oversampled. Below 1, area will be undersampled. For example, a value of 50
@@ -23,6 +21,8 @@
 #' @import sf
 #' @import dplyr
 #' @importFrom cli cli_abort
+#'
+#' @family detection
 #'
 #' @examples
 #' # Load packages
@@ -50,7 +50,7 @@
 #'   st_buffer(dist = 100) %>%
 #'   st_as_sf()
 #'
-#' occurrence_bias_sf <- apply_polygon_sample_bias(
+#' occurrence_bias_sf <- apply_polygon_sampling_bias(
 #'   occurrences_sf,
 #'   bias_area,
 #'   bias_strength = 2)
@@ -63,9 +63,8 @@
 #'     geom_sf(data = bias_area) +
 #'     geom_sf(aes(colour = bias_weight_f)) +
 #'     ggtitle("Sampling Bias via Polygon")
-#'
 
-apply_polygon_sample_bias <- function(occurrences_sf,
+apply_polygon_sampling_bias <- function(occurrences_sf,
                                       bias_area,
                                       bias_strength = 1) {
   ### Start checks

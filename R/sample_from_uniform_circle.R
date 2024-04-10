@@ -22,6 +22,8 @@
 #' @importFrom rlang .data
 #' @importFrom cli cli_abort cli_warn
 #'
+#' @family designation
+#'
 #' @examples
 #' library(sf)
 #'
@@ -45,6 +47,7 @@
 #'   observations = observations_sf,
 #'   seed = 123
 #' )
+
 sample_from_uniform_circle <- function(
     observations,
     seed = NA) {

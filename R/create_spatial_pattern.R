@@ -1,4 +1,4 @@
-#' Create spatial pattern
+#' Create spatial pattern within a polygon
 #'
 #' It creates a raster with a spatial pattern for the area of a polygon.
 #'
@@ -36,6 +36,8 @@
 #' @importFrom cli cli_abort
 #' @importFrom withr local_seed
 #' @importFrom vegan decostand
+#'
+#' @family occurrence
 #'
 #' @examples
 #'
@@ -90,7 +92,6 @@
 #'   seed = 123)
 #'
 #' plot(spat_large, main = "large scale clustered pattern")
-#'
 
 create_spatial_pattern <- function(
     polygon,

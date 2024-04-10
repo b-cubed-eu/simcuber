@@ -48,6 +48,8 @@
 #' @importFrom rlang .data
 #' @importFrom cli cli_abort cli_warn
 #'
+#' @family main
+#'
 #' @examples
 #' library(sf)
 #' library(dplyr)
@@ -85,6 +87,7 @@
 #'   grid = grid_df,
 #'   seed = 123
 #' )
+
 grid_designation <- function(
     observations,
     grid,

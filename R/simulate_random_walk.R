@@ -1,4 +1,4 @@
-#' Simulates a random walk
+#' Simulate a random walk over time
 #'
 #' The function simulates occurrences of a species in a temporal extent.
 #'
@@ -20,6 +20,8 @@
 #'
 #' @importFrom stats rnorm
 #'
+#' @family occurrence
+#'
 #' @examples
 #'
 #' simulate_random_walk(
@@ -28,7 +30,7 @@
 #'   sd_step = 1,
 #'   seed = 123
 #' )
-#'
+
 simulate_random_walk <- function(
     initial_average_occurrences = 50,
     n_time_points = 10,

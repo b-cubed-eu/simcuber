@@ -1,4 +1,4 @@
-#' Simulate occurrences within spatiotemporal scope
+#' Simulate occurrences within a spatiotemporal scope
 #'
 #' The function simulates occurrences of a species within a given spatial
 #' and/or temporal extend.
@@ -34,8 +34,9 @@
 #'
 #' @import sf
 #'
-#' @examples
+#' @family main
 #'
+#' @examples
 #' # Load Packages
 #' library(sf)
 #' library(ggplot2)
@@ -72,7 +73,6 @@
 #'        title = "Occurrences with structured\nspatial and temporal pattern",
 #'        subtitle = "4 time steps") +
 #'   theme_bw()
-#'
 
 simulate_occurrences <- function(
     plgn,

@@ -1,8 +1,7 @@
-#' Generate a sampling bias via a grid.
+#' Generate a sampling bias via a grid
 #'
-#' The function uses a sampling bias that is manually provided by the user.
-#' The user provides a grid layer (bias_weights) in which each cell contains the
-#' probability to be sampled.
+#' The function adds a sampling bias weight column containing the sample
+#' probability based on bias weights within each cell of a given grid layer.
 #'
 #' @param occurrences_sf An sf object with POINT geometry.
 #' @param bias_weights A raster layer (sf object with POLYGON geometry). The
@@ -19,6 +18,8 @@
 #'
 #' @import sf
 #' @importFrom cli cli_abort
+#'
+#' @family detection
 #'
 #' @examples
 #' # Load packages
@@ -48,13 +49,13 @@
 #' grid1 <- grid %>%
 #'   mutate(bias_weight = runif(nrow(grid), min = 0, max = 1))
 #'
-#' sampling_bias_manual(occurrences_sf, grid1)
+#' apply_manual_sampling_bias(occurrences_sf, grid1)
 #'
 #' # Bias weights larger than 1
 #' grid2 <- grid %>%
 #'   mutate(bias_weight = rpois(nrow(grid), 5))
 #'
-#' occurrence_bias_sf <- sampling_bias_manual(occurrences_sf, grid2)
+#' occurrence_bias_sf <- apply_manual_sampling_bias(occurrences_sf, grid2)
 #' occurrence_bias_sf
 #'
 #' # Visualise where the bias is
@@ -64,7 +65,7 @@
 #'  geom_sf(data = occurrence_bias_sf, aes(colour = bias_weight)) +
 #'  scale_color_gradient(trans = "reverse")
 
-sampling_bias_manual <- function(occurrences_sf, bias_weights) {
+apply_manual_sampling_bias <- function(occurrences_sf, bias_weights) {
   ### Start checks
   # 1. check input classes
   if (!("sf" %in% class(occurrences_sf))) {

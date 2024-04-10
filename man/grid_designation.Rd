@@ -102,3 +102,10 @@ grid_designation(
   seed = 123
 )
 }
+\seealso{
+Other main: 
+\code{\link{add_coordinate_uncertainty}()},
+\code{\link{sample_observations}()},
+\code{\link{simulate_occurrences}()}
+}
+\concept{main}
