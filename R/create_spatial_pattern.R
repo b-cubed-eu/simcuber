@@ -40,58 +40,77 @@
 #' @family occurrence
 #'
 #' @examples
-#'
+#' # Load packages
 #' library(sf)
-#' library(terra)
+#' library(ggplot2)
+#' library(tidyterra)
 #'
+#' # Create polygon
 #' plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
-#' plot(plgn)
-#' # random pattern by default
-#' spat_random <- create_spatial_pattern(
-#'   plgn,
+#' ggplot() +
+#'   geom_sf(data = plgn) +
+#'   theme_minimal()
+#'
+#' # Random spatial pattern
+#' rs_pattern_random <- create_spatial_pattern(
+#'   polygon = plgn,
 #'   resolution = 0.1,
+#'   spatial_pattern = "random",
 #'   seed = 123)
 #'
-#' plot(spat_random, main = "random pattern")
+#' ggplot() +
+#'   geom_spatraster(data = rs_pattern_random) +
+#'   scale_fill_continuous(type = "viridis") +
+#'   theme_minimal()
 #'
-#' # built in clustered pattern
-#'
-#' spat_clust<- create_spatial_pattern(
-#'   plgn,
+#' ## Clustered spatial pattern
+#' rs_pattern_clustered <- create_spatial_pattern(
+#'   polygon = plgn,
 #'   resolution = 0.1,
 #'   spatial_pattern = "clustered",
 #'   seed = 123)
 #'
-#' plot(spat_clust, main = "built in clustered pattern")
+#' ggplot() +
+#'   geom_spatraster(data = rs_pattern_clustered) +
+#'   scale_fill_continuous(type = "viridis") +
+#'   theme_minimal()
 #'
-#' # user defined spatial pattern
-#' ## small scale cluster
-#'
-#' spat_small <- create_spatial_pattern(
-#'   plgn,
+#' ## User defined spatial pattern
+#' # Small scale clustering
+#' rs_pattern_small <- create_spatial_pattern(
+#'   polygon = plgn,
 #'   resolution = 0.1,
 #'   spatial_pattern = 5,
 #'   seed = 123)
 #'
-#' plot(spat_small, main = "small scale clustered pattern")
+#' ggplot() +
+#'   geom_spatraster(data = rs_pattern_small) +
+#'   scale_fill_continuous(type = "viridis") +
+#'   theme_minimal()
 #'
-#' ## medium scale cluster (the built in clustered pattern)
-#' spat_medium <- create_spatial_pattern(
-#'   plgn,
+#' # Medium scale clustering (= the built-in clustered pattern)
+#' rs_pattern_medium <- create_spatial_pattern(
+#'   polygon = plgn,
 #'   resolution = 0.1,
 #'   spatial_pattern = 10,
 #'   seed = 123)
 #'
-#' plot(spat_medium, main = "medium scale clustered pattern")
+#' ggplot() +
+#'   geom_spatraster(data = rs_pattern_medium) +
+#'   scale_fill_continuous(type = "viridis") +
+#'   theme_minimal()
 #'
-#' ## large scale cluster
-#' spat_large <- create_spatial_pattern(
-#'   plgn,
+#' # Large scale clustering
+#' rs_pattern_large <- create_spatial_pattern(
+#'   polygon = plgn,
 #'   resolution = 0.1,
 #'   spatial_pattern = 100,
 #'   seed = 123)
 #'
-#' plot(spat_large, main = "large scale clustered pattern")
+#' ggplot() +
+#'   geom_spatraster(data = rs_pattern_large) +
+#'   scale_fill_continuous(type = "viridis") +
+#'   theme_minimal()
 
 create_spatial_pattern <- function(
     polygon,

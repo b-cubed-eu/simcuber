@@ -18,18 +18,56 @@ An sf object with POINT geometry
 Draws occurrences (points) from a spatial random field (raster)
 }
 \examples{
-library(terra)
+# Load packages
 library(sf)
+library(ggplot2)
+library(tidyterra)
 
-r <- rast(ncol = 50, nrow = 50, xmin = 0, xmax = 50, ymin = 0, ymax = 50)
-values(r) <- 1:ncell(r)
-timeseries <- c(20, 40, 60)
+# Create polygon
+plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
+ggplot() +
+  geom_sf(data = plgn) +
+  theme_minimal()
 
-pts_occ <- sample_occurrences_from_raster(rs = r, ts = timeseries)
+## Medium scale clustering
+# Create the random field
+rs_pattern_clustered <- create_spatial_pattern(
+  polygon = plgn,
+  resolution = 0.1,
+  spatial_pattern = "clustered",
+  seed = 123)
 
-plot(r)
-plot(pts_occ, add = TRUE, color = "black")
+# Sample from random field
+set.seed(123)
+pts_occ_clustered <- sample_occurrences_from_raster(
+  rs = rs_pattern_clustered,
+  ts = rpois(1, 100))
 
+ggplot() +
+  geom_spatraster(data = rs_pattern_clustered) +
+  geom_sf(data = pts_occ_clustered) +
+  scale_fill_continuous(type = "viridis") +
+  theme_minimal()
+
+## Large scale clustering
+# Create the random field
+rs_pattern_large <- create_spatial_pattern(
+  polygon = plgn,
+  resolution = 0.1,
+  spatial_pattern = 100,
+  seed = 123)
+
+# Sample from random field
+set.seed(123)
+pts_occ_large <- sample_occurrences_from_raster(
+  rs = rs_pattern_large,
+  ts = rpois(1, 100))
+
+ggplot() +
+  geom_spatraster(data = rs_pattern_large) +
+  geom_sf(data = pts_occ_large) +
+  scale_fill_continuous(type = "viridis") +
+  theme_minimal()
 }
 \seealso{
 Other occurrence: 
