@@ -18,6 +18,7 @@
 #' # Load packages
 #' library(sf)
 #' library(ggplot2)
+#' library(tidyterra)
 #'
 #' # Create polygon
 #' plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
@@ -40,7 +41,7 @@
 #'   ts = rpois(1, 100))
 #'
 #' ggplot() +
-#'   tidyterra::geom_spatraster(data = rs_pattern_clustered) +
+#'   geom_spatraster(data = rs_pattern_clustered) +
 #'   geom_sf(data = pts_occ_clustered) +
 #'   scale_fill_continuous(type = "viridis") +
 #'   theme_minimal()
@@ -60,7 +61,7 @@
 #'   ts = rpois(1, 100))
 #'
 #' ggplot() +
-#'   tidyterra::geom_spatraster(data = rs_pattern_large) +
+#'   geom_spatraster(data = rs_pattern_large) +
 #'   geom_sf(data = pts_occ_large) +
 #'   scale_fill_continuous(type = "viridis") +
 #'   theme_minimal()

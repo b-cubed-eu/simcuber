@@ -46,7 +46,8 @@ spherical variogram model
 \examples{
 # Load packages
 library(sf)
-library(terra)
+library(ggplot2)
+library(tidyterra)
 
 # Create polygon
 plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
@@ -62,7 +63,7 @@ rs_pattern_random <- create_spatial_pattern(
   seed = 123)
 
 ggplot() +
-  tidyterra::geom_spatraster(data = rs_pattern_random) +
+  geom_spatraster(data = rs_pattern_random) +
   scale_fill_continuous(type = "viridis") +
   theme_minimal()
 
@@ -74,7 +75,7 @@ rs_pattern_clustered <- create_spatial_pattern(
   seed = 123)
 
 ggplot() +
-  tidyterra::geom_spatraster(data = rs_pattern_clustered) +
+  geom_spatraster(data = rs_pattern_clustered) +
   scale_fill_continuous(type = "viridis") +
   theme_minimal()
 
@@ -87,7 +88,7 @@ rs_pattern_small <- create_spatial_pattern(
   seed = 123)
 
 ggplot() +
-  tidyterra::geom_spatraster(data = rs_pattern_small) +
+  geom_spatraster(data = rs_pattern_small) +
   scale_fill_continuous(type = "viridis") +
   theme_minimal()
 
@@ -99,7 +100,7 @@ rs_pattern_medium <- create_spatial_pattern(
   seed = 123)
 
 ggplot() +
-  tidyterra::geom_spatraster(data = rs_pattern_medium) +
+  geom_spatraster(data = rs_pattern_medium) +
   scale_fill_continuous(type = "viridis") +
   theme_minimal()
 
@@ -111,7 +112,7 @@ rs_pattern_large <- create_spatial_pattern(
   seed = 123)
 
 ggplot() +
-  tidyterra::geom_spatraster(data = rs_pattern_large) +
+  geom_spatraster(data = rs_pattern_large) +
   scale_fill_continuous(type = "viridis") +
   theme_minimal()
 }
