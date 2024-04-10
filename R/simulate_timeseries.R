@@ -28,8 +28,9 @@
 #'
 #' @importFrom stats rpois
 #'
-#' @examples
+#' @family occurrence
 #'
+#' @examples
 #' library(ggplot2)
 #'
 #' ## 1. Use the function simulate_random_walk()

@@ -12,6 +12,8 @@
 #' @import sf
 #' @importFrom terra spatSample global
 #'
+#' @family occurrence
+#'
 #' @examples
 #' library(terra)
 #' library(sf)

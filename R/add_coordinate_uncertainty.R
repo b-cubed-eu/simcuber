@@ -15,6 +15,8 @@
 #' @import sf
 #' @importFrom cli cli_abort
 #'
+#' @family main
+#'
 #' @examples
 #'
 #' library(sf)
@@ -42,7 +44,6 @@
 #'   observations_sf,
 #'   coords_uncertainty_meters = rgamma(n_points, shape = 5, rate = 0.1)
 #' )
-#'
 
 add_coordinate_uncertainty <- function(
     observations,

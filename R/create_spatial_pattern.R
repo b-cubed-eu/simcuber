@@ -37,6 +37,8 @@
 #' @importFrom withr local_seed
 #' @importFrom vegan decostand
 #'
+#' @family occurrence
+#'
 #' @examples
 #'
 #' library(sf)
@@ -90,7 +92,6 @@
 #'   seed = 123)
 #'
 #' plot(spat_large, main = "large scale clustered pattern")
-#'
 
 create_spatial_pattern <- function(
     polygon,

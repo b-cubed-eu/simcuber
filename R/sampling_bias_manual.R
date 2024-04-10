@@ -20,6 +20,8 @@
 #' @import sf
 #' @importFrom cli cli_abort
 #'
+#' @family detection
+#'
 #' @examples
 #' # Load packages
 #' library(sf)

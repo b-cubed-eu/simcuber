@@ -46,6 +46,8 @@
 #' @importFrom withr local_seed
 #' @importFrom rlang .data
 #'
+#' @family main
+#'
 #' @examples
 #' # Load packages
 #' library(sf)

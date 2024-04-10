@@ -29,6 +29,8 @@
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom mnormt rmnorm
 #'
+#' @family designation
+#'
 #' @examples
 #' library(sf)
 #' library(dplyr)
@@ -54,6 +56,7 @@
 #'   p_norm = 0.95,
 #'   seed = 123
 #' )
+
 sample_from_binormal_circle <- function(
     observations,
     p_norm = 0.95,

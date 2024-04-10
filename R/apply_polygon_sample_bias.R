@@ -24,6 +24,8 @@
 #' @import dplyr
 #' @importFrom cli cli_abort
 #'
+#' @family detection
+#'
 #' @examples
 #' # Load packages
 #' library(sf)
@@ -63,7 +65,6 @@
 #'     geom_sf(data = bias_area) +
 #'     geom_sf(aes(colour = bias_weight_f)) +
 #'     ggtitle("Sampling Bias via Polygon")
-#'
 
 apply_polygon_sample_bias <- function(occurrences_sf,
                                       bias_area,
