@@ -54,18 +54,22 @@ The function simulates occurrences of a species within a given spatial
 and/or temporal extend.
 }
 \examples{
-# Load Packages
+# Load packages
 library(sf)
 library(ggplot2)
 
+# Create polygon
 plgn <- st_polygon(list(cbind(c(5,10,8,2,3,5), c(2,1,7,9,5,2))))
-plot(plgn)
+ggplot() +
+  geom_sf(data = plgn) +
+  theme_minimal()
 
+## Random spatial pattern with 4 time points
 occ_sf <- simulate_occurrences(
   plgn,
   n_time_points = 4,
-  initial_average_abundance = 100
-  )
+  initial_average_abundance = 100,
+  seed = 123)
 
 ggplot() +
  geom_sf(data = occ_sf) +
@@ -76,11 +80,13 @@ ggplot() +
       subtitle = "4 time steps") +
  theme_bw()
 
+## Clustered spatial pattern with 4 time points
 occ_sf_100 <- simulate_occurrences(
   plgn,
   spatial_autocorr = 100,
   n_time_points = 4,
-   initial_average_abundance = 100)
+  initial_average_abundance = 100,
+  seed = 123)
 
 ggplot() +
   geom_sf(data = occ_sf_100) +
