@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gcube <a href="https://b-cubed-eu.github.io/gcube/"><img src="man/figures/logo.png" alt="gcube website" align="right" height="120"/></a>
+# gcube <a href="https://b-cubed-eu.github.io/gcube/"><img src="man/figures/hexa_sticker.png" alt="gcube website" align="right" height="120"/></a>
 
 <!-- badges: start -->
 
