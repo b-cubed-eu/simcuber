@@ -18,3 +18,17 @@ navbar:
       icon: fa-cube
       href: https://b-cubed.eu/
       aria-label: B-Cubed website
+
+reference:
+  - title: "Core gcube workflow functions"
+    contents:
+      - has_concept("main")
+  - title: "Occurrence process helper functions"
+    contents:
+      - has_concept("occurrence")
+  - title: "Detection process helper functions"
+    contents:
+      - has_concept("detection")
+  - title: "Grid designation process helper functions"
+    contents:
+      - has_concept("designation")
