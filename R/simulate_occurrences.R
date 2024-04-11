@@ -21,8 +21,8 @@
 #' the function will sample `n_time_points` times from a Poisson
 #' distribution with average (lambda) `initial_average_occurrences`. When a
 #' function is specified (e.g. the internal `simulate_random_walk()` function).
-#' @param spatiotemporal_autocorr A numeric value between indicating the
-#' strength of spatiotemporal autocorrelation.
+#' @param ... Additional argument to be passed to the `temporal_function`
+#' function.
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
@@ -86,7 +86,7 @@ simulate_occurrences <- function(
     spatial_autocorr = c("random", "clustered"),
     n_time_points = 1,
     temporal_function = NA,
-    spatiotemporal_autocorr = NA,
+    ...,
     seed = NA) {
 
   # Do some tests
@@ -97,6 +97,7 @@ simulate_occurrences <- function(
     initial_average_occurrences = initial_average_abundance,
     n_time_points = n_time_points,
     temporal_function = temporal_function,
+    ...,
     seed = seed)
 
   # Create the random field
@@ -104,16 +105,18 @@ simulate_occurrences <- function(
   plgn_maxr <- max(boxplgn[3] - boxplgn[1], boxplgn[4] - boxplgn[2])
   res <- plgn_maxr / 100
 
-  rs_pattern <- create_spatial_pattern(polygon = plgn,
-                                       resolution = res,
-                                       spatial_pattern = spatial_autocorr,
-                                       seed = NA,
-                                       n_sim = 1)
+  rs_pattern <- create_spatial_pattern(
+    polygon = plgn,
+    resolution = res,
+    spatial_pattern = spatial_autocorr,
+    seed = seed,
+    n_sim = 1)
 
   # Sample occurrences from raster
   occ <- sample_occurrences_from_raster(
     rs = rs_pattern,
-    ts = ts)
+    ts = ts,
+    seed = seed)
 
   # Return the occurences (sf point geometry)
   return(occ)
