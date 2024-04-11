@@ -10,7 +10,7 @@ simulate_occurrences(
   spatial_autocorr = c("random", "clustered"),
   n_time_points = 1,
   temporal_function = NA,
-  spatiotemporal_autocorr = NA,
+  ...,
   seed = NA
 )
 }
@@ -38,8 +38,8 @@ the function will sample \code{n_time_points} times from a Poisson
 distribution with average (lambda) \code{initial_average_occurrences}. When a
 function is specified (e.g. the internal \code{simulate_random_walk()} function).}
 
-\item{spatiotemporal_autocorr}{A numeric value between indicating the
-strength of spatiotemporal autocorrelation.}
+\item{...}{Additional argument to be passed to the \code{temporal_function}
+function.}
 
 \item{seed}{A positive numeric value. The seed for random number generation
 to make results reproducible. If \code{NA} (the default), no seed is used.}
