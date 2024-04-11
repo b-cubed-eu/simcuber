@@ -10,7 +10,8 @@ set.seed(9)
 ## dataset without coordinateUncertaintyInMeters
 observations_sf1 <- data.frame(
   lat = runif(n_points, ylim[1], ylim[2]),
-  long = runif(n_points, xlim[1], xlim[2])
+  long = runif(n_points, xlim[1], xlim[2]),
+  time_point = 1
   ) %>%
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
 
