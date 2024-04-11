@@ -2,8 +2,10 @@
 #'
 #' Draws occurrences (points) from a spatial random field (raster)
 #'
-#' @param rs a raster object (terra)
-#' @param ts vector with the number of occurrences by time step
+#' @param rs A raster object (terra).
+#' @param ts A vector with the number of occurrences per time point.
+#' @param seed A positive numeric value. The seed for random number generation
+#' to make results reproducible. If `NA` (the default), no seed is used.
 #'
 #' @return An sf object with POINT geometry
 #'
@@ -68,7 +70,8 @@
 
 sample_occurrences_from_raster <- function(
     rs,
-    ts) {
+    ts,
+    seed = NA) {
   # checks
   # check if rs is a terra raster
   if (!"SpatRaster" %in% class(rs)) {
@@ -78,6 +81,17 @@ sample_occurrences_from_raster <- function(
   # check if ts is a numeric vector
   if (!is.numeric(ts)) {
     cli::cli_abort(c("{.var ts} must be an numeric vector"))
+  }
+
+  # check if seed is a single value
+  if (length(seed) != 1) {
+    cli::cli_abort(c(
+      "{.var seed} must be a numeric vector of length 1.",
+      "x" = paste(
+        "You've supplied a {.cls {class(seed)}} vector",
+        "of length {length(seed)}."
+      )
+    ))
   }
 
   # centre the values of the raster (mean = 0)
@@ -92,6 +106,21 @@ sample_occurrences_from_raster <- function(
   # Should be recoded: with lapply? or map?
 
   occ_pf <- NULL
+
+  # Set seed if provided
+  if (!is.na(seed)) {
+    if (is.numeric(seed)) {
+      withr::local_seed(seed)
+    } else {
+      cli::cli_abort(c(
+        "{.var seed} must be a numeric vector of length 1.",
+        "x" = paste(
+          "You've supplied a {.cls {class(seed)}} vector",
+          "of length {length(seed)}."
+        )
+      ))
+    }
+  }
 
   for (t in 1:length(ts)) {
     occ_p <- terra::spatSample(
