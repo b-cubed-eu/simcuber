@@ -36,11 +36,11 @@
 #'   spatial_pattern = "clustered",
 #'   seed = 123)
 #'
-#' # Sample from random field
-#' set.seed(123)
+#' # Sample 200 occurrences from random field
 #' pts_occ_clustered <- sample_occurrences_from_raster(
 #'   rs = rs_pattern_clustered,
-#'   ts = rpois(1, 100))
+#'   ts = 200,
+#'   seed = 123)
 #'
 #' ggplot() +
 #'   geom_spatraster(data = rs_pattern_clustered) +
@@ -56,11 +56,11 @@
 #'   spatial_pattern = 100,
 #'   seed = 123)
 #'
-#' # Sample from random field
-#' set.seed(123)
+#' # Sample 200 occurrences from random field
 #' pts_occ_large <- sample_occurrences_from_raster(
 #'   rs = rs_pattern_large,
-#'   ts = rpois(1, 100))
+#'   ts = 200,
+#'   seed = 123)
 #'
 #' ggplot() +
 #'   geom_spatraster(data = rs_pattern_large) +
