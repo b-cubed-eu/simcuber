@@ -4,12 +4,15 @@
 \alias{sample_occurrences_from_raster}
 \title{Sample occurrences from spatial random field}
 \usage{
-sample_occurrences_from_raster(rs, ts)
+sample_occurrences_from_raster(rs, ts, seed = NA)
 }
 \arguments{
-\item{rs}{a raster object (terra)}
+\item{rs}{A raster object (terra).}
 
-\item{ts}{vector with the number of occurrences by time step}
+\item{ts}{A vector with the number of occurrences per time point.}
+
+\item{seed}{A positive numeric value. The seed for random number generation
+to make results reproducible. If \code{NA} (the default), no seed is used.}
 }
 \value{
 An sf object with POINT geometry
@@ -37,11 +40,11 @@ rs_pattern_clustered <- create_spatial_pattern(
   spatial_pattern = "clustered",
   seed = 123)
 
-# Sample from random field
-set.seed(123)
+# Sample 200 occurrences from random field
 pts_occ_clustered <- sample_occurrences_from_raster(
   rs = rs_pattern_clustered,
-  ts = rpois(1, 100))
+  ts = 200,
+  seed = 123)
 
 ggplot() +
   geom_spatraster(data = rs_pattern_clustered) +
@@ -57,11 +60,11 @@ rs_pattern_large <- create_spatial_pattern(
   spatial_pattern = 100,
   seed = 123)
 
-# Sample from random field
-set.seed(123)
+# Sample 200 occurrences from random field
 pts_occ_large <- sample_occurrences_from_raster(
   rs = rs_pattern_large,
-  ts = rpois(1, 100))
+  ts = 200,
+  seed = 123)
 
 ggplot() +
   geom_spatraster(data = rs_pattern_large) +
