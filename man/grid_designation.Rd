@@ -15,9 +15,9 @@ grid_designation(
 )
 }
 \arguments{
-\item{observations}{An sf object with POINT geometry and a
-\code{coordinateUncertaintyInMeters} column. If this column is not present, the
-function will assume no (zero meters) uncertainty around the observation
+\item{observations}{An sf object with POINT geometry and a \code{time_point} and
+\code{coordinateUncertaintyInMeters} column. If this last column is not present,
+the function will assume no (zero meters) uncertainty around the observation
 points.}
 
 \item{grid}{An sf object with POLYGON geometry (usually a grid) to which
@@ -79,6 +79,7 @@ coordinate_uncertainty <- rgamma(n_points, shape = 5, rate = 0.1)
 observations_sf <- data.frame(
   lat = runif(n_points, ylim[1], ylim[2]),
   long = runif(n_points, xlim[1], xlim[2]),
+  time_point = 1,
   coordinateUncertaintyInMeters = coordinate_uncertainty
 ) \%>\%
   st_as_sf(coords = c("long", "lat"), crs = 3035)
