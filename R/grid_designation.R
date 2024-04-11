@@ -3,9 +3,9 @@
 #' The function designates observations to cells of a given grid to create an
 #' aggregated data cube.
 #'
-#' @param observations An sf object with POINT geometry and a
-#' `coordinateUncertaintyInMeters` column. If this column is not present, the
-#' function will assume no (zero meters) uncertainty around the observation
+#' @param observations An sf object with POINT geometry and a `time_point` and
+#' `coordinateUncertaintyInMeters` column. If this last column is not present,
+#' the function will assume no (zero meters) uncertainty around the observation
 #' points.
 #' @param grid An sf object with POLYGON geometry (usually a grid) to which
 #' observations should be designated.
@@ -65,6 +65,7 @@
 #' observations_sf <- data.frame(
 #'   lat = runif(n_points, ylim[1], ylim[2]),
 #'   long = runif(n_points, xlim[1], xlim[2]),
+#'   time_point = 1,
 #'   coordinateUncertaintyInMeters = coordinate_uncertainty
 #' ) %>%
 #'   st_as_sf(coords = c("long", "lat"), crs = 3035)
@@ -215,22 +216,27 @@ grid_designation <- function(
     # Aggregate to get the cube
     occ_cube_df <- intersect_grid %>%
       sf::st_drop_geometry() %>%
-      dplyr::group_by_at(id_col) %>%
+      dplyr::group_by_at(c("time_point", id_col)) %>%
       dplyr::summarise(
         n = dplyr::n(),
         min_coord_uncertainty = min(.data$coordinateUncertaintyInMeters)
       ) %>%
       dplyr::ungroup()
 
-    # Add zeroes
+    # Add zeroes for each time point
+    design <- expand.grid(time_point = unique(occ_cube_df$time_point),
+                          id_col = unique(grid[[id_col]])) %>%
+      dplyr::rename_with(~id_col, id_col) %>%
+      dplyr::full_join(grid, by = dplyr::join_by(!!id_col))
+
     out_sf <- occ_cube_df %>%
-      dplyr::full_join(grid, by = dplyr::join_by(!!id_col)) %>%
+      dplyr::full_join(design, by = c(id_col, "time_point")) %>%
       dplyr::mutate(n = as.integer(ifelse(is.na(n), 0, n))) %>%
       sf::st_as_sf(crs = sf::st_crs(grid))
   } else {
     # Return new points
     out_sf <- intersect_grid %>%
-      dplyr::select_at(c(id_col, "coordinateUncertaintyInMeters"))
+      dplyr::select_at(c(id_col, "time_point", "coordinateUncertaintyInMeters"))
   }
 
   return(out_sf)

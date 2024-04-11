@@ -7,9 +7,9 @@
 #' `p_norm` % of all possible samples from this Normal distribution fall within
 #' the uncertainty circle.
 #'
-#' @param observations An sf object with POINT geometry and a
-#' `coordinateUncertaintyInMeters` column. If this column is not present, the
-#' function will assume no (zero meters) uncertainty around the observation
+#' @param observations An sf object with POINT geometry and a `time_point` and
+#' `coordinateUncertaintyInMeters` column. If this last column is not present,
+#' the function will assume no (zero meters) uncertainty around the observation
 #' points.
 #' @param p_norm A numeric value between 0 and 1. The proportion of all
 #' possible samples from a a bivariate Normal distribution that fall within the
@@ -46,6 +46,7 @@
 #' observations_sf <- data.frame(
 #'   lat = runif(n_points, ylim[1], ylim[2]),
 #'   long = runif(n_points, xlim[1], xlim[2]),
+#'   time_point = 1,
 #'   coordinateUncertaintyInMeters = coordinate_uncertainty
 #' ) %>%
 #'   st_as_sf(coords = c("long", "lat"), crs = 3035)
@@ -138,7 +139,7 @@ sample_from_binormal_circle <- function(
 
     # New points are equal to original points in case of no uncertainty
     new_points <- observations %>%
-      dplyr::select("coordinateUncertaintyInMeters")
+      dplyr::select("time_point", "coordinateUncertaintyInMeters")
   } else {
     # Calculate 2-dimensional means and variance-covariance matrices
     means <- sf::st_coordinates(observations$geometry)
@@ -162,6 +163,7 @@ sample_from_binormal_circle <- function(
     # Create geometry and add uncertainties
     new_points <- cbind(
       new_points_df,
+      time_point = observations$time_point,
       coordinateUncertaintyInMeters = observations$coordinateUncertaintyInMeters
     ) %>%
       sf::st_as_sf(coords = c("x_new", "y_new"), crs = sf::st_crs(observations))

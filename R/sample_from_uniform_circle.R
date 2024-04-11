@@ -3,9 +3,9 @@
 #' The function samples occurrences of a species within the uncertainty circle
 #' around each observation assuming a Uniform distribution.
 #'
-#' @param observations An sf object with POINT geometry and a
-#' `coordinateUncertaintyInMeters` column. If this column is not present, the
-#' function will assume no (zero meters) uncertainty around the observation
+#' @param observations An sf object with POINT geometry and a `time_point` and
+#' `coordinateUncertaintyInMeters` column. If this last column is not present,
+#' the function will assume no (zero meters) uncertainty around the observation
 #' points.
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
@@ -38,6 +38,7 @@
 #' observations_sf <- data.frame(
 #'   lat = runif(n_points, ylim[1], ylim[2]),
 #'   long = runif(n_points, xlim[1], xlim[2]),
+#'   time_point = 1,
 #'   coordinateUncertaintyInMeters = coordinate_uncertainty
 #' ) %>%
 #'   st_as_sf(coords = c("long", "lat"), crs = 3035)
@@ -121,7 +122,7 @@ sample_from_uniform_circle <- function(
       coords = c("x_new", "y_new"),
       crs = sf::st_crs(observations)
     ) %>%
-    dplyr::select("coordinateUncertaintyInMeters")
+    dplyr::select("time_point", "coordinateUncertaintyInMeters")
 
   return(new_points)
 }
