@@ -14,7 +14,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+The workflow for simulating a biodiversity data cube used in gcube can be divided in three steps or processes:
+
+1. Occurrence process
+2. Detection process
+3. Grid designation process
+
+This vignette documents the first part of the gcube simulation workflow, viz. the occurrence process.
+
+```{r setup, warning=FALSE, message=FALSE}
 # Load packages
 library(gcube)
 
@@ -22,3 +30,43 @@ library(sf)        # work with spatial objects
 library(tidyverse) # data wrangling and visualisation
 library(tidyterra) # visualisation spatraster objects
 ```
+
+# Input
+
+The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
+The user can change these arguments to allow for more flexibility.
+In this vignette we will demonstrate the different options.
+
+As input, we create a polygon in which we want to simulate occurrences.
+
+```{r}
+polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
+                                 c(200, 100, 700, 1000, 900, 500, 200))))
+```
+
+The polygon looks like this.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  theme_minimal()
+```
+
+# Simulate occurrences
+
+We generate occurrence points within the polygon using the `simulate_occurrences()` function.
+Default arguments ensure that an sf object with POLYGON geometry is sufficient to simulate occurrences.
+
+```
+?simulate_occurrences
+```
+
+The options for user defined arguments are demonstrated in the next subsections.
+
+## Changing number of occurrences over time
+
+
+## Changing the degree of spatial clustering
+
+
+# Examples
