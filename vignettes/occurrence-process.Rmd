@@ -12,7 +12,9 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  out.width = "80%",
+  dpi = 300
 )
 ```
 
@@ -181,16 +183,160 @@ tibble(
   time_point = seq_along(n_occurrences_linear)
   ) %>%
   ggplot(aes(x = time_point, y = n_occurrences)) +
-  geom_point() +
-  geom_smooth(method = "lm", formula = "y ~ x", se = FALSE) +
-  theme_minimal()
+    geom_point() +
+    geom_smooth(method = "lm", formula = "y ~ x", se = FALSE) +
+    theme_minimal()
 ```
 
 ## Changing the degree of spatial clustering
 
+We can also choose the amount of spatial clustering.
+We visualise this with the helper functions used in `simulate_occurrences()`.
 
+```
+?create_spatial_pattern
+```
 
+**Option 1**
 
+There are defaults for random and clustered patterns.
+Let's look at the default where we have no clustering.
 
+```{r}
+rs_pattern_random <- create_spatial_pattern(
+  polygon = polygon,
+  resolution = 10,
+  spatial_pattern = "random",
+  seed = 123)
+```
 
-# Examples
+We see values of high sampling probability randomly distributed.
+
+```{r}
+ggplot() +
+  geom_spatraster(data = rs_pattern_random) +
+  scale_fill_continuous(type = "viridis") +
+  theme_minimal()
+```
+
+**Option 2**
+
+Let's look at the default where we have clustering (same as `spatial_pattern = 10`, see further).
+
+```{r}
+rs_pattern_clustered <- create_spatial_pattern(
+  polygon = polygon,
+  resolution = 10,
+  spatial_pattern = "clustered",
+  seed = 123)
+```
+
+We see values of high sampling probability clustered together.
+
+```{r}
+ggplot() +
+  geom_spatraster(data = rs_pattern_clustered) +
+  scale_fill_continuous(type = "viridis") +
+  theme_minimal()
+```
+
+**Option 3**
+
+We can also change the clustering ourselves.
+A larger number for `spatial_pattern` means a broader size of the clusters area.
+Let's look at a low value for clustering.
+
+```{r}
+rs_pattern_clustered2 <- create_spatial_pattern(
+  polygon = polygon,
+  resolution = 10,
+  spatial_pattern = 5,
+  seed = 123)
+```
+
+We see values of high sampling probability in multiple, smaller clusters.
+
+```{r}
+ggplot() +
+  geom_spatraster(data = rs_pattern_clustered2) +
+  scale_fill_continuous(type = "viridis") +
+  theme_minimal()
+```
+
+Let's look at a high value for clustering.
+
+```{r}
+rs_pattern_clustered3 <- create_spatial_pattern(
+  polygon = polygon,
+  resolution = 10,
+  spatial_pattern = 100,
+  seed = 123)
+```
+
+We see values of high sampling probability in fewer, larger clusters.
+
+```{r}
+ggplot() +
+  geom_spatraster(data = rs_pattern_clustered3) +
+  scale_fill_continuous(type = "viridis") +
+  theme_minimal()
+```
+
+The patterns generated above are then used for sampling using a different helper function.
+
+```
+?sample_occurrences_from_raster
+```
+
+If we for example sample 500 occurrences from the last raster, we see the sampling is according to the expected pattern.
+
+```{r}
+pts_occ_clustered3 <- sample_occurrences_from_raster(
+  rs = rs_pattern_clustered3,
+  ts = 500,
+  seed = 123)
+
+ggplot() +
+  geom_spatraster(data = rs_pattern_clustered3) +
+  geom_sf(data = pts_occ_clustered3) +
+  scale_fill_continuous(type = "viridis") +
+  theme_minimal()
+```
+
+# Example
+
+Now that we know how the helper functions work, we can generate occurrence points within the polygon using the `simulate_occurrences()` function.
+We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100.
+
+```{r}
+occurrences_df <- simulate_occurrences(
+  plgn = polygon,
+  initial_average_abundance = 100,
+  n_time_points = 6,
+  temporal_function = simulate_random_walk,
+  sd_step = 1,
+  spatial_autocorr = "random",
+  seed = 123)
+```
+
+This is the number of occurrences we have for each time point
+
+```{r}
+occurrences_df %>%
+  st_drop_geometry() %>%
+  count(time_point) %>%
+  ggplot(aes(x =  time_point, y = n)) +
+    geom_point() +
+    theme_minimal()
+```
+
+This spatial distribution of the occurrences for each time point
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrences_df) +
+  facet_wrap(~time_point, nrow = 2) +
+  ggtitle("Distribution of occurrences for each time point") +
+  theme_minimal()
+```
