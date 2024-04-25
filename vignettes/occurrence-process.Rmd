@@ -29,7 +29,8 @@ This vignette documents the first part of the gcube simulation workflow, viz. th
 library(gcube)
 
 library(sf)        # work with spatial objects
-library(tidyverse) # data wrangling and visualisation
+library(dplyr)     # data wrangling
+library(ggplot2)   # data visualisation
 library(tidyterra) # visualisation spatraster objects
 ```
 
