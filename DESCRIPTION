@@ -2,8 +2,8 @@ Package: gcube
 Title: Simulating Biodiversity Data Cubes
 Version: 0.0.0
 Authors@R: c(
-    person("Ward", "Langeraert", email = "ward.langeraert@inbo.be",
-           role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5900-8109")),
+    person("Ward", "Langeraert", , "ward.langeraert@inbo.be", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-5900-8109")),
     person("Wissam", "Barhdadi", role = "ctb",
            comment = c(ORCID = "0000-0001-9304-3971")),
     person("Dimitri", "Brosens", role = "ctb",
@@ -48,14 +48,16 @@ Imports:
     vegan,
     withr
 Suggests: 
+    ggExtra,
     ggplot2,
-    tidyterra,
-    testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0),
+    tidyterra
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
-VignetteBuilder: knitr

@@ -31,6 +31,7 @@ library(gcube)
 library(sf)        # work with spatial objects
 library(dplyr)     # data wrangling
 library(ggplot2)   # data visualisation
+library(ggExtra)   # enhance data visualisation
 ```
 
 # Input
