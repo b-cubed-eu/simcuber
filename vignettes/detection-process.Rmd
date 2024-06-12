@@ -202,3 +202,32 @@ ggplot() +
   geom_sf_text(data = grid, aes(label = round(bias_weight, 2))) +
   theme_minimal()
 ```
+
+# Example
+
+Now that we know how the helper functions work, we can simulate the detection process using the `sample_observations()` function.
+We can for example state that our species has a 0.9 detection probability and this time we say there is a very small chance to detect it on the road.
+
+```{r}
+detections_df_raw <- sample_observations(
+  occurrences_df,
+  detection_probability = 0.9,
+  sampling_bias = "polygon",
+  bias_area = road_polygon,
+  bias_strength = 0.1,
+  seed = 123)
+```
+
+We see that a lot of occurrences are detected due to the high detection probability, but this is not the case on the road where few are detected.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  geom_sf(data = detections_df_raw,
+          aes(colour = sampling_status)) +
+  scale_colour_manual(values = c("blue", "red")) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(title = "Distribution of occurrences for each time point") +
+  theme_minimal()
+```
