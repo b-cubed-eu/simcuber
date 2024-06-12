@@ -3,8 +3,10 @@ title: "3. Grid designation process"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{grid-designation-process}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -31,3 +33,132 @@ library(dplyr)     # data wrangling
 library(ggplot2)   # data visualisation
 ```
 
+# Input
+
+The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
+The user can change these arguments to allow for more flexibility.
+As input, we create a polygon in which we simulate occurrences.
+
+```{r}
+polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
+                                 c(200, 100, 700, 1000, 900, 500, 200))))
+```
+
+The polygon looks like this.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  theme_minimal()
+```
+
+Also consider a road across our polygon.
+
+```{r}
+# Define the road width
+road_width <- 50
+
+# Create road points
+road_points <- rbind(c(100, 500), c(1000, 500))
+
+# Create road-like polygon within the given polygon
+road_polygon <- st_linestring(road_points) %>%
+  st_buffer(road_width) %>%
+  st_intersection(polygon) %>%
+  st_polygon() %>%
+  st_sfc() %>%
+  st_as_sf() %>%
+  rename(geometry = x)
+```
+
+The result looks like this.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  theme_minimal()
+```
+
+We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100 (see `vignette("occurrence-process")`).
+
+```{r}
+occurrences_df <- simulate_occurrences(
+  plgn = polygon,
+  initial_average_abundance = 100,
+  n_time_points = 6,
+  temporal_function = simulate_random_walk,
+  sd_step = 1,
+  spatial_autocorr = "random",
+  seed = 123)
+```
+
+This is the spatial distribution of the occurrences for each time point
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrences_df) +
+  facet_wrap(~time_point, nrow = 2) +
+  ggtitle("Distribution of occurrences for each time point") +
+  theme_minimal()
+```
+
+We detect occurrences using a 0.9 detection probability and a bias of 0.1 to detect occurrences on the road (see `vignette("detection-process")`).
+
+```{r}
+detections_df_raw <- sample_observations(
+  occurrences_df,
+  detection_probability = 0.9,
+  sampling_bias = "polygon",
+  bias_area = road_polygon,
+  bias_strength = 0.1,
+  seed = 123)
+```
+
+This is the spatial distribution of the occurrences for each time point
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  geom_sf(data = detections_df_raw,
+          aes(colour = sampling_status)) +
+  scale_colour_manual(values = c("blue", "red")) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(title = "Distribution of occurrences for each time point") +
+  theme_minimal()
+```
+
+We only keep the detected occurrences and add 25 meters of uncertainty to each observation (see `vignette("detection-process")`).
+
+```{r}
+# Keep detected occurrences
+detections_df <- detections_df_raw %>%
+  dplyr::filter(sampling_status == "detected")
+
+# Add 25 m coordinate uncertainty
+observations_df <- add_coordinate_uncertainty(
+  observations = detections_df,
+  coords_uncertainty_meters = 25)
+```
+
+The final observations with uncertainty circles look like this.
+
+```{r}
+# Create sf object with uncertainty circles
+buffered_observations <- st_buffer(
+  observations_df,
+  observations_df$coordinateUncertaintyInMeters)
+
+# Visualise
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  geom_sf(data = buffered_observations,
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = observations_df, colour = "firebrick", size = 0.8) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(title = "Distribution of observations for each time point") +
+  theme_minimal()
+```
