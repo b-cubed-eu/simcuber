@@ -154,3 +154,51 @@ ggplot() +
        colour = "bias_weight") +
   theme_minimal()
 ```
+
+3. With `"manual"`, bias weights depend on their location inside grid cells of a given grid where each cell has its own value. We can visualise this using the helper function `apply_manual_sampling_bias()`.
+
+```{r}
+?apply_manual_sampling_bias
+```
+
+Lets create a grid and give random bias weights to each cell.
+
+```{r}
+grid <- st_make_grid(
+    polygon,
+    n = c(10, 10),
+    square = TRUE) %>%
+  st_sf()
+set.seed(123)
+grid$bias_weight <- runif(nrow(grid), min = 0, max = 1)
+```
+
+Plot the grid.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = grid, alpha = 0) +
+  geom_sf_text(data = grid, aes(label = round(bias_weight, 2))) +
+  theme_minimal()
+```
+
+We use the helper function. We only use time point 1.
+
+```{r}
+occurrence_bias_df2 <- apply_manual_sampling_bias(
+  occurrences_df %>% dplyr::filter(time_point == 1),
+  bias_weights = grid)
+```
+
+We indeed see higher bias weights for occurrences where with higher values in the grid cells.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = grid, alpha = 0) +
+  geom_sf(data = occurrence_bias_df2,
+          aes(colour = bias_weight)) +
+  geom_sf_text(data = grid, aes(label = round(bias_weight, 2))) +
+  theme_minimal()
+```
