@@ -1,0 +1,33 @@
+---
+title: "2. Simulating the detection process"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{detection-process}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The workflow for simulating a biodiversity data cube used in gcube can be divided in three steps or processes:
+
+1. Occurrence process
+2. Detection process
+3. Grid designation process
+
+This vignette documents the second part of the gcube simulation workflow, viz. the detection process.
+
+```{r setup, warning=FALSE, message=FALSE}
+# Load packages
+library(gcube)
+
+library(sf)        # work with spatial objects
+library(dplyr)     # data wrangling
+library(ggplot2)   # data visualisation
+library(tidyterra) # visualisation spatraster objects
+```
