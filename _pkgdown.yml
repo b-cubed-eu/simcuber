@@ -19,6 +19,14 @@ navbar:
       href: https://b-cubed.eu/
       aria-label: B-Cubed website
 
+articles:
+  - title: "Vignettes"
+    navbar: ~
+    contents:
+    - occurrence-process
+    - detection-process
+    - grid-designation-process
+
 reference:
   - title: "Core gcube workflow functions"
     contents:
