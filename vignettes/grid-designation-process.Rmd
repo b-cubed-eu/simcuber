@@ -300,3 +300,64 @@ ggExtra::ggMarginal(scatter_normal, type = "histogram")
 ```
 
 If no coordinate uncertainty is provided, the original observation point is used for grid designation.
+
+# Example
+
+Now we know how to use the randomisation in `grid_designation()`.
+By default we use uniform randomisation.
+We create an occurrence cube for time point 1.
+
+```{r}
+occurrence_cube_df <- grid_designation(
+  observations_df,
+  cube_grid,
+  seed = 123)
+```
+
+For each grid cell (column `id`) at each time point (column `time_point`), we get the number of observations (column `n`, sampled within uncertainty circle) and the minimal coordinate uncertainty (column `min_coord_uncertainty`).
+The latter is 25 for each grid cell since each observation had the same coordinate uncertainty.
+
+```{r}
+head(occurrence_cube_df %>% st_drop_geometry())
+```
+
+Get sampled points within uncertainty circle by setting `aggregate = FALSE`.
+
+```{r}
+sampled_points <- grid_designation(
+  observations_df,
+  cube_grid,
+  seed = 123,
+  aggregate = FALSE)
+```
+
+Lets visualise were the samples were taken for time point 1.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrence_cube_df %>% dplyr::filter(time_point == 1),
+          alpha = 0) +
+  geom_sf_text(data = occurrence_cube_df %>% dplyr::filter(time_point == 1),
+               aes(label = n)) +
+  geom_sf(data = buffered_observations %>% dplyr::filter(time_point == 1),
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = sampled_points %>% dplyr::filter(time_point == 1),
+          colour = "blue") +
+  geom_sf(data = observations_df %>% dplyr::filter(time_point == 1),
+          colour = "firebrick") +
+  theme_minimal()
+```
+
+Visualise minimal coordinate uncertainty for time points 1 and 2.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrence_cube_df %>% dplyr::filter(time_point %in% 1:2),
+          aes(fill = min_coord_uncertainty), alpha = 0.5) +
+  geom_sf_text(data = occurrence_cube_df %>% dplyr::filter(time_point %in% 1:2),
+               aes(label = n)) +
+  facet_wrap(~time_point) +
+  theme_minimal()
+```
