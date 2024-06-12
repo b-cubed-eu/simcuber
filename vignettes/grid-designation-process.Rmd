@@ -1,5 +1,5 @@
 ---
-title: "3. Grid designation process"
+title: "3. Specifying the grid designation process"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{grid-designation-process}
