@@ -318,7 +318,7 @@ occurrences_df <- simulate_occurrences(
   seed = 123)
 ```
 
-This is the number of occurrences we have for each time point
+This is the number of occurrences we have for each time point.
 
 ```{r}
 occurrences_df %>%
@@ -329,7 +329,7 @@ occurrences_df %>%
     theme_minimal()
 ```
 
-This spatial distribution of the occurrences for each time point
+This is the spatial distribution of the occurrences for each time point.
 
 ```{r}
 ggplot() +
