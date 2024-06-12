@@ -231,3 +231,46 @@ ggplot() +
   labs(title = "Distribution of occurrences for each time point") +
   theme_minimal()
 ```
+
+# Adding coordinate uncertainty
+
+To mimic real life data collection, we can finally add coordinate uncertainty to our observations.
+We only keep the detected occurrences of the previous example.
+
+```{r}
+detections_df <- detections_df_raw %>%
+  dplyr::filter(sampling_status == "detected")
+```
+
+We add coordinate uncertainty to the observations using the `add_coordinate_uncertainty()` function.
+
+```{r}
+?add_coordinate_uncertainty
+```
+
+You can add a value for all observations or a vector with a single value for each observation.
+Lets add 25 meters of uncertainty to each observation.
+
+```{r}
+observations_df <- add_coordinate_uncertainty(
+  observations = detections_df,
+  coords_uncertainty_meters = 25)
+```
+
+Created and sf object with uncertainty circles to visualise this.
+
+```{r}
+buffered_observations <- st_buffer(
+  observations_df,
+  observations_df$coordinateUncertaintyInMeters)
+
+ggplot() +
+  geom_sf(data = polygon, fill = "lightgreen") +
+  geom_sf(data = road_polygon) +
+  geom_sf(data = buffered_observations,
+          fill = alpha("firebrick", 0.3)) +
+  geom_sf(data = observations_df, colour = "firebrick", size = 0.8) +
+  facet_wrap(~time_point, nrow = 2) +
+  labs(title = "Distribution of occurrences for each time point") +
+  theme_minimal()
+```
