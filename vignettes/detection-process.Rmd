@@ -271,6 +271,6 @@ ggplot() +
           fill = alpha("firebrick", 0.3)) +
   geom_sf(data = observations_df, colour = "firebrick", size = 0.8) +
   facet_wrap(~time_point, nrow = 2) +
-  labs(title = "Distribution of occurrences for each time point") +
+  labs(title = "Distribution of observations for each time point") +
   theme_minimal()
 ```
