@@ -3,8 +3,10 @@ title: "2. Simulating the detection process"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{detection-process}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -29,5 +31,49 @@ library(gcube)
 library(sf)        # work with spatial objects
 library(dplyr)     # data wrangling
 library(ggplot2)   # data visualisation
-library(tidyterra) # visualisation spatraster objects
 ```
+
+# Input
+
+The functions are set up such that a single polygon as input is enough to go through this workflow using default arguments.
+The user can change these arguments to allow for more flexibility.
+As input, we create a polygon in which we simulate occurrences.
+
+```{r}
+polygon <- st_polygon(list(cbind(c(500, 1000, 1000, 600, 200, 100, 500),
+                                 c(200, 100, 700, 1000, 900, 500, 200))))
+```
+
+The polygon looks like this.
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  theme_minimal()
+```
+
+We can for example sample randomly within the polygon over 6 time points were we use a random walk over time with an initial average number of occurrences equal to 100 (see `vignette("occurrence-process")`).
+
+```{r}
+occurrences_df <- simulate_occurrences(
+  plgn = polygon,
+  initial_average_abundance = 100,
+  n_time_points = 6,
+  temporal_function = simulate_random_walk,
+  sd_step = 1,
+  spatial_autocorr = "random",
+  seed = 123)
+```
+
+This is the spatial distribution of the occurrences for each time point
+
+```{r}
+ggplot() +
+  geom_sf(data = polygon) +
+  geom_sf(data = occurrences_df) +
+  facet_wrap(~time_point, nrow = 2) +
+  ggtitle("Distribution of occurrences for each time point") +
+  theme_minimal()
+```
+
+# Simulate occurrences
