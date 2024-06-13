@@ -36,7 +36,8 @@ test_that("add_coordinate_uncertainty() add the right coordinate uncertainty", {
   )
 })
 
-test_that("add_coordinate_uncertainty() can handle different uncertainties per point", {
+test_that(paste("add_coordinate_uncertainty() can handle different",
+                "uncertainties per point"), {
   # set the number of observations and coordinate uncertainty to test
   n_observations <- 23
   coords_uncertanty_set <- sample(1000:4000, size = n_observations)
@@ -56,7 +57,8 @@ test_that("add_coordinate_uncertainty() can handle different uncertainties per p
   )
 })
 
-test_that("add_coordinate_uncertainty() returns error on wrong length of coords_uncertainty_meters", {
+test_that(paste("add_coordinate_uncertainty() returns error on wrong length of",
+                "coords_uncertainty_meters"), {
   # set the number of observations and coordinate uncertainty to test
   n_observations <- 7
   # create observations_sf object to be used as an input
@@ -73,7 +75,8 @@ test_that("add_coordinate_uncertainty() returns error on wrong length of coords_
       observations_sf,
       coords_uncertainty_meters = rep(1234, n_observations + 1)
     ),
-    regexp = "`coords_uncertainty_meters` has diferent length than the number of rows in `observations`",
+    regexp = paste("`coords_uncertainty_meters` has diferent length than the",
+                   "number of rows in `observations`"),
     fixed = TRUE
   )
 
@@ -82,11 +85,13 @@ test_that("add_coordinate_uncertainty() returns error on wrong length of coords_
       observations_sf,
       coords_uncertainty_meters = rep(1234, n_observations + 1)
     ),
-    regexp = "You've supplied `coords_uncertainty_meters` of length 8 but `observations` has 7 rows."
+    regexp = paste("You've supplied `coords_uncertainty_meters` of length 8",
+                   "but `observations` has 7 rows.")
   )
 })
 
-test_that("add_coordinate_uncertainty() returns error on non sf occurrence input", {
+test_that(paste("add_coordinate_uncertainty() returns error on non sf",
+                "occurrence input"), {
   not_an_sf_object <- data.frame(1:5, 5, 6)
 
   # Use an expectation per line of the error.
@@ -102,12 +107,14 @@ test_that("add_coordinate_uncertainty() returns error on non sf occurrence input
   )
 })
 
-test_that("add_coordinate_uncertainty() returns error when occurrence geompetry is different from POINT", {
+test_that(paste("add_coordinate_uncertainty() returns error when occurrence",
+          "geometry is different from POINT"), {
 
   }
 )
 
-test_that("add_coordinate_uncertainty() returns error when coordinate uncertainty is not a number", {
+test_that(paste("add_coordinate_uncertainty() returns error when coordinate",
+                "uncertainty is not a number"), {
   # create observations_sf object to be used as an input
   observations_sf <-
     data.frame(

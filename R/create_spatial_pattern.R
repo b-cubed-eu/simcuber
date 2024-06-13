@@ -112,7 +112,7 @@
 #'   scale_fill_continuous(type = "viridis") +
 #'   theme_minimal()
 
-create_spatial_pattern <- function (
+create_spatial_pattern <- function(
     polygon,
     resolution,
     spatial_pattern = c("random", "clustered"),

@@ -1,6 +1,7 @@
 #' Add coordinate uncertainty to observations
 #'
-#' Adds a column to the observations sf object with the coordinate uncertainty in meters.
+#' Adds a column to the observations sf object with the coordinate uncertainty
+#' in meters.
 #'
 #'
 #' @param observations An sf object with POINT geometry.

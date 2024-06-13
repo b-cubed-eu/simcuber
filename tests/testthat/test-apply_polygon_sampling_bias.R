@@ -15,7 +15,7 @@ occurrences_sf <- data.frame(
   sf::st_as_sf(coords = c("long", "lat"), crs = 3035)
 
 ## Create bias_area polygon overlapping two of the points
-selected_occurrences_sf <- sf::st_union(occurrences_sf[2:3,])
+selected_occurrences_sf <- sf::st_union(occurrences_sf[2:3, ])
 bias_area <- sf::st_convex_hull(selected_occurrences_sf) %>%
   sf::st_buffer(dist = 100) %>%
   sf::st_as_sf()
@@ -66,15 +66,19 @@ test_that("arguments are of the right class", {
   expect_error(apply_polygon_sampling_bias(occurrences_sf,
                                          bias_area = occurrences_sf,
                                          bias_strength = 1),
-               regexp = "`bias_area` must be an sf object containing one or more polygon geometry types",
+               regexp = paste("`bias_area` must be an sf object containing one",
+                              "or more polygon geometry types"),
                fixed = TRUE)
 
   # bias_strength is numeric
-  expect_error(apply_polygon_sampling_bias(occurrences_sf,
-                                         bias_area = bias_area,
-                                         bias_strength = data.frame(x = 1, y = 1)),
-               regexp = "`bias_strength` must be a numeric object",
-               fixed = TRUE)
+  expect_error(
+      apply_polygon_sampling_bias(
+        occurrences_sf,
+        bias_area = bias_area,
+        bias_strength = data.frame(x = 1, y = 1)
+        ),
+     regexp = "`bias_strength` must be a numeric object",
+     fixed = TRUE)
   expect_error(apply_polygon_sampling_bias(occurrences_sf,
                                          bias_area = bias_area,
                                          bias_strength = "string"),
@@ -109,4 +113,3 @@ test_that("only one column (bias_weight) is added to occurrences_sf", {
   # Checking if the added column is bias_weight
   expect_true("bias_weight" %in% names(result))
 })
-

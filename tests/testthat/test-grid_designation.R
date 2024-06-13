@@ -139,7 +139,7 @@ test_that("provided id column present in provided grid", {
 
 ## expected outputs
 test_that("output class is correct", {
-  # aggregate = TRUE
+  # aggregate is TRUE
   suppressWarnings({
     expect_s3_class(grid_designation(observations_sf1, grid = grid_df1),
                     class = "sf")
@@ -151,7 +151,7 @@ test_that("output class is correct", {
   expect_s3_class(grid_designation(observations_sf2, grid = grid_df1),
                   class = "data.frame")
 
-  # aggregate = FALSE
+  # aggregate is FALSE
   suppressWarnings({
     expect_s3_class(grid_designation(observations_sf1, grid = grid_df1,
                                      aggregate = FALSE),
@@ -250,7 +250,7 @@ test_that("no minimal coordinate uncertainty for empty grid cells", {
   grid_designation_df4 <- grid_designation(observations_sf2, grid = grid_df1,
                                            randomisation = "normal")
 
-  # randomisation = "uniform"
+  # randomisation is "uniform"
   suppressWarnings({
     expect_equal(sum(grid_designation_df1$n == 0),
                  sum(is.na(grid_designation_df1$min_coord_uncertainty))
@@ -260,7 +260,7 @@ test_that("no minimal coordinate uncertainty for empty grid cells", {
     sum(is.na(grid_designation_df2$min_coord_uncertainty))
   )
 
-  # randomisation = "normal"
+  # randomisation is "normal"
   suppressWarnings({
     expect_equal(sum(grid_designation_df3$n == 0),
       sum(is.na(grid_designation_df3$min_coord_uncertainty))
@@ -344,7 +344,7 @@ test_that("check possible outcomes for grid cell designation", {
 })
 
 test_that("number of observations should equal numbers in grid", {
-  # randomisation = "uniform"
+  # randomisation is "uniform"
   suppressWarnings({
     expect_equal(grid_designation(observations_sf1, grid = grid_df1) %>%
                    dplyr::pull(n) %>%
@@ -355,7 +355,7 @@ test_that("number of observations should equal numbers in grid", {
                  dplyr::pull(n) %>%
                  sum(),
                nrow(observations_sf2))
-  # randomisation = "normal"
+  # randomisation is "normal"
   suppressWarnings({
     expect_equal(grid_designation(observations_sf1, grid = grid_df1,
                                   randomisation = "normal") %>%
@@ -371,7 +371,7 @@ test_that("number of observations should equal numbers in grid", {
 })
 
 test_that("number of observations be the same as output if aggregate = FALSE", {
-  # randomisation = "uniform"
+  # randomisation is "uniform"
   suppressWarnings({
     expect_equal(grid_designation(observations_sf1, grid = grid_df1,
                                   aggregate = FALSE) %>%
@@ -382,7 +382,7 @@ test_that("number of observations be the same as output if aggregate = FALSE", {
                                 aggregate = FALSE) %>%
                  nrow(),
                nrow(observations_sf2))
-  # randomisation = "normal"
+  # randomisation is "normal"
   suppressWarnings({
     expect_equal(grid_designation(observations_sf1, grid = grid_df1,
                                   randomisation = "normal",

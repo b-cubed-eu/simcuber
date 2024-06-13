@@ -277,8 +277,8 @@ scatter_normal <- ggplot() +
                linewidth = 1.5, colour = "darkgreen") +
   geom_label(aes(y = 503, x = 212.5, label = "25 m"), colour = "black",
              size = 5) +
-  stat_ellipse(data = coordinates_normal_df,
-               aes(x = X, y = Y), level = 0.975, linewidth = 1, color = "firebrick") +
+  stat_ellipse(data = coordinates_normal_df, aes(x = X, y = Y),
+               level = 0.975, linewidth = 1, color = "firebrick") +
   geom_point(data = coordinates_point_df,
              aes(x = X, y = Y),
              color = "firebrick", size = 2) +
