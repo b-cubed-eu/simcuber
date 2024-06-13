@@ -1,10 +1,10 @@
 cff-version: 1.2.0
 message: If you use this software, please cite it using these metadata.
-title: 'gcube: Simulating Biodiversity Data Cubes'
+title: "gcube: Simulating Biodiversity Data Cubes"
 authors:
 - given-names: Ward
   family-names: Langeraert
-  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  affiliation: Research Institute for Nature and Forest (INBO)
   orcid: 0000-0002-5900-8109
 keywords:
 - simulation
@@ -15,14 +15,14 @@ keywords:
 contact:
 - given-names: Ward
   family-names: Langeraert
-  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  affiliation: Research Institute for Nature and Forest (INBO)
   orcid: 0000-0002-5900-8109
 doi: ~
 license: MIT
-repository-code: /
+repository-code: https://github.com/b-cubed-eu/simcuber/
 type: software
-abstract: Simulation framework for biodiversity data cubes.
+abstract: "Simulation framework for biodiversity data cubes."
 identifiers:
 - type: url
-  value: []
-version: 0.0.0
+  value: https://b-cubed-eu.github.io/gcube/
+version: 0.0.1
