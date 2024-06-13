@@ -91,6 +91,9 @@ occurrences_df <- simulate_occurrences(
   plgn = polygon,
   seed = 123)
 #> [using unconditional Gaussian simulation]
+```
+
+``` r
 
 # Visualise
 ggplot() + 
@@ -207,6 +210,8 @@ ggplot() +
   scale_y_continuous(limits = c(st_bbox(polygon)$ymin, st_bbox(polygon)$ymax)) +
   labs(x = "", y = "", fill = "n") +
   theme_minimal()
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_text()`).
 ```
 
 <img src="man/figures/README-grid-designation-1.png" width="80%" />
@@ -225,6 +230,8 @@ ggplot() +
   scale_fill_continuous(type = "viridis") +
   labs(x = "", y = "") +
   theme_minimal()
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_text()`).
 ```
 
 <img src="man/figures/README-visualise-designation-1.png" width="80%" />
