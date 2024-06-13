@@ -18,7 +18,7 @@
 #'   the \code{spatial_pattern} argument change the range parameter of the
 #'   spherical variogram model. \code{spatial_pattern = 1} means the range has
 #'   the same size of the grid cell, which is defined in \code{resolution}
-#'   argument. We use the functon [gstat::vgm()] to implement the
+#'   argument. We use the function [gstat::vgm()] to implement the
 #'   spherical variogram model
 #'
 #' @seealso [gstat::vgm()] and its \code{range} argument

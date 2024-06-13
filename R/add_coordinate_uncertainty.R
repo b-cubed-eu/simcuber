@@ -5,7 +5,7 @@
 #'
 #' @param observations An sf object with POINT geometry.
 #' @param coords_uncertainty_meters A numeric value or a vector of numeric
-#' values indicating the coordinate uncertainty associated with oberservations.
+#' values indicating the coordinate uncertainty associated with observations.
 #'
 #' @return An sf object with POINT geometry with an additional column
 #' `coordinateUncertaintyInMeters`.

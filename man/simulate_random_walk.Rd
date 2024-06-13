@@ -27,7 +27,7 @@ the random steps.}
 to make results reproducible. If \code{NA} (the default), no seed is used.}
 }
 \value{
-A vector of integers of length n_time_points with the avarage number
+A vector of integers of length n_time_points with the average number
 of occurrences.
 }
 \description{
