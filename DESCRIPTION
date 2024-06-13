@@ -1,9 +1,9 @@
 Package: gcube
 Title: Simulating Biodiversity Data Cubes
-Version: 0.0.0
+Version: 0.0.1
 Authors@R: c(
     person("Ward", "Langeraert", , "ward.langeraert@inbo.be", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-5900-8109")),
+           comment = c(ORCID = "0000-0002-5900-8109", affiliation = "Research Institute for Nature and Forest (INBO)")),
     person("Wissam", "Barhdadi", role = "ctb",
            comment = c(ORCID = "0000-0001-9304-3971")),
     person("Dimitri", "Brosens", role = "ctb",
@@ -56,6 +56,9 @@ Suggests:
     tidyterra
 VignetteBuilder: 
     knitr
+Config/checklist/communities: b3
+Config/checklist/keywords: simulation; data cubes; B-Cubed; biodiversity;
+    Monte-Carlo
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
