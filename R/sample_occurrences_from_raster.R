@@ -122,7 +122,7 @@ sample_occurrences_from_raster <- function(
     }
   }
 
-  for (t in 1:length(ts)) {
+  for (t in seq_along(ts)) {
     occ_p <- terra::spatSample(
       x = rs3, size = ts[t], method = "weights",
       replace = TRUE, as.points = TRUE

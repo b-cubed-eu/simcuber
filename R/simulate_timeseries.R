@@ -160,7 +160,7 @@ simulate_timeseries <- function(
     seed = NA) {
   # Checks
   # Check if initial_average_occurrences is a positive integer
-  if (!is.numeric(initial_average_occurrences) |
+  if (!is.numeric(initial_average_occurrences) ||
       initial_average_occurrences <= 0) {
     cli::cli_abort(
       c(
@@ -172,7 +172,7 @@ simulate_timeseries <- function(
     )
   }
   # Check if n_time_points is a positive integer
-  if (!is.numeric(n_time_points) | n_time_points <= 0) {
+  if (!is.numeric(n_time_points) || n_time_points <= 0) {
     cli::cli_abort(
       c(
         "{.var n_time_points} must be a positive integer.",
@@ -183,7 +183,7 @@ simulate_timeseries <- function(
     )
   }
   # Check if temporal_function is NA or a function
-  if (suppressWarnings(!is.na(temporal_function)) &
+  if (suppressWarnings(!is.na(temporal_function)) &&
     !is.function(temporal_function)) {
     cli::cli_abort(
       c(

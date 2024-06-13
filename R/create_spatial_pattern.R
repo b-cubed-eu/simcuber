@@ -112,13 +112,13 @@
 #'   scale_fill_continuous(type = "viridis") +
 #'   theme_minimal()
 
-create_spatial_pattern <- function(
+create_spatial_pattern <- function (
     polygon,
     resolution,
     spatial_pattern = c("random", "clustered"),
     seed = NA,
     n_sim = 1
-  ){
+  ) {
   ### Start checks
   if (length(seed) != 1) {
     cli::cli_abort(c(
@@ -195,9 +195,9 @@ create_spatial_pattern <- function(
 
   # Use gstat object with vgm model to create spatial pattern
   gstat_model <- gstat::gstat(
-    formula = z~1,
-    locations = ~x+y,
-    dummy = T,
+    formula = z ~ 1,
+    locations = ~ x + y,
+    dummy = TRUE,
     beta = 1,
     model = gstat::vgm(
       psill = 0.5,
