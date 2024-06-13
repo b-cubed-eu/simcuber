@@ -17,7 +17,8 @@ An sf object with POINT geometry with an additional column
 \code{coordinateUncertaintyInMeters}.
 }
 \description{
-Adds a column to the observations sf object with the coordinate uncertainty in meters.
+Adds a column to the observations sf object with the coordinate uncertainty
+in meters.
 }
 \examples{
 
