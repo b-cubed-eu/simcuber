@@ -60,7 +60,7 @@ ggplot() +
 We generate occurrence points within the polygon using the `simulate_occurrences()` function.
 Default arguments ensure that an sf object with POLYGON geometry is sufficient to simulate occurrences.
 
-```
+```{r, eval=FALSE}
 ?simulate_occurrences
 ```
 
@@ -73,7 +73,7 @@ You can change the trend in number of occurrences over time.
 We visualise this with the helper functions used in `simulate_occurrences()`.
 The number of occurrences are always drawn from a Poisson distribution.
 
-```
+```{r, eval=FALSE}
 ?simulate_timeseries
 ```
 
@@ -192,7 +192,7 @@ tibble(
 We can also choose the amount of spatial clustering.
 We visualise this with the helper functions used in `simulate_occurrences()`.
 
-```
+```{r, eval=FALSE}
 ?create_spatial_pattern
 ```
 
@@ -283,7 +283,7 @@ ggplot() +
 
 The patterns generated above are then used for sampling using a different helper function.
 
-```
+```{r, eval=FALSE}
 ?sample_occurrences_from_raster
 ```
 
