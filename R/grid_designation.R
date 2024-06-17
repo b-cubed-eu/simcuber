@@ -98,6 +98,7 @@ grid_designation <- function(
     randomisation = c("uniform", "normal"),
     p_norm = ifelse(tolower(randomisation[1]) == "uniform", NA, 0.95)) {
   ### Start checks
+  # 1. Check input type and length
   # Check if observations is an sf object
   stopifnot("`observations` must be an sf object." =
               inherits(observations, "sf"))
@@ -124,26 +125,26 @@ grid_designation <- function(
            call. = FALSE)
   })
 
-  # 3. other checks
-  # crs of sf objects
-  if (sf::st_crs(observations) != sf::st_crs(grid)) {
-    cli::cli_abort("sf::st_crs(observations) == sf::st_crs(grid) is not TRUE")
-  }
-  # unique ids if id column is provided
+  # 2. Other checks
+  # CRS of sf objects
+  stopifnot("CRS of `observations` must have the same CRS as `grid`." =
+              sf::st_crs(observations) == sf::st_crs(grid))
+
+  # Unique ids if id column is provided
   if (id_col != "row_names") {
     if (!id_col %in% names(grid)) {
-      cli::cli_warn(
-        paste(
-          'Column name "{id_col}" not present in provided grid!',
-          "Creating ids based on row names"
+      warning(
+        paste0(
+          "Column name '",  id_col, "' not present in provided grid!\n",
+          "Creating ids based on row names."
+          )
         )
-      )
       id_col <- "row_names"
     } else if (length(unique(grid[[id_col]])) != nrow(grid)) {
-      cli::cli_warn(
-        paste(
-          "Column `{id_col}` does not contain unique ids for grid",
-          "cells! Creating new ids based on row names"
+      warning(
+        paste0(
+          "Column '",  id_col, "' does not contain unique ids for grid cells!",
+          "\nCreating new ids based on row names."
         )
       )
       id_col <- "row_names"
