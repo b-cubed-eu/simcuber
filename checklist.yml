@@ -1,10 +1,7 @@
 description: Configuration file for checklist::check_pkg()
 package: yes
 allowed:
-  warnings:
-  - motivation: EU is funder
-    value: '`Research Institute for Nature and Forest (INBO)` must be listed as copyright
-      holder and funder and use `NA_character_` as email.'
+  warnings: []
   notes:
   - motivation: This is just a note that reminds CRAN maintainers to check that the
       submission comes actually from his maintainer and not anybody else.
@@ -13,8 +10,6 @@ allowed:
       Maintainer: 'Ward Langeraert <ward.langeraert@inbo.be>'
 
       New submission
-  - motivation: EU is funder
-    value: funder differs from `Research Institute for Nature and Forest (INBO)`
 required:
 - CITATION
 - DESCRIPTION
