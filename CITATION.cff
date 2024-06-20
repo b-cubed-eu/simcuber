@@ -19,7 +19,7 @@ contact:
   orcid: 0000-0002-5900-8109
 doi: ~
 license: MIT
-repository-code: https://github.com/b-cubed-eu/simcuber/
+repository-code: https://github.com/b-cubed-eu/gcube/
 type: software
 abstract: "Simulation framework for biodiversity data cubes."
 identifiers:
