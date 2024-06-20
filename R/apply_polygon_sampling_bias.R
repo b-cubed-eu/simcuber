@@ -85,8 +85,11 @@ apply_polygon_sampling_bias <- function(occurrences_sf,
 
   if (!unique(sf::st_geometry_type(bias_area)) == "POLYGON") {
     cli::cli_abort(c(
-      "{.var bias_area} must be an sf object containing one or more polygon geometry types.",
-      "x" = "You've supplied an sf object with {.cls {unique(sf::st_geometry_type(bias_area))}} geometry types."
+      paste("{.var bias_area} must be an sf object containing one or more",
+            "polygon geometry types."),
+      "x" = paste("You've supplied an sf object with",
+                  "{.cls {unique(sf::st_geometry_type(bias_area))}} geometry",
+                  "types.")
     ))
   }
 

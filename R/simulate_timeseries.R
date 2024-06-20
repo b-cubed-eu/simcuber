@@ -26,6 +26,7 @@
 #'
 #' @export
 #'
+#' @import assertthat
 #' @importFrom stats rpois
 #'
 #' @family occurrence
@@ -160,40 +161,17 @@ simulate_timeseries <- function(
     seed = NA) {
   # Checks
   # Check if initial_average_occurrences is a positive integer
-  if (!is.numeric(initial_average_occurrences) |
-      initial_average_occurrences <= 0) {
-    cli::cli_abort(
-      c(
-        "{.var initial_average_occurrences} must be a positive integer.",
-        "x" = "You've supplied a {.cls {class(initial_average_occurrences)}}
-      value of {initial_average_occurrences}."
-      ),
-      class = "gcube_error_wrong_argument_type"
-    )
-  }
+  stopifnot("`initial_average_occurrences` must be a positive integer." =
+              assertthat::is.count(initial_average_occurrences))
+
   # Check if n_time_points is a positive integer
-  if (!is.numeric(n_time_points) | n_time_points <= 0) {
-    cli::cli_abort(
-      c(
-        "{.var n_time_points} must be a positive integer.",
-        "x" = "You've supplied a {.cls {class(n_time_points)}}
-             value of {n_time_points}."
-      ),
-      class = "gcube_error_wrong_argument_type"
-    )
-  }
+  stopifnot("`n_time_points` must be a positive integer." =
+              assertthat::is.count(n_time_points))
+
   # Check if temporal_function is NA or a function
-  if (suppressWarnings(!is.na(temporal_function)) &
-    !is.function(temporal_function)) {
-    cli::cli_abort(
-      c(
-        "{.var temporal_function} must be `NA` or a function.",
-        "x" = "You've supplied a {.cls {class(temporal_function)}}",
-        "value of {temporal_function}."
-      ),
-      class = "gcube_error_wrong_argument_type"
-    )
-  }
+  stopifnot("`temporal_function` must be `NA` or a function." =
+              is.function(temporal_function) || is.na(temporal_function))
+
   # Set seed if provided
   if (!is.na(seed)) {
     if (is.numeric(seed)) {

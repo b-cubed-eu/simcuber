@@ -40,7 +40,7 @@ It creates a raster with a spatial pattern for the area of a polygon.
 the \code{spatial_pattern} argument change the range parameter of the
 spherical variogram model. \code{spatial_pattern = 1} means the range has
 the same size of the grid cell, which is defined in \code{resolution}
-argument. We use the functon \code{\link[gstat:vgm]{gstat::vgm()}} to implement the
+argument. We use the function \code{\link[gstat:vgm]{gstat::vgm()}} to implement the
 spherical variogram model
 }
 \examples{

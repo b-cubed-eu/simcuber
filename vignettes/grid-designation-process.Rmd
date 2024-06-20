@@ -169,7 +169,7 @@ ggplot() +
 Now we can make a data cube from our observations while taking into account the uncertainty.
 We can create the grid using the `grid_designation()` function.
 
-```{r}
+```{r, eval=FALSE}
 ?grid_designation
 ```
 
@@ -199,7 +199,7 @@ This point is then designated to the overlapping grid cell.
 Another option is `"normal"` where a point is sampled from a bivariate Normal distribution with means equal to the observation point and the variance equal to `(-coordinateUncertaintyInMeters^2) / (2 * log(1 - p_norm))` such that `p_norm` % of all possible samples from this Normal distribution fall within the uncertainty circle.
 This can be visualised by using these helper functions.
 
-```{r}
+```{r, eval=FALSE}
 ?sample_from_uniform_circle
 ?sample_from_binormal_circle
 ```
@@ -277,8 +277,8 @@ scatter_normal <- ggplot() +
                linewidth = 1.5, colour = "darkgreen") +
   geom_label(aes(y = 503, x = 212.5, label = "25 m"), colour = "black",
              size = 5) +
-  stat_ellipse(data = coordinates_normal_df,
-               aes(x = X, y = Y), level = 0.975, linewidth = 1, color = "firebrick") +
+  stat_ellipse(data = coordinates_normal_df, aes(x = X, y = Y),
+               level = 0.975, linewidth = 1, color = "firebrick") +
   geom_point(data = coordinates_point_df,
              aes(x = X, y = Y),
              color = "firebrick", size = 2) +

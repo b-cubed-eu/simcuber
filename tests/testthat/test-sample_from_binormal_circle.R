@@ -152,14 +152,14 @@ test_that("coordinateUncertaintyInMeters column is handled correctly", {
 # original point are not larger than their coordinate uncertainty
 test_smaller_distances <- function(observations, seed = NA) {
   sample_dists <- sample_from_binormal_circle(observations, seed = seed) %>%
-    dplyr::mutate(dist = sf::st_distance(geometry, observations,
+    dplyr::mutate(dist = sf::st_distance(.data$geometry, observations,
                               by_element = TRUE),
            dist = as.numeric(dist)) %>%
     dplyr::pull(dist)
   test_dists_df <- observations %>%
     sf::st_drop_geometry() %>%
     mutate(dist = sample_dists,
-           test = dist < coordinateUncertaintyInMeters)
+           test = dist < .data$coordinateUncertaintyInMeters)
 
   return(all(test_dists_df$test))
 }

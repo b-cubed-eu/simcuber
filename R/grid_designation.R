@@ -45,6 +45,7 @@
 #'
 #' @import dplyr
 #' @import sf
+#' @import assertthat
 #' @importFrom rlang .data
 #' @importFrom cli cli_abort cli_warn
 #'
@@ -97,100 +98,58 @@ grid_designation <- function(
     aggregate = TRUE,
     randomisation = c("uniform", "normal"),
     p_norm = ifelse(tolower(randomisation[1]) == "uniform", NA, 0.95)) {
-  # Default randomisation is first element in vector
-  randomisation <- randomisation[1]
-
   ### Start checks
-  # 1. check input lengths
-  if (length(id_col) != 1) {
-    cli::cli_abort(c(
-      "{.var id_col} must be a character vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(id_col)}} vector",
-        "of length {length(id_col)}."
-      )
-    ))
-  }
-  if (length(aggregate) != 1) {
-    cli::cli_abort(c(
-      "{.var aggregate} must be a logical vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(aggregate)}} vector",
-        "of length {length(aggregate)}."
-      )
-    ))
-  }
+  # 1. Check input type and length
+  # Check if observations is an sf object
+  stopifnot("`observations` must be an sf object." =
+              inherits(observations, "sf"))
 
-  # 2. check input classes
-  if (!"sf" %in% class(observations)) {
-    cli::cli_abort(c(
-      "{.var observations} must be an sf object",
-      "x" = "You've supplied a {.cls {class(observations)}} object."
-    ))
-  }
-  if (!"sf" %in% class(grid)) {
-    cli::cli_abort(c(
-      "{.var grid} must be an sf object.",
-      "x" = "You've supplied a {.cls {class(grid)}} object."
-    ))
-  }
-  if (!is.character(id_col)) {
-    cli::cli_abort(c(
-      "{.var id_col} must be a character vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(id_col)}} vector",
-        "of length {length(id_col)}."
-      )
-    ))
-  }
-  if (!is.logical(aggregate)) {
-    cli::cli_abort(c(
-      "{.var aggregate} must be a logical vector of length 1.",
-      "x" = paste(
-        "You've supplied a {.cls {class(aggregate)}} vector",
-        "of length {length(aggregate)}."
-      )
-    ))
-  }
-  if (!is.character(randomisation)) {
-    cli::cli_abort(c(
-      "{.var randomisation} must be a character vector.",
-      "x" = "You've supplied a {.cls {class(randomisation)}} vector"
-    ))
-  }
+  # Check if grid is an sf object
+  stopifnot("`grid` must be an sf object." =
+              inherits(grid, "sf"))
 
-  # 3. other checks
-  # crs of sf objects
-  if (sf::st_crs(observations) != sf::st_crs(grid)) {
-    cli::cli_abort("sf::st_crs(observations) == sf::st_crs(grid) is not TRUE")
-  }
-  # unique ids if id column is provided
+  # Check if id_col is a character vector of length 1
+  stopifnot("`id_col` must be a character vector of length 1." =
+              assertthat::is.string(id_col))
+
+
+  # Check if aggregate is a logical vector of length 1
+  stopifnot("`aggregate` must be a logical vector of length 1." =
+              assertthat::is.flag(aggregate) && assertthat::noNA(aggregate))
+
+  # Check if randomisation is uniform or normal
+  randomisation <- tryCatch({
+    match.arg(randomisation, c("uniform", "normal"))
+    }, error = function(e) {
+      stop(paste("`randomisation` must be one of", paste(c("uniform", "normal"),
+                                                         collapse = ", ")),
+           call. = FALSE)
+  })
+
+  # 2. Other checks
+  # CRS of sf objects
+  stopifnot("CRS of `observations` must have the same CRS as `grid`." =
+              sf::st_crs(observations) == sf::st_crs(grid))
+
+  # Unique ids if id column is provided
   if (id_col != "row_names") {
     if (!id_col %in% names(grid)) {
-      cli::cli_warn(
-        paste(
-          'Column name "{id_col}" not present in provided grid!',
-          "Creating ids based on row names"
+      warning(
+        paste0(
+          "Column name '",  id_col, "' not present in provided grid!\n",
+          "Creating ids based on row names."
+          )
         )
-      )
       id_col <- "row_names"
     } else if (length(unique(grid[[id_col]])) != nrow(grid)) {
-      cli::cli_warn(
-        paste(
-          "Column `{id_col}` does not contain unique ids for grid",
-          "cells! Creating new ids based on row names"
+      warning(
+        paste0(
+          "Column '",  id_col, "' does not contain unique ids for grid cells!",
+          "\nCreating new ids based on row names."
         )
       )
       id_col <- "row_names"
     }
-  }
-  # randomisation arguments must match
-  randomisation <- tolower(randomisation)
-  if (!randomisation %in% c("uniform", "normal")) {
-    cli::cli_abort(c(
-      '{.var randomisation} should be one of "uniform", "normal".',
-      "x" = "You've supplied {.val {randomisation[1]}}."
-    ))
   }
   ### End checks
 

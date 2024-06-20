@@ -83,7 +83,7 @@ The detection of occurrences depends on the detection probability of a species
 and the sampling bias (includes both sampling bias and effort).
 This process can be simulated using the `sample_observations()` function.
 
-```{r}
+```{r, eval=FALSE}
 ?sample_observations
 ```
 
@@ -95,7 +95,7 @@ For bias there are 3 options: `"no_bias"`, `"polygon"` or `"manual"`.
 1. With `"no_bias"`, only the detection probability value will decide whether an occurrence is observed or not.
 2. With `"polygon"`, bias weights depend on their location inside or outside a given polygon with a certain bias strength. We can visualise this using the helper function `apply_polygon_sampling_bias()`.
 
-```{r}
+```{r, eval=FALSE}
 ?apply_polygon_sampling_bias
 ```
 
@@ -157,7 +157,7 @@ ggplot() +
 
 3. With `"manual"`, bias weights depend on their location inside grid cells of a given grid where each cell has its own value. We can visualise this using the helper function `apply_manual_sampling_bias()`.
 
-```{r}
+```{r, eval=FALSE}
 ?apply_manual_sampling_bias
 ```
 
@@ -244,7 +244,7 @@ detections_df <- detections_df_raw %>%
 
 We add coordinate uncertainty to the observations using the `add_coordinate_uncertainty()` function.
 
-```{r}
+```{r, eval=FALSE}
 ?add_coordinate_uncertainty
 ```
 

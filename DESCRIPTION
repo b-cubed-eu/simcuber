@@ -1,9 +1,9 @@
 Package: gcube
 Title: Simulating Biodiversity Data Cubes
-Version: 0.0.0
+Version: 0.0.1
 Authors@R: c(
     person("Ward", "Langeraert", , "ward.langeraert@inbo.be", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-5900-8109")),
+           comment = c(ORCID = "0000-0002-5900-8109", affiliation = "Research Institute for Nature and Forest (INBO)")),
     person("Wissam", "Barhdadi", role = "ctb",
            comment = c(ORCID = "0000-0001-9304-3971")),
     person("Dimitri", "Brosens", role = "ctb",
@@ -29,7 +29,9 @@ Authors@R: c(
     person("Annegreet", "Veeken", role = "ctb",
            comment = c(ORCID = "0000-0003-4291-5981")),
     person("Mukhtar Muhammed", "Yahaya", role = "ctb",
-           comment = c(ORCID = "0009-0008-9200-0863"))
+           comment = c(ORCID = "0009-0008-9200-0863")),
+    person("Research Institute for Nature and Forest (INBO)", , , "info@inbo.be", role = "cph"),
+    person("European Union's Horizon Europe Research and Innovation Programme (ID No 101059592)", role = "fnd")
   )
 Description: Simulation framework for biodiversity data cubes.
 License: MIT + file LICENSE
@@ -37,6 +39,7 @@ URL: https://github.com/b-cubed-eu/gcube,
     https://b-cubed-eu.github.io/gcube/
 BugReports: https://github.com/b-cubed-eu/gcube/issues
 Imports:
+    assertthat,
     cli,
     dplyr,
     gstat,
@@ -56,6 +59,9 @@ Suggests:
     tidyterra
 VignetteBuilder: 
     knitr
+Config/checklist/communities: b3; inbo
+Config/checklist/keywords: simulation; data cubes; B-Cubed; biodiversity;
+    Monte-Carlo
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB

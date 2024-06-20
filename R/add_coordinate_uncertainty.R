@@ -1,11 +1,12 @@
 #' Add coordinate uncertainty to observations
 #'
-#' Adds a column to the observations sf object with the coordinate uncertainty in meters.
+#' Adds a column to the observations sf object with the coordinate uncertainty
+#' in meters.
 #'
 #'
 #' @param observations An sf object with POINT geometry.
 #' @param coords_uncertainty_meters A numeric value or a vector of numeric
-#' values indicating the coordinate uncertainty associated with oberservations.
+#' values indicating the coordinate uncertainty associated with observations.
 #'
 #' @return An sf object with POINT geometry with an additional column
 #' `coordinateUncertaintyInMeters`.
@@ -71,7 +72,8 @@ add_coordinate_uncertainty <- function(
   if (!is_point) {
     cli::cli_abort(c(
       "{.var observations} must be a 'sf' object with POINT geometry",
-      "x" = "You've supplied an 'sf' object of geometry type {.cls {sf::st_geometry_type(observations, by_geometry = FALSE)}}"
+      paste("x" = "You've supplied an 'sf' object of geometry type {.cls",
+            "{sf::st_geometry_type(observations, by_geometry = FALSE)}}")
       )
     )
    }
@@ -84,8 +86,10 @@ add_coordinate_uncertainty <- function(
     if (!size_match) {
       cli::cli_abort(
         c(
-          "{.var coords_uncertainty_meters} has diferent length than the number of rows in {.var observations}",
-          "x" = paste("You've supplied {.var coords_uncertainty_meters} of length {length(coords_uncertainty_meters)}",
+          paste("{.var coords_uncertainty_meters} has diferent length than the",
+                "number of rows in {.var observations}"),
+          "x" = paste("You've supplied {.var coords_uncertainty_meters} of",
+                      "length {length(coords_uncertainty_meters)}",
                       "but {.var observations} has {nrow(observations)} rows.")
         )
      )

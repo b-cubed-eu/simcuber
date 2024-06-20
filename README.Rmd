@@ -10,7 +10,7 @@ editor_options:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = file.path("man", "figures", "README-"),
+  fig.path = file.path("man", "figures", "readme-"),
   out.width = "80%",
   dpi = 300
 )
@@ -20,7 +20,9 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-[![CRAN status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube) [![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml) [![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/) [![repo status](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+[![CRAN status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
+[![Release](https://img.shields.io/github/release/b-cubed-eu/gcube.svg)](https://github.com/b-cubed-eu/gcube/releases)
+[![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml) [![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/) [![repo status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
 <!-- badges: end -->
 
@@ -184,8 +186,6 @@ ggplot() +
           fill = alpha("firebrick", 0.3)) +
   geom_sf(data = sampled_points, colour = "blue") +
   geom_sf(data = observations_df, colour = "firebrick") +
-  scale_x_continuous(limits = c(st_bbox(polygon)$xmin, st_bbox(polygon)$xmax)) +
-  scale_y_continuous(limits = c(st_bbox(polygon)$ymin, st_bbox(polygon)$ymax)) +
   labs(x = "", y = "", fill = "n") +
   theme_minimal()
 ```
@@ -198,8 +198,6 @@ ggplot() +
   geom_sf(data = occurrence_cube_df, aes(fill = min_coord_uncertainty),
           alpha = 0.5, linewidth = 1) +
   geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
-  scale_x_continuous(limits = c(st_bbox(polygon)$xmin, st_bbox(polygon)$xmax)) +
-  scale_y_continuous(limits = c(st_bbox(polygon)$ymin, st_bbox(polygon)$ymax)) +
   scale_fill_continuous(type = "viridis") +
   labs(x = "", y = "") +
   theme_minimal()

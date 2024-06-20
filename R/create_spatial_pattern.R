@@ -18,7 +18,7 @@
 #'   the \code{spatial_pattern} argument change the range parameter of the
 #'   spherical variogram model. \code{spatial_pattern = 1} means the range has
 #'   the same size of the grid cell, which is defined in \code{resolution}
-#'   argument. We use the functon [gstat::vgm()] to implement the
+#'   argument. We use the function [gstat::vgm()] to implement the
 #'   spherical variogram model
 #'
 #' @seealso [gstat::vgm()] and its \code{range} argument
@@ -118,7 +118,7 @@ create_spatial_pattern <- function(
     spatial_pattern = c("random", "clustered"),
     seed = NA,
     n_sim = 1
-  ){
+  ) {
   ### Start checks
   if (length(seed) != 1) {
     cli::cli_abort(c(
@@ -195,9 +195,9 @@ create_spatial_pattern <- function(
 
   # Use gstat object with vgm model to create spatial pattern
   gstat_model <- gstat::gstat(
-    formula = z~1,
-    locations = ~x+y,
-    dummy = T,
+    formula = z ~ 1,
+    locations = ~ x + y,
+    dummy = TRUE,
     beta = 1,
     model = gstat::vgm(
       psill = 0.5,

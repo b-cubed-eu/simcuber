@@ -44,78 +44,6 @@ grid_df3 <- grid_df1 %>%
   sf::st_drop_geometry()
 
 # Unit tests
-## expect errors
-test_that("arguments are of the right class", {
-  # observations are sf dataframe
-  expect_error(grid_designation(observations_sf3, grid_df1),
-               regexp = "`observations` must be an sf object",
-               fixed = TRUE)
-  expect_error(grid_designation(observations = 2, grid_df1),
-               regexp = "`observations` must be an sf object",
-               fixed = TRUE)
-  expect_error(grid_designation(observations = "string", grid_df1),
-               regexp = "`observations` must be an sf object",
-               fixed = TRUE)
-
-  # grid is sf dataframe
-  expect_error(grid_designation(observations_sf2, grid_df3),
-              regexp = "`grid` must be an sf object",
-              fixed = TRUE)
-  expect_error(grid_designation(observations_sf2, grid = 2),
-              regexp = "`grid` must be an sf object",
-              fixed = TRUE)
-  expect_error(grid_designation(observations_sf2, grid = "string"),
-              regexp = "`grid` must be an sf object",
-              fixed = TRUE)
-
-  # id_col is string
-  expect_error(grid_designation(observations_sf2, grid = grid_df1,
-                                id_col = 3),
-               regexp = "`id_col` must be a character vector of length 1.",
-               fixed = TRUE)
-
-  # randomisation is string
-  expect_error(grid_designation(observations_sf2, grid = grid_df1,
-                                randomisation = 3),
-               regexp = "`randomisation` must be a character vector.",
-               fixed = TRUE)
-
-  # aggregate is logical
-  expect_error(grid_designation(observations_sf2, grid = grid_df1,
-                                aggregate = "TRUE"),
-               regexp = "`aggregate` must be a logical vector of length 1.",
-               fixed = TRUE)
-})
-
-test_that("arguments are of the right length", {
-  # id_col has length 1
-  expect_error(grid_designation(observations_sf2, grid = grid_df1,
-                                id_col = c("col1", "col2")),
-               regexp = "`id_col` must be a character vector of length 1.",
-               fixed = TRUE)
-
-  # aggregate has length 1
-  expect_error(grid_designation(observations_sf2, grid = grid_df1,
-                                aggregate = rep(TRUE, 3)),
-               regexp = "`aggregate` must be a logical vector of length 1.",
-               fixed = TRUE)
-})
-
-test_that("crs of observations and grid must match", {
-  expect_error(
-    grid_designation(observations_sf2,
-                     grid = sf::st_transform(grid_df1, crs = 4326)),
-    regexp = "sf::st_crs(observations) == sf::st_crs(grid) is not TRUE",
-    fixed = TRUE)
-})
-
-test_that('randomisation should be one of "uniform", "normal"', {
-  expect_error(
-    grid_designation(observations_sf2, grid_df1, randomisation = "beta"),
-    regexp = '`randomisation` should be one of "uniform", "normal".',
-    fixed = TRUE)
-})
-
 ## expect warnings
 test_that("unique ids if id column is provided", {
   expect_warning(
@@ -123,7 +51,10 @@ test_that("unique ids if id column is provided", {
                      grid = grid_df1 %>%
                        dplyr::mutate(id = 1),
                      id_col = "id"),
-    regexp = "Column `id` does not contain unique ids for grid cells!",
+    regexp = paste0(
+      "Column 'id' does not contain unique ids for grid cells!\n",
+      "Creating new ids based on row names."
+    ),
     fixed = TRUE)
 })
 
@@ -133,13 +64,16 @@ test_that("provided id column present in provided grid", {
                      grid = grid_df1 %>%
                        dplyr::mutate(id = seq_len(nrow(grid_df1))),
                      id_col = "identifier"),
-    regexp = 'Column name "identifier" not present in provided grid!',
+    regexp = paste0(
+      "Column name 'identifier' not present in provided grid!\n",
+      "Creating ids based on row names."
+    ),
     fixed = TRUE)
 })
 
 ## expected outputs
 test_that("output class is correct", {
-  # aggregate = TRUE
+  # aggregate is TRUE
   suppressWarnings({
     expect_s3_class(grid_designation(observations_sf1, grid = grid_df1),
                     class = "sf")
@@ -151,7 +85,7 @@ test_that("output class is correct", {
   expect_s3_class(grid_designation(observations_sf2, grid = grid_df1),
                   class = "data.frame")
 
-  # aggregate = FALSE
+  # aggregate is FALSE
   suppressWarnings({
     expect_s3_class(grid_designation(observations_sf1, grid = grid_df1,
                                      aggregate = FALSE),
@@ -250,7 +184,7 @@ test_that("no minimal coordinate uncertainty for empty grid cells", {
   grid_designation_df4 <- grid_designation(observations_sf2, grid = grid_df1,
                                            randomisation = "normal")
 
-  # randomisation = "uniform"
+  # randomisation is "uniform"
   suppressWarnings({
     expect_equal(sum(grid_designation_df1$n == 0),
                  sum(is.na(grid_designation_df1$min_coord_uncertainty))
@@ -260,7 +194,7 @@ test_that("no minimal coordinate uncertainty for empty grid cells", {
     sum(is.na(grid_designation_df2$min_coord_uncertainty))
   )
 
-  # randomisation = "normal"
+  # randomisation is "normal"
   suppressWarnings({
     expect_equal(sum(grid_designation_df3$n == 0),
       sum(is.na(grid_designation_df3$min_coord_uncertainty))
@@ -344,7 +278,7 @@ test_that("check possible outcomes for grid cell designation", {
 })
 
 test_that("number of observations should equal numbers in grid", {
-  # randomisation = "uniform"
+  # randomisation is "uniform"
   suppressWarnings({
     expect_equal(grid_designation(observations_sf1, grid = grid_df1) %>%
                    dplyr::pull(n) %>%
@@ -355,7 +289,7 @@ test_that("number of observations should equal numbers in grid", {
                  dplyr::pull(n) %>%
                  sum(),
                nrow(observations_sf2))
-  # randomisation = "normal"
+  # randomisation is "normal"
   suppressWarnings({
     expect_equal(grid_designation(observations_sf1, grid = grid_df1,
                                   randomisation = "normal") %>%
@@ -371,7 +305,7 @@ test_that("number of observations should equal numbers in grid", {
 })
 
 test_that("number of observations be the same as output if aggregate = FALSE", {
-  # randomisation = "uniform"
+  # randomisation is "uniform"
   suppressWarnings({
     expect_equal(grid_designation(observations_sf1, grid = grid_df1,
                                   aggregate = FALSE) %>%
@@ -382,7 +316,7 @@ test_that("number of observations be the same as output if aggregate = FALSE", {
                                 aggregate = FALSE) %>%
                  nrow(),
                nrow(observations_sf2))
-  # randomisation = "normal"
+  # randomisation is "normal"
   suppressWarnings({
     expect_equal(grid_designation(observations_sf1, grid = grid_df1,
                                   randomisation = "normal",

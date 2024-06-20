@@ -13,7 +13,7 @@
 #' @param seed A positive numeric value. The seed for random number generation
 #' to make results reproducible. If `NA` (the default), no seed is used.
 #'
-#' @returns A vector of integers of length n_time_points with the avarage number
+#' @returns A vector of integers of length n_time_points with the average number
 #' of occurrences.
 #'
 #' @export

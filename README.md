@@ -7,10 +7,11 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
+[![Release](https://img.shields.io/github/release/b-cubed-eu/gcube.svg)](https://github.com/b-cubed-eu/gcube/releases)
 [![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
 [![repo
-status](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
 <!-- badges: end -->
 
@@ -74,7 +75,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/README-polygon-1.png" width="80%" />
+<img src="man/figures/readme-polygon-1.png" width="80%" />
 
 ### Occurrence process
 
@@ -91,6 +92,9 @@ occurrences_df <- simulate_occurrences(
   plgn = polygon,
   seed = 123)
 #> [using unconditional Gaussian simulation]
+```
+
+``` r
 
 # Visualise
 ggplot() + 
@@ -99,7 +103,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/README-simulate-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-simulate-occurrences-1.png" width="80%" />
 
 ### Detection process
 
@@ -123,7 +127,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/README-detect-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-detect-occurrences-1.png" width="80%" />
 
 We select the detected occurrences and add an uncertainty to these
 observations. This can be done using the `add_coordinate_uncertainty()`
@@ -155,7 +159,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/README-uncertainty-occurrences-1.png" width="80%" />
+<img src="man/figures/readme-uncertainty-occurrences-1.png" width="80%" />
 
 ### Grid designation process
 
@@ -203,13 +207,11 @@ ggplot() +
           fill = alpha("firebrick", 0.3)) +
   geom_sf(data = sampled_points, colour = "blue") +
   geom_sf(data = observations_df, colour = "firebrick") +
-  scale_x_continuous(limits = c(st_bbox(polygon)$xmin, st_bbox(polygon)$xmax)) +
-  scale_y_continuous(limits = c(st_bbox(polygon)$ymin, st_bbox(polygon)$ymax)) +
   labs(x = "", y = "", fill = "n") +
   theme_minimal()
 ```
 
-<img src="man/figures/README-grid-designation-1.png" width="80%" />
+<img src="man/figures/readme-grid-designation-1.png" width="80%" />
 
 The output gives the number of observations per grid cell and minimal
 coordinate uncertainty per grid cell.
@@ -220,11 +222,9 @@ ggplot() +
   geom_sf(data = occurrence_cube_df, aes(fill = min_coord_uncertainty),
           alpha = 0.5, linewidth = 1) +
   geom_sf_text(data = occurrence_cube_df, aes(label = n)) +
-  scale_x_continuous(limits = c(st_bbox(polygon)$xmin, st_bbox(polygon)$xmax)) +
-  scale_y_continuous(limits = c(st_bbox(polygon)$ymin, st_bbox(polygon)$ymax)) +
   scale_fill_continuous(type = "viridis") +
   labs(x = "", y = "") +
   theme_minimal()
 ```
 
-<img src="man/figures/README-visualise-designation-1.png" width="80%" />
+<img src="man/figures/readme-visualise-designation-1.png" width="80%" />

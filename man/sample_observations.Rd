@@ -59,7 +59,7 @@ occurrence was detected (observations) or not (unobserved occurrences).
 }
 \description{
 The function samples observations from occurrences based on detection
-probability and sampling bias by implementing a Bernouilli trial.
+probability and sampling bias by implementing a Bernoulli trial.
 }
 \examples{
 # Load packages

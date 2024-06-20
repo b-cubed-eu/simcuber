@@ -1,7 +1,7 @@
 #' Sample observations from a larger occurrence dataset
 #'
 #' The function samples observations from occurrences based on detection
-#' probability and sampling bias by implementing a Bernouilli trial.
+#' probability and sampling bias by implementing a Bernoulli trial.
 #'
 #' @param occurrences An sf object with POINT geometry.
 #' @param detection_probability A numeric value between 0 and 1, corresponding
@@ -139,7 +139,7 @@ sample_observations <- function(
 
   # 2. other checks
   # Detection_probability is a numeric value between 0 and 1
-  if ((!(0 <= detection_probability) | !(detection_probability <= 1))) {
+  if ((!(0 <= detection_probability) || !(detection_probability <= 1))) {
     cli::cli_abort(c(
       "{.var detection_probability} must be a numeric value between 0 and 1.",
       "x" = "You've supplied {(detection_probability)} as

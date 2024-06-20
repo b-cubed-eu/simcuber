@@ -10,14 +10,15 @@ add_coordinate_uncertainty(observations, coords_uncertainty_meters = 25)
 \item{observations}{An sf object with POINT geometry.}
 
 \item{coords_uncertainty_meters}{A numeric value or a vector of numeric
-values indicating the coordinate uncertainty associated with oberservations.}
+values indicating the coordinate uncertainty associated with observations.}
 }
 \value{
 An sf object with POINT geometry with an additional column
 \code{coordinateUncertaintyInMeters}.
 }
 \description{
-Adds a column to the observations sf object with the coordinate uncertainty in meters.
+Adds a column to the observations sf object with the coordinate uncertainty
+in meters.
 }
 \examples{
 
