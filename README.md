@@ -7,10 +7,11 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gcube)](https://CRAN.R-project.org/package=gcube)
+[![Release](https://img.shields.io/github/release/b-cubed-eu/gcube.svg)](https://github.com/b-cubed-eu/gcube/releases)
 [![R-CMD-check](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/b-cubed-eu/gcube/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/b-cubed-eu/gcube/branch/main/graph/badge.svg)](https://app.codecov.io/gh/b-cubed-eu/gcube/)
 [![repo
-status](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+status](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#wip)
 
 <!-- badges: end -->
 
