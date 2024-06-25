@@ -1,3 +1,7 @@
+# gcube 0.0.2
+
+* ...
+
 # gcube 0.0.1
 
 * Add [`checklist`](https://inbo.github.io/checklist/) infrastructure.
